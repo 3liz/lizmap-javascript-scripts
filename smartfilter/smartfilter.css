@@ -1,0 +1,109 @@
+#smlcontent div.menu-content {
+    background: none;
+    border: none;
+    font-size: 1em;
+}
+
+#smlcontent .lizmapSmlContent {
+    margin: 0px !important;
+    padding: 0px !important;
+    width: 100% !important;
+}
+
+#smlcontent .lizmapSmlContent h4 {
+    margin: 0px;
+    color: white !important;
+    font-size: 1em;
+    padding: 2px;
+    padding-left: 2px;
+    padding-left: 5px;
+    border-bottom: 1px solid white;
+    border-bottom: 1px solid rgba(255,255,255,0.4);
+}
+
+#smlcontent div.lizmapSmlDiv {
+    margin: 10px !important;
+}
+#smlcontent div.lizmapSmlDiv.templated {
+    padding: 10px !important;
+    background-color: #F0F0F0 !important;
+}
+
+
+#smlcontent .lizmapPopupTable{
+  /*background:#333333 !important;*/
+  margin-bottom:10px;
+  font-size:0.8em;
+  width:100%;
+  background-color: #F0F0F0 !important;
+/*
+  border: 1px solid #2B2B2B !important;
+*/
+  border-collapse: collapse;
+}
+#smlcontent .lizmapPopupTable thead {
+  color: black;
+  background-color: lightgrey;
+  font-size: 1em;
+}
+#smlcontent .lizmapPopupTable th{
+  text-align: left;
+  vertical-align: top;
+  padding-right: 5px;
+}
+#smlcontent .lizmapPopupTable th.left{
+  border-right: 1px solid #C9C9C9 !important;
+}
+#smlcontent .lizmapPopupTable td{
+  padding-left: 5px;
+}
+#smlcontent .lizmapPopupTable thead th{
+  text-align: center;
+}
+#smlcontent .lizmapPopupTable th{
+  width: 30%;
+}
+
+#sml span.disabled {
+  color: grey;
+  pointer-events: none;
+}
+
+img.sml-card-media {
+    margin: 1px 1px;
+}
+
+#content #baselayer-image-selector {
+    width:62px;
+    height:62px;
+    position:absolute;
+    bottom:50px;
+    right:10px;
+    z-index:1000;
+    border:2px solid white;
+    border-radius:4px;
+    background-image:url(osm-toner.png);
+    background-size:cover;
+    background-repeat:no-repeat;
+    box-shadow: 2px 2px 2px 2px #aaa;
+    cursor:pointer;
+}
+#content.mobile #baselayer-image-selector {
+    bottom:none;
+    right:none;
+    left: 10px;
+    top: 10px;
+}
+
+#content.smlcontent-visible:not(.mobile) #right-dock {
+    width: 20%;
+    max-width: 20%;
+}
+#content.smlcontent-visible:not(.mobile) #map-content {
+    margin-right: 20%;
+}
+
+.liz-sml-show-results{
+    font-weight: bold;
+}
+
