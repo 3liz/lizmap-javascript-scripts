@@ -510,7 +510,7 @@ var lizSmartLayer = function() {
             home+= '<div style="padding:0px 10px;" class="tree">';
             for(var f in lizSmartLayerConfig.smartFields){
                 var field = lizSmartLayerConfig.smartFields[f];
-                home+= '<div id="liz-sml-field-box">';
+                home+= '<div class="liz-sml-field-box">';
                 var flabel = field;
                 if( 'alias' in lconfig
                     && field in lconfig.alias
