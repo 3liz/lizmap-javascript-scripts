@@ -104,6 +104,8 @@ var lizSmartLayer = function() {
             // This can be used to place "Other" at the bottom
             other_regexp: /^autre(s)?(.+)?/i,
 
+            // Take the left panel width into account when setting map center ?
+            map_center_based_on_dock_width: true,
             // Internal script data
             // DO NOT MODIFY
             features_with_pkey: {},
@@ -675,8 +677,9 @@ var lizSmartLayer = function() {
 
             // Activate unfilter
             $('#liz-sml-unfilter').click(function(){
-                if(lizMap.lizmapLayerFilterActive)
+                if(lizMap.lizmapLayerFilterActive){
                     $('#layerActionUnfilter').click();
+                }
                 return false;
             });
 
@@ -706,6 +709,9 @@ var lizSmartLayer = function() {
                 var targetCenter = extent.getCenterLonLat();
                 lizMap.map.zoomTo( targetzoom );
                 lizMap.map.setCenter( targetCenter );
+                if( lizSmartLayerConfig.map_center_based_on_dock_width && $('#dock:visible').width() ){
+                    lizMap.map.moveByPx(-$('#dock').width() / 2, 0)
+                }
             }
 
         }
