@@ -677,6 +677,8 @@ var lizSmartLayer = function() {
 
             // Activate unfilter
             $('#liz-sml-unfilter').click(function(){
+                // Remove feature info geometry
+                removeFeatureInfoGeometry();
                 if(lizMap.lizmapLayerFilterActive){
                     $('#layerActionUnfilter').click();
                 }
@@ -934,6 +936,13 @@ var lizSmartLayer = function() {
 
         }
 
+        function removeFeatureInfoGeometry(){
+            if(lizSmartLayerConfig.display_geometry){
+                var layer = lizMap.map.getLayersByName('locatelayer');
+                if ( layer.length == 1 )
+                    layer[0].destroyFeatures();
+            }
+        }
         function adaptSmartLayerSize(){
             lizMap.events.on({
             // Adapt dock size to display metadata
@@ -1003,11 +1012,7 @@ var lizSmartLayer = function() {
                     $('div#popupcontent div.lizmapPopupContent:first').prepend('<button class="sml-card-close-detail">Retour</button>');
                     $('div.lizmapPopupContent button.sml-card-close-detail').click(function(){
                         $('#mapmenu li.popupcontent.active a').click();
-                        if(lizSmartLayerConfig.display_geometry){
-                            var layer = lizMap.map.getLayersByName('locatelayer');
-                            if ( layer.length == 1 )
-                                layer[0].destroyFeatures();
-                        }
+                        removeFeatureInfoGeometry();
                     })
                 }
 
