@@ -106,6 +106,7 @@ var lizSmartLayer = function() {
 
             // Take the left panel width into account when setting map center ?
             map_center_based_on_dock_width: true,
+
             // Internal script data
             // DO NOT MODIFY
             features_with_pkey: {},
@@ -943,6 +944,7 @@ var lizSmartLayer = function() {
                     layer[0].destroyFeatures();
             }
         }
+
         function adaptSmartLayerSize(){
             lizMap.events.on({
             // Adapt dock size to display metadata
@@ -974,6 +976,7 @@ var lizSmartLayer = function() {
                 // Show the result right dock when popup is closed
                 if( e.id == 'popupcontent' ) {
                     $('#mapmenu li.smlcontent:not(.active) a').click();
+                    removeFeatureInfoGeometry();
                 }
                 // Show the search dock when result is closed
                 else if( e.id == 'smlcontent' ) {
@@ -1002,14 +1005,14 @@ var lizSmartLayer = function() {
 
                     refreshTotalcount();
 
-
+                    removeFeatureInfoGeometry();
                 }
             },
 
             lizmappopupdisplayed: function(e){
                 // Add back button above popup dock
                 if(!lizMap.checkMobile()){
-                    $('div#popupcontent div.lizmapPopupContent:first').prepend('<button class="sml-card-close-detail">Retour</button>');
+                    $('div#popupcontent div.lizmapPopupContent:first').prepend('<button class="sml-card-close-detail btn btn-mini">Retour</button>');
                     $('div.lizmapPopupContent button.sml-card-close-detail').click(function(){
                         $('#mapmenu li.popupcontent.active a').click();
                         removeFeatureInfoGeometry();
