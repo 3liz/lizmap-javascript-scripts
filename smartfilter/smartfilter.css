@@ -73,27 +73,7 @@ img.sml-card-media {
     margin: 1px 1px;
 }
 
-#content #baselayer-image-selector {
-    width:62px;
-    height:62px;
-    position:absolute;
-    bottom:50px;
-    right:10px;
-    z-index:1000;
-    border:2px solid white;
-    border-radius:4px;
-    background-image:url(osm-toner.png);
-    background-size:cover;
-    background-repeat:no-repeat;
-    box-shadow: 2px 2px 2px 2px #aaa;
-    cursor:pointer;
-}
-#content.mobile #baselayer-image-selector {
-    bottom:none;
-    right:none;
-    left: 10px;
-    top: 10px;
-}
+
 
 #content.smlcontent-visible:not(.mobile) #right-dock {
     width: 20%;
@@ -104,6 +84,7 @@ img.sml-card-media {
 }
 
 .liz-sml-show-results{
+    cursor:pointer;
     font-weight: bold;
 }
 

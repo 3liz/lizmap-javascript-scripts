@@ -58,6 +58,10 @@ var lizSmartLayer = function() {
             // 0 zooms exactly, -1 zooms one zoom above
             zoom_factor: -1,
 
+            // max zoom when performing automatic zoom
+            // list of zoom & scales for EPSG:3857 :
+            // https://www.3liz.com/blog/rldhont/index.php?post/2012/07/17/OpenStreetMap-Tiles-in-QGIS
+            max_zoom: 7,
             // Should we display the feature geometry when the user click on an item
             display_geometry: true,
             // Geometry circle color
@@ -346,7 +350,7 @@ var lizSmartLayer = function() {
 
         function sortFeatures(){
             lizSmartLayerConfig.features_sortable.sort(function(a, b) {
-                var nameA=a[1].toLowerCase(), nameB=b[1].toLowerCase()
+                var nameA=a.toString()[1].toLowerCase(), nameB=b.toString()[1].toLowerCase()
                 if (nameA < nameB)
                     return -1
                 if (nameA > nameB)
@@ -432,11 +436,14 @@ var lizSmartLayer = function() {
                         if( !cval || lizMap.cleanName(cval) == '' )
                             label = 'Autre';
                         label = '&nbsp;' + label;
-                        label+= '&nbsp;(' + nb + ')';
+                        if( nb > 0){
+                            label+= '&nbsp;(' + nb + ')';
+                        }
                         option.html(label);
-                        if ( nb == 0 )
+                        if ( nb == 0 ){
                             option.hide();
-                        else
+                        }
+                        else{
                             option.show();
                     }
                 } else {
@@ -639,7 +646,7 @@ var lizSmartLayer = function() {
                     $('#smlcontent div.menu-content div.lizmapSmlContent').append(card);
                 }
 
-                if(lizSmartLayerConfig.zoom_to_features){
+                if(lizSmartLayerConfig.zoom_to_features && feature.geometry){
                     // calculate x_min and co
                     x_min = Math.min( x_min, feature.geometry.coordinates[0]);
                     y_min = Math.min( y_min, feature.geometry.coordinates[1]);
@@ -709,6 +716,9 @@ var lizSmartLayer = function() {
                     0,
                     lizMap.map.getZoomForExtent(extent) + lizSmartLayerConfig.zoom_factor
                 );
+                // Zoom only to a certain maxzoom
+                if( lizSmartLayerConfig.max_zoom && targetzoom > lizSmartLayerConfig.max_zoom)
+                    targetzoom = lizSmartLayerConfig.max_zoom;
                 var targetCenter = extent.getCenterLonLat();
                 lizMap.map.zoomTo( targetzoom );
                 lizMap.map.setCenter( targetCenter );
@@ -717,6 +727,13 @@ var lizSmartLayer = function() {
                 }
             }
 
+            // Add export button
+            if($('button.exportSmartLayerData').length == 0){
+                $('#nav-tab-smlcontent a').append('&nbsp;&nbsp;<button class="btn btn-mini btn-primary exportSmartLayerData">Exporter</button>');
+                $('button.exportSmartLayerData').click(function(){
+                    lizMap.exportVectorLayer(lizSmartLayerConfig.layername, 'ODS', false); return false;
+                });
+            }
         }
 
         function getCard(pkey, template){
@@ -933,7 +950,7 @@ var lizSmartLayer = function() {
             $('#content.mobile #sml span.title span ').html('').append($('.liz-sml-show-results'));
 
             // Show results
-            showResults(500,0);
+            showResults(1000,0);
 
         }
 
