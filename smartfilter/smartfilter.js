@@ -445,6 +445,7 @@ var lizSmartLayer = function() {
                         }
                         else{
                             option.show();
+                        }
                     }
                 } else {
                     var somechecked = false;
