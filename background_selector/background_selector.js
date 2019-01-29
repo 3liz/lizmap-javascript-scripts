@@ -11,6 +11,10 @@ lizMap.events.on({
             //$('#map-content').append(html);
             if($('#baselayer-image-selector').length == 0){
                 $('#map-content').append(html);
+
+                if($('#overview-box').length == 1)
+                    $('#baselayer-image-selector').addClass('with-overview-box');
+
                 $('#baselayer-image-selector').tooltip({placement: 'bottom'});
                 $('#baselayer-image-selector').click(function(){
 
