@@ -793,6 +793,8 @@ var lizSmartLayer = function() {
         }
 
         function renderCardHtml(content){
+            if( content == 'null' || content === null  )
+                return '';
             if( typeof content != 'string' ){
                 return content;
             }
