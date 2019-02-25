@@ -25,6 +25,13 @@ var lizSmartLayer = function() {
             // Layer primary key
             primaryKey: 'gid',
 
+            // field_intra_filter : 'and' OR 'or'
+            field_intra_filter: 'or',
+            // We filter always with a "AND" between fields
+            // Between the values (checkboxes) inside a specific field, we can do
+            // * 'or' : you can check multiple items in the same field, even if no feature has both types
+            // * 'and': when checking a value, we filter the other checkbox and only allow checkboxes compatible (drill down effect)
+
             // Layer fields to add in the filter
             // By default, the unique values will be shown as checkboxes
             smartFields: ['lib_type_vente1' , 'liste_famille_produit',  'liste_label_pt_vente', 'liste_services'],
@@ -264,18 +271,28 @@ var lizSmartLayer = function() {
                     // If not initial count, we should increase only if it matches checked field distinct values
                     var add_feature = true;
                     var field_count = {};
+
 //console.log('FEATURE');
-//console.log(feat.properties);
+
+                    var feat_matches_some_field = 0;
+                    var feat_matches_field = 0;
+                    var number_of_fields = 0;
                     for( var cfield in checkedFieldValues ){
+                        number_of_fields += 1;
                         if( !(cfield in field_count) )
                             field_count[cfield] = {}
                         if( !feat.properties[cfield] ){
                             feat.properties[cfield] = '';
                         }
+                        var feat_matches_checked_value = 0;
+                        var feat_matches_checked_or_unchecked_value = 0;
+                        var somechecked = false;
+                        var add_feature_for_field = true;
                         for( var cval in checkedFieldValues[cfield] ){
                             var achecked = checkedFieldValues[cfield][cval];
-//console.log('cval = ' + cval);
-//console.log('field val = ' + feat.properties[cfield]);
+                            if( achecked)
+                                somechecked = true;
+
                             // Create table of trimed values for this feature field .
                             // Ex: " a, b, c" will give ['a', 'b', 'c']
                             var atable = feat.properties[cfield].split(lizSmartLayerConfig.valueSeparator[cfield]).map(function(item) {
@@ -291,11 +308,13 @@ var lizSmartLayer = function() {
                                 if( achecked ){
                                     //console.log('matched & checked');
                                     field_count[cfield][cval] = 1;
+                                    feat_matches_checked_value += 1;
                                 }
                                 else{
                                     //console.log('matched & NON coché');
                                     field_count[cfield][cval] = 1;
                                 }
+                                feat_matches_checked_or_unchecked_value += 1;
                             }
 
                             // The values does not match this checkbox value
@@ -304,16 +323,36 @@ var lizSmartLayer = function() {
                                     //console.log('NO MATCH & checked');
                                     field_count[cfield][cval] = 0;
                                     // We remove from counter
-                                    add_feature = false;
+                                    // And further not add it to the filteredFeaturesIds
+                                    add_feature_for_field = false;
                                 }else{
                                     //console.log('NO MATCH & NON coché');
                                     field_count[cfield][cval] = 0;
                                 }
                             }
 //console.log('---------');
+                        } // End loop over values
+
+                        if( lizSmartLayerConfig.field_intra_filter == 'and'
+                            && !add_feature_for_field
+                        ){
+                            add_feature = false;
                         }
 
+                        // If the feature matches one of the field checkbox
+                        // OR no checkbox is checked for this field
+                        if(feat_matches_checked_value || !somechecked){
+                            feat_matches_field +=1;
+                        }
 
+                    } // End loop over fields
+
+                    // For or type
+                    // we remove features that are not valid
+                    if( lizSmartLayerConfig.field_intra_filter == 'or'
+                        && feat_matches_field < number_of_fields
+                    ){
+                        add_feature = false;
                     }
 
 //console.log(field_count);
@@ -414,7 +453,8 @@ var lizSmartLayer = function() {
             }
 
             // Update counters
-            updateCounters();
+            if(lizSmartLayerConfig.field_intra_filter == 'and')
+                updateCounters();
 
             // Show corresponding results
             showResults(1000,0);
@@ -455,12 +495,15 @@ var lizSmartLayer = function() {
                         $(inputId).next('span.liz-sml-field-counter').html(nb);
 
                         // Deactivate item with 0 features
-                        $(inputId).parent('span').children().prop('disabled', ( nb == 0 ) );
-                        $(inputId).parent('span').toggleClass('disabled', ( nb == 0 ) );
-                        $(inputId).toggleClass('disabled', ( nb == 0 ) );
+                        if(lizSmartLayerConfig.field_intra_filter == 'and'){
+                            $(inputId).parent('span').children().prop('disabled', ( nb == 0 ) );
+                            $(inputId).parent('span').toggleClass('disabled', ( nb == 0 ) );
+                            $(inputId).toggleClass('disabled', ( nb == 0 ) );
+                        }
 
                         // Hide or display depending on status
-                        if(lizSmartLayerConfig.hide_zero_items){
+                        if(lizSmartLayerConfig.field_intra_filter == 'and'
+                        && lizSmartLayerConfig.hide_zero_items){
                             $(inputId).parent('span').children().toggle(!( nb == 0 ) );
                             $(inputId).parent('span').toggle( !( nb == 0 ) );
                             $(inputId).parent('span').next('br').toggle( !( nb == 0 ) );
@@ -659,7 +702,11 @@ var lizSmartLayer = function() {
                 k+=1;
             }
 
-            $('#liz-sml-item-layer-total-count').text(filteredFeaturesIds.length);
+            var mytotal = filteredFeaturesIds.length;
+            if(filteredFeaturesIds.length == 1 && filteredFeaturesIds[0] == -1)
+                mytotal = 0;
+
+            $('#liz-sml-item-layer-total-count').text(mytotal);
 
             // Change class for templated divs
             if ( lizSmartLayerConfig.card_display ) {
@@ -1018,7 +1065,8 @@ var lizSmartLayer = function() {
                     countFeatures(false);
 
                     // And the recalculate the counters
-                    updateCounters();
+                    if(lizSmartLayerConfig.field_intra_filter == 'and')
+                        updateCounters();
 
                     // Show corresponding results
                     showResults(1000,0);
