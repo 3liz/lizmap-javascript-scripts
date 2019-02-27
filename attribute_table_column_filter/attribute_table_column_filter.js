@@ -7,27 +7,20 @@ lizMap.events.on({
 				// Set flag to add filters only once
 				$('#attribute-layer-table-'+cleanLayerName+'_wrapper').data('filtersON', true);
 
-				$('#attribute-layer-table-'+cleanLayerName+'_wrapper thead:first th').not('.sorting_disabled').each( function () {
-				    var title = $(this).text();
-				    $(this).html( '<input type="text" placeholder=" '+title+'" />' );
-				});
+				// You can put an array of index in columns() to tell on which column you want the search input to appear
+				$('#attribute-layer-table-'+cleanLayerName).dataTable().api().columns().every( function () {
+			       	var column = this;
 
-				var table = $('#attribute-layer-table-'+cleanLayerName).DataTable();
-
-				table.columns().every( function () {
-			       var column = this;
-
-			       $( 'input', this.header() ).on( 'keyup change', function () {
-			           if ( column.search() !== this.value ) {
-			               column
-			                   .search( this.value )
-			                   .draw();
-			           }
-			       }).click(function(e) {
-					   // We don't want to sort when users click on the search field
-					   e.stopPropagation();
+			       	$( 'input', this.header() ).on( 'keyup change', function () {
+						if ( column.search() !== this.value ) {
+						   column
+						       .search( this.value )
+						       .draw();
+						}
+			       	}).click(function(e) {// We don't want to sort when users click on the search field
+						e.stopPropagation();
 					});
-			   	});
+				});
 				lizMap.refreshDatatableSize("#attribute-layer-main-"+cleanLayerName);
 			}
 		}, 500);
