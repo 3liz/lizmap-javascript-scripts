@@ -4,8 +4,11 @@ lizSnapEdition = function(){
     var snapLayerName = 'Quartiers';
     var snapRestrictToMapExtent = true;
     var snapMaxFeatures = 1000;
-    var snapTolerance = 20;
-    var snapColor = 'cyan';
+    var snapTolerance = 40;
+    var snapToNode = true;
+    var snapToVertex = true;
+    var snapToEdge = false;
+    var snapColor = 'red';
 
     lizMap.events.on({
         'uicreated':function(evt){
@@ -13,10 +16,10 @@ lizSnapEdition = function(){
             // Create layer to store snap features
             lizMap.map.addLayer(new OpenLayers.Layer.Vector('snaplayer',{
                 styleMap: new OpenLayers.StyleMap({
-                    pointRadius: 1,
+                    pointRadius: 2,
                     fill: false,
                     stroke: true,
-                    strokeWidth: 2,
+                    strokeWidth: 3,
                     strokeColor: snapColor,
                     strokeOpacity: 0.8
                 })
@@ -28,7 +31,10 @@ lizSnapEdition = function(){
                 layer: editionLayer,
                 targets: [{
                     layer: snapLayer,
-                    snapTolerance: 15
+                    snapTolerance: 15,
+                    node: snapToNode,
+                    vertex: snapToVertex,
+                    edge: snapToEdge
                 }]
             });
             lizMap.map.addControls([snapControl]);
