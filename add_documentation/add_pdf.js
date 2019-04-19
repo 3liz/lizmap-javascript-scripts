@@ -38,5 +38,24 @@ lizMap.events.on({
           $(".menu-content").find("iframe").remove();
           $("#pdf.tab-pane.active .menu-content").append(iframe);
         });
-    }
+      },
+
+      rightdockopened: function(e) {
+        if ( e.id == 'pdf') {
+          $('#bouton1').css({
+            'display':'block'
+          });
+          $('#bouton2').css({
+            'display':'block'
+          });
+        }
+        else {
+          $('#bouton1').css({
+            'display':'none'
+          });
+          $('#bouton2').css({
+            'display':'none'
+          });
+        }
+      }
 });
