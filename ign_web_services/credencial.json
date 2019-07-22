@@ -1,0 +1,10 @@
+{
+	"ignServiceKey" : "your-ign-key",
+	"ignServiceUrl" : "https://wxs.ign.fr/",
+	"services": {
+		"alti":{
+			"ignEntryPoints" : "/alti/rest/elevation.json?"
+		}
+	}		
+	
+}

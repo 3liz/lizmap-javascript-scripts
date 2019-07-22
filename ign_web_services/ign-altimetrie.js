@@ -1,34 +1,43 @@
-//IGN KEYS
-//MUST BE DEFINED !
-var ignServiceKey = 'your IGN Key';
-
-//IGN REST PARAMS
-var ignServiceUrl = 'https://wxs.ign.fr/';
-var ignEntryPoints = {
-    'alti': '/alti/rest/elevation.json?'
-};
+//IGN KEYS MUST BE DEFINED inside credencial json file !
+var ignServiceKey;
+var ignServiceUrl;
+var ignEntryPoints;
+var scriptPath = document.currentScript;
 
 lizMap.events.on({
         'uicreated': function(e) {
 		lizMap.addDock('ign_altimetrie', 'Altimétrie', 'minidock', 'Veuillez cliquer sur la carte <br />pour connaitre l\'altitude', 'icon-screenshot');
-		initIgnAltiView()
+		credencial = getCredentialPath();
+		$.getJSON(credencial, function(json) {
+			ignServiceKey = json.ignServiceKey;
+			ignServiceUrl = json.ignServiceUrl;
+			ignEntryPoints = json.services.alti.ignEntryPoints;	
+			initIgnAltiView();					
+		});						
 	}
 });
 
-function getIgnJsonResponse(service, params, aCallback){
-    var fullUrl = '';
-    var ep = ignEntryPoints[service];
-    var fullUrl = ignServiceUrl + ignServiceKey + ep;    
-    $.get(
-	fullUrl,
-      	params,
-      	function(data) {        	
-        	if(aCallback){
-            		aCallback(data);			
-        	}
-      }
-      ,'json'
-    );
+function getCredentialPath(){
+	var splitScriptPath  = scriptPath.src.split("%2F");
+	var jsDirPath = splitScriptPath.slice(0, splitScriptPath.length - 1).join("/") + "/";
+	var credencial = jsDirPath.concat('credencial.json');
+	return credencial;
+}
+
+function getIgnJsonResponse(service, params, aCallback){	
+	var fullUrl = '';
+	var ep = ignEntryPoints;
+	var fullUrl = ignServiceUrl + ignServiceKey + ep;    
+	$.get(
+		fullUrl,
+		params,
+		function(data) {        	
+			if(aCallback){
+	    			aCallback(data);			
+			}
+		}
+		,'json'
+	);
 }
 
 function getIgnAlti(lon,lat){
@@ -55,7 +64,7 @@ function getIgnAlti(lon,lat){
 
 function initIgnAltiView() {
 	var map = lizMap.map;
-
+	
 	//Layer to display clic location
 	var ignLayerAlti = map.getLayersByName('ignLayerAlti');
 	if ( ignLayerAlti.length == 0 ) {
@@ -74,8 +83,7 @@ function initIgnAltiView() {
 		});
 		map.addLayer(ignLayerAlti);
 		ignLayerAlti.setVisibility(true);
-	}
-	
+	}	
 
 	OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {                
 		defaultHandlerOptions: {
