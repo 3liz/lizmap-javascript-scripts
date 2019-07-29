@@ -1,31 +1,27 @@
-//IGN KEYS MUST BE DEFINED inside credencial json file !
 var ignServiceKey;
 var ignServiceUrl;
 var ignEntryPoints;
-var help = 'Veuillez cliquer sur la carte <br />pour connaitre l\'altitude';
+var scriptPath = document.currentScript;
 
 lizMap.events.on({
         'uicreated': function(e) {
-		lizMap.addDock('ign_altimetrie', 'Altimétrie', 'minidock', help, 'icon-screenshot');
-		var credencial = OpenLayers.Util.urlAppend(
-		     lizUrls.media,
-		     OpenLayers.Util.getParameterString({
-			 "repository": lizUrls.params.repository,
-			 "project": lizUrls.params.project,
-			 "path": "media/js/".concat(lizUrls.params.project,"/credencial.json")
-		     })
-		);
-		
+		lizMap.addDock('ign_altimetrie_profil', 'Profil Altimétrique', 'minidock', 'Veuillez cliquer sur la carte <br /> pour définir un point de départ un point d\'arrivé', 'icon-screenshot');
+		credencial = getCredentialPath();
 		$.getJSON(credencial, function(json) {
-			
 			ignServiceKey = json.ignServiceKey;
 			ignServiceUrl = json.ignServiceUrl;
 			ignEntryPoints = json.services.alti.ignEntryPoints;	
-			
-			initIgnAltiView();					
+			initIgnAltiProfilView();					
 		});						
 	}
 });
+
+function getCredentialPath(){
+	var splitScriptPath  = scriptPath.src.split("%2F");
+	var jsDirPath = splitScriptPath.slice(0, splitScriptPath.length - 1).join("/") + "/";
+	var credencial = jsDirPath.concat('credencial.json');
+	return credencial;
+}
 
 function getIgnJsonResponse(service, params, aCallback){	
 	var fullUrl = '';
@@ -41,32 +37,14 @@ function getIgnJsonResponse(service, params, aCallback){
 		}
 		,'json'
 	);
-}
 
-function getIgnAlti(lon,lat){	
-	//IGN Web Service only allows coordinates in 4326
-	if(lizMap.map.projection.projCode != "EPSG:4326"){
-		var fromProjection = new OpenLayers.Projection(lizMap.map.projection.projCode);
-		var toProjection = new OpenLayers.Projection("EPSG:4326");
-		var convertedPoint = new OpenLayers.LonLat(lon, lat);
-		convertedPoint.transform(fromProjection, toProjection);
-		lon = convertedPoint.lon;
-		lat = convertedPoint.lat;
-	}
-	
-	var qParams = {
-		'lon': lon,
-		'lat':lat,	
-		'srs': lizMap.map.projection.projCode
-	}
-	getIgnJsonResponse('alti', qParams, function(data){
-		var alt = data['elevations'][0]['z'];
-		$('#ign_altimetrie .menu-content').html('Altitude :'.concat(' ',alt));		
-	});
 }
 
 function initIgnAltiView() {
 	var map = lizMap.map;
+
+	 var html = '<button">Réinitialiser</button>';
+	html.insertAfter( $('#ign_altimetrie_profil ign_altimetrie_profil h3') )  ;
 	
 	//Layer to display clic location
 	var ignLayerAlti = map.getLayersByName('ignLayerAlti');
@@ -135,11 +113,11 @@ function initIgnAltiView() {
 		},
 			minidockclosed: function(e) {
 		    	if ( e.id == 'ign_altimetrie' ) {
-				$('#ign_altimetrie .menu-content').html(help);
 				ignLayerAlti.destroyFeatures();	
 				ignLayerAlti.setVisibility(false);		
-				click.deactivate();				
+				click.deactivate();
 		    	}
 		}
 	});
+
 }
