@@ -2,7 +2,7 @@ lizMap.events.on({
     'uicreated': function(e) {
         // decalre here your google maps key compatible with google street view
         var gkey = '';
-        $('body').append('<script async defer src="https://maps.googleapis.com/maps/api/js?key=&callback=initGoogleStreetView">');
+        $('body').append('<script async defer src="https://maps.googleapis.com/maps/api/js?key='+gkey+'&callback=initGoogleStreetView">');
     }
 });
 function initGoogleStreetView() {
