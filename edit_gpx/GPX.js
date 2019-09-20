@@ -22,8 +22,8 @@ lizMap.events.on({
         html+= '    <span style="font-size:1em;font-weight:bold;">Ajouter une couche </span><br>';
         html+= '    <div class="controls">';
         html+= '      <input type="file" style="margin-bottom:5px;" class="form-control-file" id="myFile" name="myFile" accept=".gpx">';
-        html+= '    </div><br>';
-        //html+= '    <button type="button" id="import" class="btn btn-light">Importer</button><br><br>';
+        html+= '    </div>';
+        html+= '    <button type="button" id="emptyLayer" class="btn btn-light">Créer une couche vide</button><br><br>';
 
         html+= '    <span style="font-size:1em;font-weight:bold;">Modifier la couche</span><br>';
 
@@ -34,6 +34,21 @@ lizMap.events.on({
         html+= '                    checked="checked" />';
         html+= '              Naviguer';
         html+= '            </label>';
+        html+= '        </div>';
+        html+= '        <div class="controls">';
+        html+= '            <label class="inline-block" for="pointToggle">';
+        html+= '                <input type="radio" name="type" value="point" id="pointToggle" />';
+        html+= '            draw point</label>';
+        html+= '        </div>';
+        html+= '        <div class="controls">';
+        html+= '            <label class="inline-block" for="lineToggle">';
+        html+= '                <input type="radio" name="type" value="line" id="lineToggle" />';
+        html+= '            draw line</label>';
+        html+= '        </div>';
+        html+= '        <div class="controls">';
+        html+= '            <label class="inline-block" for="polygonToggle">';
+        html+= '                <input type="radio" name="type" value="polygon" id="polygonToggle" />';
+        html+= '            draw polygon</label>';
         html+= '        </div>';
         html+= '        <div class="controls">';
         html+= '            <label class="inline-block" for="modifyToggle">';
@@ -50,7 +65,6 @@ lizMap.events.on({
         html+= '        </div>';
         html+= '    </div>';
         html+= '    <button type="button" id="export" style="margin-top:10px;" class="btn btn-light">Exporter</button><br>';
-        //html+= '    <input type="file" id="ctrl" webkitdirectory>';
         html+= '</div>';
 
         // Distance ou temps
@@ -107,13 +121,18 @@ function initGpxView() {
         strokeWidth: selectStrokeWidth
     })
     });
-    map = map;
 
-    vectors = new OpenLayers.Layer.Vector('test', {
+    vectors = new OpenLayers.Layer.Vector('default name', {
       styleMap: myStyles
     });
 
     controls = {
+        point: new OpenLayers.Control.DrawFeature(vectors,
+                  OpenLayers.Handler.Point),
+        line: new OpenLayers.Control.DrawFeature(vectors,
+                  OpenLayers.Handler.Path),
+        polygon: new OpenLayers.Control.DrawFeature(vectors,
+                  OpenLayers.Handler.Polygon),
         modify: new OpenLayers.Control.ModifyFeature(vectors)
     };
 
@@ -143,6 +162,18 @@ function initGpxView() {
     toggleControl(this);
   });
 
+  $("#pointToggle").click(function(){
+    toggleControl(this);
+  });
+
+  $("#lineToggle").click(function(){
+    toggleControl(this);
+  });
+
+  $("#polygonToggle").click(function(){
+    toggleControl(this);
+  });
+
   $("#modifyToggle").click(function(){
     toggleControl(this);
   });
@@ -152,32 +183,37 @@ function initGpxView() {
   });
 
   $("#myFile").change(function(){
-    var reader = new FileReader();
-    var fileInput = document.querySelector('#myFile');
-    var result;
-    fileName = $('#myFile')[0].files[0].name;
-    fileName = fileName.split('.')[0];
-    vectors.setName(fileName);
-    gpxLayer = new OpenLayers.Layer.Vector(fileName, {
-      style: {strokeColor: "green", strokeWidth: 5}
-    });
-    console.log('result');
-    reader.addEventListener('load', function() {
-        result = reader.result;
-        var features = (new OpenLayers.Format.GPX()).read(result);
-        for(var i in features){
-          feat = features[i];
-          feat.geometry.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjection());
-        }
-        console.log();
-        vectors.addFeatures(features);
-        map.addLayer(vectors);
+    if(fileName == undefined){
+      var reader = new FileReader();
+      var fileInput = document.querySelector('#myFile');
+      var result;
+      fileName = $('#myFile')[0].files[0].name;
+      fileName = fileName.split('.')[0];
+      vectors.setName(fileName);
+      reader.addEventListener('load', function() {
+          result = reader.result;
+          var features = (new OpenLayers.Format.GPX()).read(result);
+          for(var i in features){
+            feat = features[i];
+            feat.geometry.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjection());
+          }
+          vectors.addFeatures(features);
+          map.addLayer(vectors);
 
-    });
-    reader.readAsText(fileInput.files[0]);
+        });
+        reader.readAsText(fileInput.files[0]);
+      }else{
+        alert('Une couche est déjà en cours d\'édition!');
+      }
+  });
 
-
-
+  $("#emptyLayer").click(function(){
+    if(fileName == undefined){
+      fileName= 'edit';
+      map.addLayer(vectors);
+    }else{
+      alert('Une couche est déjà en cours d\'édition!');
+    }
   });
 
   $("#export").click(function(){
@@ -203,21 +239,5 @@ function initGpxView() {
   }else{
     alert("Export impossible Veuillez saisir un nom de fichier !")
   }
-  });
-
-  $("#getgeom").click(function(){
-    //var layer = getLayer(layers[0]);
-    //var features = layer.features();
-    if(gpxLayer === undefined){
-      alert('Veuillez importer un GPX en premier');
-    }else{
-      var features = gpxLayer.features;
-      for(var i in features){
-        var item = features[i];
-        if(item.geometry instanceof OpenLayers.Geometry.LineString){
-          console.log("ok line");
-        }
-      }
-    }
-  });
+});
 }
