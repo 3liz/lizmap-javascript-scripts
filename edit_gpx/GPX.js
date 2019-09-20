@@ -112,8 +112,6 @@ function initGpxView() {
     vectors = new OpenLayers.Layer.Vector('test', {
       styleMap: myStyles
     });
-    map.addControl(new OpenLayers.Control.LayerSwitcher());
-    map.addControl(new OpenLayers.Control.MousePosition());
 
     controls = {
         modify: new OpenLayers.Control.ModifyFeature(vectors)
