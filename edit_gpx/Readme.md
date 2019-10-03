@@ -11,4 +11,4 @@ s'importe automatiquement.
 Puis il est possible de le modifier en cochant "Modifier les données".
 Après ça on clique sur la donnée à modifier.
 
-![editgpx](editstart.png)
+![editgpx](editgpx.png)
