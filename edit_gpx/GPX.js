@@ -23,7 +23,7 @@ lizMap.events.on({
         html+= '    <div class="controls">';
         html+= '      <input type="file" style="margin-bottom:5px;" class="form-control-file" id="myFile" name="myFile" accept=".gpx">';
         html+= '    </div>';
-        html+= '    <button type="button" id="emptyLayer" class="btn btn-light">Créer une couche vide</button><br><br>';
+        html+= '    <br>';
 
         html+= '    <span style="font-size:1em;font-weight:bold;">Modifier la couche</span><br>';
 
@@ -31,24 +31,14 @@ lizMap.events.on({
         html+= '        <div class="controls">';
         html+= '            <label class="inline-block" for="noneToggle">';
         html+= '              <input type="radio" name="type" value="none" id="noneToggle"';
-        html+= '                    checked="checked" />';
+        html+= '              />';
         html+= '              Naviguer';
         html+= '            </label>';
         html+= '        </div>';
         html+= '        <div class="controls">';
-        html+= '            <label class="inline-block" for="pointToggle">';
-        html+= '                <input type="radio" name="type" value="point" id="pointToggle" />';
-        html+= '            draw point</label>';
-        html+= '        </div>';
-        html+= '        <div class="controls">';
         html+= '            <label class="inline-block" for="lineToggle">';
         html+= '                <input type="radio" name="type" value="line" id="lineToggle" />';
-        html+= '            draw line</label>';
-        html+= '        </div>';
-        html+= '        <div class="controls">';
-        html+= '            <label class="inline-block" for="polygonToggle">';
-        html+= '                <input type="radio" name="type" value="polygon" id="polygonToggle" />';
-        html+= '            draw polygon</label>';
+        html+= '            Dessiner des lignes</label>';
         html+= '        </div>';
         html+= '        <div class="controls">';
         html+= '            <label class="inline-block" for="modifyToggle">';
@@ -64,7 +54,7 @@ lizMap.events.on({
         html+= '            </div>';
         html+= '        </div>';
         html+= '    </div>';
-        html+= '    <button type="button" id="export" style="margin-top:10px;" class="btn btn-light">Exporter</button><br>';
+        html+= '    <button type="button" id="export" style="margin-top:10px;" class="btn btn-light">Exporter</button><button type="button" id="emptyLayer" style="margin-top:10px;" class="btn btn-light">Nouvelle couche</button><button type="button" id="clear" style="margin-top:10px;" class="btn btn-light">Vider</button><br>';
         html+= '</div>';
 
         // Distance ou temps
@@ -84,7 +74,7 @@ lizMap.events.on({
 
         lizMap.addDock(
             'GPX',
-            'Edit your GPX file',
+            'Editer vos fichiers GPX',
             'minidock',
             html,
             'icon-road'
@@ -105,6 +95,35 @@ function initGpxView() {
     var selectStrokeColor = "red";
     var selectStrokeWidth = 5;
     var pointRadius = 6;
+    var save = 1;
+    var center;
+
+    function clearControl(){
+      for(var key in controls) {
+          map.removeControl(controls[key]);
+      }
+    }
+
+    function createLayer(){
+      vectors = new OpenLayers.Layer.Vector('GPX Layer', {
+        styleMap: myStyles
+      });
+
+      controls = {
+          point: new OpenLayers.Control.DrawFeature(vectors,
+                    OpenLayers.Handler.Point),
+          line: new OpenLayers.Control.DrawFeature(vectors,
+                    OpenLayers.Handler.Path),
+          polygon: new OpenLayers.Control.DrawFeature(vectors,
+                    OpenLayers.Handler.Polygon),
+          modify: new OpenLayers.Control.ModifyFeature(vectors)
+      };
+
+      for(var key in controls) {
+          map.addControl(controls[key]);
+      }
+      document.getElementById("noneToggle").checked = true;
+    }
 
     map = lizMap.map;
     var myStyles = new OpenLayers.StyleMap({
@@ -122,24 +141,9 @@ function initGpxView() {
     })
     });
 
-    vectors = new OpenLayers.Layer.Vector('default name', {
-      styleMap: myStyles
-    });
+    createLayer();
+    $("#noneToggle").attr('checked', 'checked');
 
-    controls = {
-        point: new OpenLayers.Control.DrawFeature(vectors,
-                  OpenLayers.Handler.Point),
-        line: new OpenLayers.Control.DrawFeature(vectors,
-                  OpenLayers.Handler.Path),
-        polygon: new OpenLayers.Control.DrawFeature(vectors,
-                  OpenLayers.Handler.Polygon),
-        modify: new OpenLayers.Control.ModifyFeature(vectors)
-    };
-
-    for(var key in controls) {
-        map.addControl(controls[key]);
-    }
-    document.getElementById('noneToggle').checked = true;
 
     function update() {
         // reset modification mode
@@ -162,17 +166,17 @@ function initGpxView() {
     toggleControl(this);
   });
 
-  $("#pointToggle").click(function(){
-    toggleControl(this);
-  });
+  //$("#pointToggle").click(function(){
+  //  toggleControl(this);
+  //});
 
   $("#lineToggle").click(function(){
     toggleControl(this);
   });
 
-  $("#polygonToggle").click(function(){
-    toggleControl(this);
-  });
+  //$("#polygonToggle").click(function(){
+  //  toggleControl(this);
+  //});
 
   $("#modifyToggle").click(function(){
     toggleControl(this);
@@ -182,37 +186,57 @@ function initGpxView() {
     update();
   });
 
-  $("#myFile").change(function(){
-    if(fileName == undefined){
-      var reader = new FileReader();
-      var fileInput = document.querySelector('#myFile');
-      var result;
-      fileName = $('#myFile')[0].files[0].name;
-      fileName = fileName.split('.')[0];
-      vectors.setName(fileName);
-      reader.addEventListener('load', function() {
-          result = reader.result;
-          var features = (new OpenLayers.Format.GPX()).read(result);
-          for(var i in features){
-            feat = features[i];
-            feat.geometry.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjection());
-          }
-          vectors.addFeatures(features);
-          map.addLayer(vectors);
+  function addLayerFile(){
+    var reader = new FileReader();
+    var fileInput = document.querySelector('#myFile');
+    var result;
+    fileName = $('#myFile')[0].files[0].name;
+    fileName = fileName.split('.')[0];
+    vectors.setName(fileName);
+    reader.addEventListener('load', function() {
+        result = reader.result;
+        var features = (new OpenLayers.Format.GPX()).read(result);
+        for(var i in features){
+          feat = features[i];
+          feat.geometry.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjection());
+        }
+        vectors.addFeatures(features);
+        map.addLayer(vectors);
+        map.zoomToExtent(vectors.getDataExtent());
 
-        });
-        reader.readAsText(fileInput.files[0]);
+      });
+      reader.readAsText(fileInput.files[0]);
+      document.getElementById("modifyToggle").click();
+  }
+
+  $("#myFile").change(function(){
+    if(save == 1){
+      save = 0;
+      addLayerFile();
       }else{
-        alert('Une couche est déjà en cours d\'édition!');
+        if(confirm('Une couche est déjà présente, voulez-vous la remplacer ?')){
+          document.getElementById("noneToggle").click();
+          map.removeLayer(vectors);
+          clearControl();
+          createLayer();
+          addLayerFile();
+        }
       }
   });
 
   $("#emptyLayer").click(function(){
-    if(fileName == undefined){
-      fileName= 'edit';
+    if(save == 1){
+      save = 0;
       map.addLayer(vectors);
     }else{
-      alert('Une couche est déjà en cours d\'édition!');
+      if(confirm('Une couche est déjà présente, voulez-vous la remplacer ?')){
+        save = 0;
+        document.getElementById("noneToggle").click();
+        map.removeLayer(vectors);
+        clearControl();
+        createLayer();
+        map.addLayer(vectors);
+      }
     }
   });
 
@@ -223,7 +247,7 @@ function initGpxView() {
       var features_clone = [];
       for(var i in features){
         feat = features[i];
-        feat_clone = feat.clone()
+        feat_clone = feat.clone();
         feat_clone.geometry.transform(map.getProjection(), new OpenLayers.Projection("EPSG:4326"));
         features_clone.push(feat_clone);
       }
@@ -234,10 +258,24 @@ function initGpxView() {
 
       element.style.display = 'none';
       document.body.appendChild(element);
-
+      save = 1;
       element.click();
-  }else{
-    alert("Export impossible Veuillez saisir un nom de fichier !")
-  }
-});
+    }else{
+      alert("Export impossible Veuillez saisir un nom de fichier !")
+    }
+  });
+  $("#clear").click(function(){
+    if(map.getLayer(vectors.id)){
+      if(save == 1){
+        document.getElementById("noneToggle").click();
+        map.removeLayer(vectors);
+        clearControl();
+      }else if(confirm("Une couche non exporter est présente, voulez-vous vider le projet ?")){
+        save = 1
+        document.getElementById("noneToggle").click();
+        map.removeLayer(vectors);
+        clearControl();
+      }
+    }
+  });
 }
