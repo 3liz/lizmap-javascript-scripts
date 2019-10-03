@@ -12,3 +12,6 @@ Puis il est possible de le modifier en cochant "Modifier les données".
 Après ça on clique sur la donnée à modifier.
 
 ![editgpx](editgpx.png)
+
+Il est aussi possible de dessiner des lignes créer des couches vides
+et de vider le projet en cliquant sur les boutons dédiés.
