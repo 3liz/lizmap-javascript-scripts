@@ -1,7 +1,27 @@
 lizSnapEdition = function(){
 
     // Options
-    var snapLayerName = 'Quartiers';
+    var snapLayerName = '';
+
+    var snapLayers = {
+	     'Quartiers' : {
+         'layers': [
+            'SousQuartiers'
+        ],
+        snapToNode: true,
+        snapToEdge: false,
+        snapToVertex: true
+       },
+	     'SousQuartiers' : {
+         'layers': [
+            'Quartiers'
+        ],
+        snapToNode: true,
+        snapToEdge: false,
+        snapToVertex: true
+       }
+    }
+
     var snapRestrictToMapExtent = true;
     var snapMaxFeatures = 1000;
     var snapTolerance = 40;
@@ -38,45 +58,63 @@ lizSnapEdition = function(){
                 }]
             });
             lizMap.map.addControls([snapControl]);
+            lizMap.controls['snapControl'] = snapControl;
 
         },
 
         'lizmapeditionformdisplayed': function(evt){
             // Get layer config
+            var getLayerConfig = lizMap.getLayerConfigById(evt['layerId']);
 
+            // verifiying  related children objects
+            if ( !getLayerConfig )
+              return true;
+            var layerConfig = getLayerConfig[1];
+            var featureType = getLayerConfig[0];
+
+            var getSnapLayer = snapLayers[featureType]['layers'];
 
             // Get features for the current extent
             // Max 1000 features
 
-            lizMap.getFeatureData(snapLayerName, null, null, 'geom', snapRestrictToMapExtent, null, snapMaxFeatures,
-                function(fName, fFilter, fFeatures, fAliases) {
-                    // Transform features
-                    var snapLayerConfig = lizMap.config.layers[snapLayerName];
-                    var snapLayerCrs = snapLayerConfig['featureCrs'];
-                    if(!snapLayerCrs)
-                        snapLayerCrs = snapLayerConfig['crs'];
+            var snapLayer = lizMap.map.getLayersByName('snaplayer')[0];
+            snapLayer.destroyFeatures();
+            for(var i=0; i<getSnapLayer.length; i++){
+              snapLayerName = getSnapLayer[i];
+              console.log(snapLayerName);
+              lizMap.getFeatureData(snapLayerName, null, null, 'geom', snapRestrictToMapExtent, null, snapMaxFeatures,
+                  function(fName, fFilter, fFeatures, fAliases) {
+                      // Transform features
+                      console.log('ok');
 
-                    var gFormat = new OpenLayers.Format.GeoJSON({
-                        externalProjection: snapLayerCrs,
-                        internalProjection: lizMap.map.getProjection()
-                    });
-                    var tfeatures = gFormat.read( {
-                        type: 'FeatureCollection',
-                        features: fFeatures
-                    } );
+                      var snapLayerConfig = lizMap.config.layers[snapLayerName];
+                      var snapLayerCrs = snapLayerConfig['featureCrs'];
+                      if(!snapLayerCrs)
+                          snapLayerCrs = snapLayerConfig['crs'];
 
-                    // Add features
-                    var snapLayer = lizMap.map.getLayersByName('snaplayer')[0];
-                    snapLayer.destroyFeatures();
-                    snapLayer.addFeatures( tfeatures );
+                      var gFormat = new OpenLayers.Format.GeoJSON({
+                          externalProjection: snapLayerCrs,
+                          internalProjection: lizMap.map.getProjection()
+                      });
+                      var tfeatures = gFormat.read( {
+                          type: 'FeatureCollection',
+                          features: fFeatures
+                      } );
 
-                    // Activate snapping
-                    var snapControl = lizMap.map.getControlsByClass('OpenLayers.Control.Snapping')[0];
-                    snapControl.deactivate();
-                    snapControl.activate();
-                    return false;
-                }
-            );
+                      // Add features
+                      var snapLayer = lizMap.map.getLayersByName('snaplayer')[0];
+                      snapLayer.addFeatures( tfeatures );
+
+                      // Activate snapping
+                      var snapControl = lizMap.controls.snapControl;
+                      snapControl.deactivate();
+                      snapControl.targets[0].edge = snapLayers[featureType].snapToEdge;
+                      snapControl.targets[0].node = snapLayers[featureType].snapToNode;
+                      snapControl.targets[0].vertex = snapLayers[featureType].snapToVertex;
+                      snapControl.activate();
+                      return false;
+              });
+            }
 
         },
 
