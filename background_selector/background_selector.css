@@ -22,3 +22,6 @@
     left: 10px;
     top: 10px;
 }
+#switcher-baselayer{
+    display:none;
+}
