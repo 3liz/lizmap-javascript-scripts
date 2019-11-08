@@ -1,9 +1,7 @@
 lizMap.events.on({
         'uicreated': function(e) {
 
-        var html = '<span style="font-size:1em;font-weight:bold;">Ajouter un fichier GPX</span>';
-        html+= '<br/>';
-        html+= '<br/>';
+        var html = '<span style="font-size:1em;font-weight:bold;">Ajouter une trace</span>';
         html+= '<div id="gpx_form_container" style="">';
 
         html+= '<form class="" id="gpx_form">';
@@ -19,7 +17,6 @@ lizMap.events.on({
         //html+= '<div class="control-group">';
         //html+= '    <label class="sr-only" for="ign_form_method">Méthode</label>';
         html+= '  <div id="controls">';
-        html+= '    <span style="font-size:1em;font-weight:bold;">Ajouter une couche </span><br>';
         html+= '    <div class="controls">';
         html+= '      <input type="file" style="margin-bottom:5px;" class="form-control-file" id="myFile" name="myFile" accept=".gpx">';
         html+= '    </div>';
@@ -28,23 +25,10 @@ lizMap.events.on({
         html+= '    <span style="font-size:1em;font-weight:bold;">Modifier la couche</span><br>';
 
         html+= '    <div id="controlToggle">';
-        html+= '        <div class="controls">';
-        html+= '            <label class="inline-block" for="noneToggle">';
-        html+= '              <input type="radio" name="type" value="none" id="noneToggle"';
-        html+= '              />';
-        html+= '              Naviguer';
-        html+= '            </label>';
-        html+= '        </div>';
-        html+= '        <div class="controls">';
-        html+= '            <label class="inline-block" for="lineToggle">';
-        html+= '                <input type="radio" name="type" value="line" id="lineToggle" />';
-        html+= '            Dessiner des lignes</label>';
-        html+= '        </div>';
-        html+= '        <div class="controls">';
-        html+= '            <label class="inline-block" for="modifyToggle">';
-        html+= '              <input type="radio" name="type" value="modify" id="modifyToggle"/>';
-        html+= '              Modifier les données';
-        html+= '            </label>';
+        html+= '        <div class="btn-group-vertical">';
+        html+= '          <button type="button" class="btn" style="width: 170px; margin-bottom: 10px;" value="none" id="noneToggle" >Désactiver édition</button>';
+        html+= '          <button type="button" class="btn" style="width: 170px; margin-bottom: 10px;" value="line" id="lineToggle" >Dessiner une trace</button>';
+        html+= '          <button type="button" class="btn" style="width: 170px; margin-bottom: 10px;" value="modify" id="modifyToggle">Modifier une trace</button>';
         html+= '            <div class="controls">';
         html+= '                <div hidden>';
         html+= '                    <input id="createVertices" type="checkbox" checked';
@@ -52,9 +36,11 @@ lizMap.events.on({
         html+= '                    <label for="createVertices">allow vertices creation</label>';
         html+= '                </div>';
         html+= '            </div>';
+        html+= '          <button type="button" class="btn" style="width: 170px;">Supprimer une trace</button>';
+        html+= '          <button type="button" id="clear" style="width: 170px; margin-top:10px;" class="btn btn-light">Reinitialiser la couche</button>';
         html+= '        </div>';
         html+= '    </div>';
-        html+= '    <button type="button" id="export" style="margin-top:10px;" class="btn btn-light">Exporter</button><button type="button" id="emptyLayer" style="margin-top:10px;" class="btn btn-light">Nouvelle couche</button><button type="button" id="clear" style="margin-top:10px;" class="btn btn-light">Vider</button><br>';
+        html+= '    <button type="button" id="export" style="margin-top:10px;" class="btn btn-light">Exporter</button><br>';
         html+= '</div>';
 
         // Distance ou temps
@@ -74,7 +60,7 @@ lizMap.events.on({
 
         lizMap.addDock(
             'GPX',
-            'Editer vos fichiers GPX',
+            'Trace GPX',
             'minidock',
             html,
             'icon-road'
@@ -95,8 +81,9 @@ function initGpxView() {
     var selectStrokeColor = "red";
     var selectStrokeWidth = 5;
     var pointRadius = 6;
-    var save = 1;
+    var save = 0;
     var center;
+    var editButton;
 
     function clearControl(){
       for(var key in controls) {
@@ -104,7 +91,7 @@ function initGpxView() {
       }
     }
 
-    function createLayer(){
+    function createNewLayer(){
       vectors = new OpenLayers.Layer.Vector('GPX Layer', {
         styleMap: myStyles
       });
@@ -122,7 +109,6 @@ function initGpxView() {
       for(var key in controls) {
           map.addControl(controls[key]);
       }
-      document.getElementById("noneToggle").checked = true;
     }
 
     map = lizMap.map;
@@ -141,8 +127,8 @@ function initGpxView() {
     })
     });
 
-    createLayer();
-    $("#noneToggle").attr('checked', 'checked');
+    createNewLayer();
+    map.addLayer(vectors);
 
 
     function update() {
@@ -154,7 +140,7 @@ function initGpxView() {
     function toggleControl(element) {
         for(key in controls) {
             var control = controls[key];
-            if(element.value == key && element.checked) {
+            if(element.value == key) {
                 control.activate();
               } else {
                 control.deactivate();
@@ -163,6 +149,14 @@ function initGpxView() {
       }
 
   $("#noneToggle").click(function(){
+    if(editButton != undefined){
+      $("#" + editButton.id).removeClass("btn-inverse");
+      editButton = this;
+    }else{
+      editButton = this;
+    }
+    console.log(this);
+    $("#" + this.id).addClass("btn-inverse");
     toggleControl(this);
   });
 
@@ -171,6 +165,14 @@ function initGpxView() {
   //});
 
   $("#lineToggle").click(function(){
+    if(editButton != undefined){
+      $("#" + editButton.id).removeClass("btn-inverse");
+      editButton = this;
+    }else{
+      editButton = this;
+    }
+    console.log(this);
+    $("#" + this.id).addClass("btn-inverse");
     toggleControl(this);
   });
 
@@ -179,6 +181,13 @@ function initGpxView() {
   //});
 
   $("#modifyToggle").click(function(){
+    if(editButton != undefined){
+      $("#" + editButton.id).removeClass("btn-inverse");
+      editButton = this;
+    }else{
+      editButton = this;
+    }
+    $("#" + this.id).addClass("btn-inverse");
     toggleControl(this);
   });
 
@@ -201,12 +210,10 @@ function initGpxView() {
           feat.geometry.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjection());
         }
         vectors.addFeatures(features);
-        map.addLayer(vectors);
         map.zoomToExtent(vectors.getDataExtent());
 
       });
       reader.readAsText(fileInput.files[0]);
-      document.getElementById("modifyToggle").click();
   }
 
   $("#myFile").change(function(){
@@ -215,29 +222,10 @@ function initGpxView() {
       addLayerFile();
       }else{
         if(confirm('Une couche est déjà présente, voulez-vous la remplacer ?')){
-          document.getElementById("noneToggle").click();
-          map.removeLayer(vectors);
-          clearControl();
-          createLayer();
+          vectors.destroyFeatures();
           addLayerFile();
         }
       }
-  });
-
-  $("#emptyLayer").click(function(){
-    if(save == 1){
-      save = 0;
-      map.addLayer(vectors);
-    }else{
-      if(confirm('Une couche est déjà présente, voulez-vous la remplacer ?')){
-        save = 0;
-        document.getElementById("noneToggle").click();
-        map.removeLayer(vectors);
-        clearControl();
-        createLayer();
-        map.addLayer(vectors);
-      }
-    }
   });
 
   $("#export").click(function(){
@@ -267,15 +255,13 @@ function initGpxView() {
   $("#clear").click(function(){
     if(map.getLayer(vectors.id)){
       if(save == 1){
-        document.getElementById("noneToggle").click();
-        map.removeLayer(vectors);
-        clearControl();
+        vectors.destroyFeatures();
+        save = 0;
       }else if(confirm("Une couche non exporter est présente, voulez-vous vider le projet ?")){
-        save = 1
-        document.getElementById("noneToggle").click();
-        map.removeLayer(vectors);
-        clearControl();
+        vectors.destroyFeatures();
       }
     }
   });
+
+  $('#lineToggle').click();
 }
