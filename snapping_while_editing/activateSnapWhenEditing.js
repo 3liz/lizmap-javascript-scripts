@@ -81,18 +81,18 @@ lizSnapEdition = function(){
             snapLayer.destroyFeatures();
             for(var i=0; i<getSnapLayer.length; i++){
               snapLayerName = getSnapLayer[i];
-              console.log(snapLayerName);
+		  
               lizMap.getFeatureData(snapLayerName, null, null, 'geom', snapRestrictToMapExtent, null, snapMaxFeatures,
                   function(fName, fFilter, fFeatures, fAliases) {
+		      
                       // Transform features
-                      console.log('ok');
-
                       var snapLayerConfig = lizMap.config.layers[snapLayerName];
                       var snapLayerCrs = snapLayerConfig['featureCrs'];
                       if(!snapLayerCrs)
                           snapLayerCrs = snapLayerConfig['crs'];
 
                       var gFormat = new OpenLayers.Format.GeoJSON({
+			  ignoreExtraDims: true,
                           externalProjection: snapLayerCrs,
                           internalProjection: lizMap.map.getProjection()
                       });
