@@ -18,7 +18,7 @@ lizMap.events.on({
         //html+= '    <label class="sr-only" for="ign_form_method">Méthode</label>';
         html+= '  <div id="controls">';
         html+= '    <div class="controls">';
-        html+= '      <input type="file" style="margin-bottom:5px;" class="form-control-file" id="myFile" name="myFile" accept=".gpx">';
+        html+= '      <input type="file" style="margin-bottom:5px;" class="form-control-file" id="myFile" name="myFile" accept=".gpx, .kml">';
         html+= '    </div>';
         html+= '    <br>';
 
@@ -84,6 +84,8 @@ function initGpxView() {
     var save = 0;
     var center;
     var editButton;
+    var ext;
+    var format;
 
     function clearControl(){
       for(var key in controls) {
@@ -200,11 +202,21 @@ function initGpxView() {
     var fileInput = document.querySelector('#myFile');
     var result;
     fileName = $('#myFile')[0].files[0].name;
+    ext = fileName.split('.')[1];
     fileName = fileName.split('.')[0];
+    if(ext.toLowerCase() == 'gpx'){
+        format = (new OpenLayers.Format.GPX());
+        console.log('gpx');
+    }else if(ext.toLowerCase() == 'kml'){
+        format = (new OpenLayers.Format.KML());
+        console.log('kml');
+    }
     vectors.setName(fileName);
     reader.addEventListener('load', function() {
         result = reader.result;
-        var features = (new OpenLayers.Format.GPX()).read(result);
+
+        var features = format.read(result);
+
         for(var i in features){
           feat = features[i];
           feat.geometry.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjection());
@@ -239,10 +251,10 @@ function initGpxView() {
         feat_clone.geometry.transform(map.getProjection(), new OpenLayers.Projection("EPSG:4326"));
         features_clone.push(feat_clone);
       }
-      var gpxContent = (new OpenLayers.Format.GPX).write(features_clone);
+      var content = format.write(features_clone);
       var element = document.createElement('a');
-      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(gpxContent));
-      element.setAttribute('download', fileName + ".gpx");
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+      element.setAttribute('download', fileName + "." + ext);
 
       element.style.display = 'none';
       document.body.appendChild(element);
