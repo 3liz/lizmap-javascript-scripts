@@ -1,6 +1,6 @@
 lizMap.events.on({
     'uicreated': function(e) {
-        // decalre here your google maps key compatible with google street view
+        // declare here your google maps key compatible with google street view
         var gkey = '';
         $('body').append('<script async defer src="https://maps.googleapis.com/maps/api/js?key='+gkey+'&callback=initGoogleStreetView">');
     }
@@ -114,8 +114,7 @@ function initGoogleStreetView() {
     });
 
 
-    var html = '<h4>Panorama</h4>';
-    html += '<div id="gsv-pano" style="width:400px; height:300px;"></div>';
+    var html = '<div id="gsv-pano"></div>';
 
     lizMap.addDock(
         'gsv',
@@ -166,6 +165,21 @@ function initGoogleStreetView() {
     lizMap.events.on({
         minidockopened: function(e) {
             if ( e.id == 'gsv' ) {
+                // gsv is displayed in an absolute position, and set its width/height
+                // regarding the width/height of its host (gsv-pano). So we must
+                // set width/height of gsv-pano manually. These values depends
+                // of the width/height of screen.
+                var sidemenuStyles = window.getComputedStyle(document.getElementById('mapmenu'))
+                var headerStyles = window.getComputedStyle(document.getElementById('header'))
+                var minidockStyles = window.getComputedStyle(document.getElementById('mini-dock'));
+
+                // we assume that minidockStyles.maxWidth is in %, other values in px
+                var height = (parseFloat(sidemenuStyles.height) * 45 / 100) - 15;
+                var width = ((parseFloat(headerStyles.width)-parseFloat(sidemenuStyles.width))  *  (parseFloat(minidockStyles.maxWidth)-1) / 100) -15;
+                var gsvPano = document.getElementById('gsv-pano');
+                gsvPano.style.width = width+'px';
+                gsvPano.style.height = height+'px';
+
                 drawCtrl.activate();
                 $('#gsv-message').html('<p>Click on the map to localize your view.</p>');
             }
