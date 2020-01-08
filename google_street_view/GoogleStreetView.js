@@ -6,7 +6,24 @@ lizMap.events.on({
     }
 });
 function initGoogleStreetView() {
-    // Google maps initialize
+
+    var gsvMessageTimeoutId;
+    var cleanGsvMessage = function() {
+        var gsvMessage = $('#gsv-message');
+        if ( gsvMessage.length != 0 ) {
+            gsvMessage.remove();
+        }
+        gsvMessageTimeoutId = null;
+    };
+    var addGsvMessage = function (aMessage){
+        if ( gsvMessageTimeoutId ) {
+            window.clearTimeout(gsvMessageTimeoutId);
+        }
+        cleanGsvMessage()
+        lizMap.addMessage(aMessage, 'info', true).attr('id','gsv-message');
+        gsvMessageTimeoutId = window.setTimeout(cleanGsvMessage, 5000);
+    };
+
     var map = lizMap.map;
 
     // get Google Street View layer
@@ -92,7 +109,7 @@ function initGoogleStreetView() {
             dragCtrl.activate();
 
             // update message
-            $('#gsv-message').html('<p>Vous pouvez déplacez la position de votre vue sur la carte.</p>');
+            addGsvMessage( 'Vous pouvez déplacez la position de votre vue sur la carte.');
         },
         featuremodified: function(evt) {
             // get feature
@@ -123,11 +140,6 @@ function initGoogleStreetView() {
         html,
         'icon-road'
     );
-
-    var message = '<div id="gsv-message" class="alert alert-block alert-info fade in" data-alert="alert">';
-    message += '<p></p>';
-    message += '</div>';
-    $('#gsv > div.menu-content').prepend(message);
 
     var panorama = new google.maps.StreetViewPanorama(
                     document.getElementById('gsv-pano'), {
@@ -181,7 +193,7 @@ function initGoogleStreetView() {
                 gsvPano.style.height = height+'px';
 
                 drawCtrl.activate();
-                $('#gsv-message').html('<p>Click on the map to localize your view.</p>');
+                addGsvMessage( 'Cliquez sur la carte pour positionner votre vue.');
             }
         },
         minidockclosed: function(e) {
