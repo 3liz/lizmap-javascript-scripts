@@ -1,77 +1,80 @@
 lizMap.events.on({
-        'uicreated': function(e) {
 
-        var html = '<span style="font-size:1em;font-weight:bold;">Ajouter une trace</span>';
-        html+= '<div id="gpx_form_container" style="">';
+    'uicreated': function(e) {
+        // Activate GPX manager tool when the map loads
+        var activateGpxOnStartup = true;
 
-        html+= '<form class="" id="gpx_form">';
+        // File format based on extension
+        var gpxFileFormat = new OpenLayers.Format.GPX();
+        var gpxFileExt = 'ext';
 
-        // A pied ou en voiture
-        html+= '<div class="control-group">';
+        // Add Dock
+        addGpxDock();
 
-        //html+= '    <label class="control-label" for="ign_form_graphName">Moyen de locomotion</label>';
-
-        //html+= '</div>';
-
-        // Méthode
-        //html+= '<div class="control-group">';
-        //html+= '    <label class="sr-only" for="ign_form_method">Méthode</label>';
-        html+= '  <div id="controls">';
-        html+= '    <div class="controls">';
-        html+= '      <input type="file" style="margin-bottom:5px;" class="form-control-file" id="myFile" name="myFile" accept=".gpx">';
-        html+= '    </div>';
-        html+= '    <br>';
-
-        html+= '    <span style="font-size:1em;font-weight:bold;">Modifier la couche</span><br>';
-
-        html+= '    <div id="controlToggle">';
-        html+= '        <div class="btn-group-vertical">';
-        html+= '          <button type="button" class="btn" style="width: 170px; margin-bottom: 10px;" value="none" id="noneToggle" >Désactiver édition</button>';
-        html+= '          <button type="button" class="btn" style="width: 170px; margin-bottom: 10px;" value="line" id="lineToggle" >Dessiner une trace</button>';
-        html+= '          <button type="button" class="btn" style="width: 170px; margin-bottom: 10px;" value="modify" id="modifyToggle">Modifier une trace</button>';
-        html+= '            <div class="controls">';
-        html+= '                <div hidden>';
-        html+= '                    <input id="createVertices" type="checkbox" checked';
-        html+= '                           name="createVertices" />';
-        html+= '                    <label for="createVertices">allow vertices creation</label>';
-        html+= '                </div>';
-        html+= '            </div>';
-        html+= '          <button type="button" class="btn" style="width: 170px;">Supprimer une trace</button>';
-        html+= '          <button type="button" id="clear" style="width: 170px; margin-top:10px;" class="btn btn-light">Reinitialiser la couche</button>';
-        html+= '        </div>';
-        html+= '    </div>';
-        html+= '    <button type="button" id="export" style="margin-top:10px;" class="btn btn-light">Exporter</button><br>';
-        html+= '</div>';
-
-        // Distance ou temps
-        //html+= '<div class="control-group">';
-
-        //html+= '</div>';
-
-
-        // Reverse
-        //html+= '<div class="control-group">';
-
-
-        html+= '</div>';
-
-        html+= '</form>'
-        html+= '</div>'
-
-        lizMap.addDock(
-            'GPX',
-            'Trace GPX',
-            'minidock',
-            html,
-            'icon-road'
-        );
-
-        initGpxView();
-
+        // Activate tools
+        initGpxView(activateGpxOnStartup);
+    },
+    'minidockclosed': function(e) {
+        if ( e.id == 'gpx-manager' ) {
+            $("#gpx_none_toggle").click();
+        }
     }
 });
 
-function initGpxView() {
+function addGpxDock(){
+
+    // Build HTML interface
+    var html = '';
+    html+= '<div id="gpx_form_container" style="">';
+
+    html+= '<form class="" id="gpx_form">';
+    html+= '<div class="control-group">';
+
+    html+= '    <div class="controls">';
+    html+= '        <h4 style="font-weight:bold !important;">Ajouter une trace</h4>';
+    html+= '        <input type="file" style="margin-bottom:5px;" class="form-control-file" id="gpx_file" name="gpx_file" accept=".gpx, .kml">';
+    html+= '    </div>';
+
+    html+= '    <div id="controlToggle" class="controls">';
+    html+= '        <h4 style="font-weight:bold !important;">Modifier les lignes</h4>';
+    html+= '        <div style="width:100%;">';
+    html+= '            <button type="button" class="btn btn-block" value="none" id="gpx_none_toggle" >Désactiver édition</button>';
+    html+= '            <button type="button" class="btn btn-block" value="gpx_line" id="gpx_line_toggle" >Dessiner une trace</button>';
+    html+= '            <button type="button" class="btn btn-block" value="gpx_modify" id="gpx_modify_toggle">Modifier une trace</button>';
+    html+= '            <button type="button" class="btn btn-block" value="gpx_delete" id="gpx_delete_toggle">Supprimer une trace</button>';
+    html+= '            <button type="button" class="btn btn-block" value="clear" id="gpx_clear_layer">Reinitialiser la couche</button>';
+    html+= '        </div>';
+    html+= '    </div>';
+
+    html+= '    <div class="controls">';
+    html+= '        <h4 style="font-weight:bold !important;">Exporter les données</h4>';
+    html+= '        <div style="width:100%;">';
+    html+= '            <button type="button" id="gpx_export" style="margin-top:10px;" class="btn btn-block">Exporter</button>';
+    html+= '        </div>';
+    html+= '    </div>';
+
+    html+= '</div>';
+
+    html+= '<div style="display:none;">';
+    html+= '    <input id="gpx_create_vertices" type="checkbox" checked';
+    html+= '           name="gpx_create_vertices" />';
+    html+= '    <label for="gpx_create_vertices">allow vertices creation</label>';
+    html+= '</div>';
+    html+= '</form>'
+    html+= '</div>'
+
+    // Add Lizmap minidock
+    lizMap.addDock(
+        'gpx-manager',
+        'Gestion de traces GPX/KML',
+        'minidock',
+        html,
+        'icon-road'
+    );
+}
+
+// Initialize GPX manager functions and handlers
+function initGpxView(activateGpxOnStartup) {
     var map, vectors, controls, fileName;
     var gpxLayer;
     var defaultFillColor = "yellow";
@@ -85,183 +88,281 @@ function initGpxView() {
     var center;
     var editButton;
 
+    // Clear all controls
     function clearControl(){
-      for(var key in controls) {
-          map.removeControl(controls[key]);
-      }
+        for(var key in controls) {
+            lizMap.map.removeControl(controls[key]);
+        }
     }
 
+    // Create a new gpx OpenLayers vector layer
     function createNewLayer(){
-      vectors = new OpenLayers.Layer.Vector('GPX Layer', {
-        styleMap: myStyles
-      });
+        var myStyles = new OpenLayers.StyleMap({
+            "default": new OpenLayers.Style({
+                pointRadius: pointRadius,
+                fillColor: defaultFillColor,
+                strokeColor: defaultStrokeColor,
+                strokeWidth: defaultStrokeWidth
+            }),
+            "select": new OpenLayers.Style({
+                pointRadius: pointRadius,
+                fillColor: selectFillColor,
+                strokeColor: selectStrokeColor,
+                strokeWidth: selectStrokeWidth
+            })
+        });
+        vectors = new OpenLayers.Layer.Vector('gpxlayer', {
+            styleMap: myStyles
+        });
 
-      controls = {
-          point: new OpenLayers.Control.DrawFeature(vectors,
-                    OpenLayers.Handler.Point),
-          line: new OpenLayers.Control.DrawFeature(vectors,
-                    OpenLayers.Handler.Path),
-          polygon: new OpenLayers.Control.DrawFeature(vectors,
-                    OpenLayers.Handler.Polygon),
-          modify: new OpenLayers.Control.ModifyFeature(vectors)
-      };
+        controls = {
+            gpx_point: new OpenLayers.Control.DrawFeature(
+                vectors,
+                OpenLayers.Handler.Point
+            ),
+            gpx_line: new OpenLayers.Control.DrawFeature(
+                vectors,
+                OpenLayers.Handler.Path, {
+                    eventListeners: {
+                        featureadded: function(event) {
+                            $('#lizmap-gpx-message').remove();
+                        }
+                    }
+                }
+            ),
+            gpx_polygon: new OpenLayers.Control.DrawFeature(
+                vectors,
+                OpenLayers.Handler.Polygon
+            ),
+            gpx_modify: new OpenLayers.Control.ModifyFeature(
+                vectors
+            ),
+            gpx_delete: new OpenLayers.Control.SelectFeature(
+                vectors,
+                {
+                    clickout: true, toggle: true,
+                    multiple: false, hover: false,
+                    box: false,
+                    eventListeners: {
+                        featurehighlighted: function overlay_delete(event) {
+                            var feature = event.feature;
+                            if( confirm('Delete selected line ?') ) {
+                                vectors.removeFeatures( [ feature ] );
+                            }else{
+                                this.unselect(feature);
+                            }
+                        }
+                    }
+                }
+            )
+        };
 
-      for(var key in controls) {
-          map.addControl(controls[key]);
-      }
+        for(var key in controls) {
+            lizMap.map.addControl(controls[key]);
+        }
     }
 
-    map = lizMap.map;
-    var myStyles = new OpenLayers.StyleMap({
-    "default": new OpenLayers.Style({
-        pointRadius: pointRadius,
-        fillColor: defaultFillColor,
-        strokeColor: defaultStrokeColor,
-        strokeWidth: defaultStrokeWidth
-    }),
-    "select": new OpenLayers.Style({
-        pointRadius: pointRadius,
-        fillColor: selectFillColor,
-        strokeColor: selectStrokeColor,
-        strokeWidth: selectStrokeWidth
-    })
-    });
-
+    // Create gpx layer and add it to the map
     createNewLayer();
-    map.addLayer(vectors);
+    lizMap.map.addLayer(vectors);
 
-
+    // Change modify feature control to allow updating feature
     function update() {
-        // reset modification mode
         controls.modify.mode = OpenLayers.Control.ModifyFeature.RESHAPE;
-        controls.modify.createVertices = true;
+        controls.modify.gpx_create_vertices = true;
+        return false;
     }
 
+    // Toggle control based on element name
     function toggleControl(element) {
         for(key in controls) {
             var control = controls[key];
             if(element.value == key) {
                 control.activate();
-              } else {
+            } else {
                 control.deactivate();
-              }
             }
-      }
-
-  $("#noneToggle").click(function(){
-    if(editButton != undefined){
-      $("#" + editButton.id).removeClass("btn-inverse");
-      editButton = this;
-    }else{
-      editButton = this;
-    }
-    console.log(this);
-    $("#" + this.id).addClass("btn-inverse");
-    toggleControl(this);
-  });
-
-  //$("#pointToggle").click(function(){
-  //  toggleControl(this);
-  //});
-
-  $("#lineToggle").click(function(){
-    if(editButton != undefined){
-      $("#" + editButton.id).removeClass("btn-inverse");
-      editButton = this;
-    }else{
-      editButton = this;
-    }
-    console.log(this);
-    $("#" + this.id).addClass("btn-inverse");
-    toggleControl(this);
-  });
-
-  //$("#polygonToggle").click(function(){
-  //  toggleControl(this);
-  //});
-
-  $("#modifyToggle").click(function(){
-    if(editButton != undefined){
-      $("#" + editButton.id).removeClass("btn-inverse");
-      editButton = this;
-    }else{
-      editButton = this;
-    }
-    $("#" + this.id).addClass("btn-inverse");
-    toggleControl(this);
-  });
-
-  $("#createVertices").change(function(){
-    update();
-  });
-
-  function addLayerFile(){
-    var reader = new FileReader();
-    var fileInput = document.querySelector('#myFile');
-    var result;
-    fileName = $('#myFile')[0].files[0].name;
-    fileName = fileName.split('.')[0];
-    vectors.setName(fileName);
-    reader.addEventListener('load', function() {
-        result = reader.result;
-        var features = (new OpenLayers.Format.GPX()).read(result);
-        for(var i in features){
-          feat = features[i];
-          feat.geometry.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjection());
         }
-        vectors.addFeatures(features);
-        map.zoomToExtent(vectors.getDataExtent());
+    }
 
-      });
-      reader.readAsText(fileInput.files[0]);
-  }
-
-  $("#myFile").change(function(){
-    if(save == 1){
-      save = 0;
-      addLayerFile();
-      }else{
-        if(confirm('Une couche est déjà présente, voulez-vous la remplacer ?')){
-          vectors.destroyFeatures();
-          addLayerFile();
+    // Deactivate edition
+    $("#gpx_none_toggle").click(function(){
+        if(editButton != undefined){
+            $("#" + editButton.id).removeClass("btn-info");
+            editButton = this;
+        }else{
+            editButton = this;
         }
-      }
-  });
+        //console.log(this);
+        $("#" + this.id).addClass("btn-info");
+        toggleControl(this);
 
-  $("#export").click(function(){
-    fileName = prompt("Entrez le nom du fichie", fileName);
-    if(fileName != null && fileName != ""){
-      var features = vectors.features;
-      var features_clone = [];
-      for(var i in features){
-        feat = features[i];
-        feat_clone = feat.clone();
-        feat_clone.geometry.transform(map.getProjection(), new OpenLayers.Projection("EPSG:4326"));
-        features_clone.push(feat_clone);
-      }
-      var gpxContent = (new OpenLayers.Format.GPX).write(features_clone);
-      var element = document.createElement('a');
-      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(gpxContent));
-      element.setAttribute('download', fileName + ".gpx");
+        $('#lizmap-gpx-message').remove();
 
-      element.style.display = 'none';
-      document.body.appendChild(element);
-      save = 1;
-      element.click();
-    }else{
-      alert("Export impossible Veuillez saisir un nom de fichier !")
+        return false;
+    });
+
+    // Activate line drawing control
+    $("#gpx_line_toggle").click(function(){
+        if(editButton != undefined){
+            $("#" + editButton.id).removeClass("btn-info");
+            editButton = this;
+        }else{
+            editButton = this;
+        }
+        //console.log(this);
+        $("#" + this.id).addClass("btn-info");
+        toggleControl(this);
+
+        $('#lizmap-gpx-message').remove();
+        var msg = 'You can draw one or more lines. Click to add a node, double-click to finish a line';
+        lizMap.addMessage(msg,'info',true).attr('id','lizmap-gpx-message');
+
+        return false;
+    });
+
+    // Activate modify control
+    $("#gpx_modify_toggle").click(function(){
+        if(editButton != undefined){
+            $("#" + editButton.id).removeClass("btn-info");
+            editButton = this;
+        }else{
+            editButton = this;
+        }
+        $("#" + this.id).addClass("btn-info");
+        toggleControl(this);
+
+        $('#lizmap-gpx-message').remove();
+        var msg = 'You can click on one line then use the handles to modify the nodes: drag & drop nodes, clic on a node and use the Del key to delete the node.';
+        lizMap.addMessage(msg,'info',true).attr('id','lizmap-gpx-message');
+
+        return false;
+    });
+
+    // Activate delete feature control
+    $("#gpx_delete_toggle").click(function(){
+        if(editButton != undefined){
+            $("#" + editButton.id).removeClass("btn-info");
+            editButton = this;
+        }else{
+            editButton = this;
+        }
+        $("#" + this.id).addClass("btn-info");
+        toggleControl(this);
+
+        $('#lizmap-gpx-message').remove();
+        var msg = 'You can click on one line to select and delete it';
+        lizMap.addMessage(msg,'info',true).attr('id','lizmap-gpx-message');
+
+        return false;
+    });
+
+    $("#gpx_create_vertices").change(function(){
+        update();
+        return false;
+    });
+
+    // Read data from given file and add features to the map
+    function addLayerFile(){
+        var reader = new FileReader();
+        var fileInput = document.querySelector('#gpx_file');
+        var result;
+        var fileName = $('#gpx_file')[0].files[0].name;
+        var ext = fileName.split('.')[1];
+        fileName = fileName.split('.')[0];
+        if(ext.toLowerCase() == 'gpx'){
+            format = (new OpenLayers.Format.GPX());
+        }else if(ext.toLowerCase() == 'kml'){
+            format = (new OpenLayers.Format.KML());
+        }
+        gpxFileFormat = format;
+        gpxFileExt = ext;
+        vectors.setName(fileName);
+        reader.addEventListener('load', function() {
+            result = reader.result;
+        var features = format.read(result);
+            for(var i in features){
+                feat = features[i];
+                feat.geometry.transform(
+                    new OpenLayers.Projection("EPSG:4326"),
+                    lizMap.map.getProjection()
+                );
+            }
+            vectors.addFeatures(features);
+            lizMap.map.zoomToExtent(vectors.getDataExtent());
+
+            $('#lizmap-gpx-message').remove();
+            var msg = 'Data from given file has been successfully added to the map. You can now edit the geometries.';
+            lizMap.addMessage(msg,'info',true).attr('id','lizmap-gpx-message');
+
+        });
+        reader.readAsText(fileInput.files[0]);
     }
-  });
-  $("#clear").click(function(){
-    if(map.getLayer(vectors.id)){
-      if(save == 1){
-        vectors.destroyFeatures();
-        save = 0;
-      }else if(confirm("Une couche non exporter est présente, voulez-vous vider le projet ?")){
-        vectors.destroyFeatures();
-      }
-    }
-  });
 
-  $('#lineToggle').click();
+    // Add file data on file change
+    $("#gpx_file").change(function(){
+        if(save == 1){
+            save = 0;
+            addLayerFile();
+        }else{
+            if( vectors.features.length > 0 ){
+                if(confirm('Une couche est déjà présente, voulez-vous la remplacer ?')){
+                    vectors.destroyFeatures();
+                }
+            }
+            addLayerFile();
+        }
+    });
+
+    // Export layers to GPX or KML
+    $("#gpx_export").click(function(){
+        fileName = prompt("Entrez le nom du fichier (sans extension)", fileName);
+        if(fileName != null && fileName != ""){
+            var features = vectors.features;
+            var features_clone = [];
+            for(var i in features){
+                feat = features[i];
+                feat_clone = feat.clone();
+                feat_clone.geometry.transform(
+                    lizMap.map.getProjection(),
+                    new OpenLayers.Projection("EPSG:4326")
+                );
+                features_clone.push(feat_clone);
+            }
+
+            var gpxContent = gpxFileFormat.write(features_clone);
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(gpxContent));
+            element.setAttribute('download', fileName + "." + gpxFileExt);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            save = 1;
+            element.click();
+        }else{
+            alert("Veuillez saisir un nom de fichier !")
+        }
+    });
+
+    // Clear layer: destroy all features
+    $("#gpx_clear_layer").click(function(){
+        if(lizMap.map.getLayer(vectors.id)){
+            if(save == 1){
+                vectors.destroyFeatures();
+                save = 0;
+            }else if(confirm("Une couche non exportée est présente. Souhaitez-vous néanmoins vider le projet ?")){
+                vectors.destroyFeatures();
+            }
+        }
+    });
+
+    // Activate drawing on start
+    if(activateGpxOnStartup){
+        // Show dock
+        if( !($('#gpx-manager').hasClass('active')) ){
+            $('#mapmenu li.gpx-manager:not(.active) a').click();
+        }
+
+        // Activate line drawing
+        $('#gpx_line_toggle').click();
+    }
 }
