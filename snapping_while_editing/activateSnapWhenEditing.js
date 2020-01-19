@@ -4,23 +4,23 @@ lizSnapEdition = function(){
     var snapLayerName = '';
 
     var snapLayers = {
-         'Quartiers' : {
-         'layers': [
-            'SousQuartiers'
-        ],
-        snapToNode: true,
-        snapToEdge: false,
-        snapToVertex: true
-       },
-         'SousQuartiers' : {
-         'layers': [
-            'Quartiers'
-        ],
-        snapToNode: true,
-        snapToEdge: false,
-        snapToVertex: true
-       }
-    }
+        'Quartiers' : {
+            'layers': [
+                'SousQuartiers'
+            ],
+            snapToNode: true,
+            snapToEdge: false,
+            snapToVertex: true
+        },
+        'SousQuartiers' : {
+            'layers': [
+                'Quartiers'
+            ],
+            snapToNode: true,
+            snapToEdge: false,
+            snapToVertex: true
+        }
+    };
 
     var snapRestrictToMapExtent = true;
     var snapMaxFeatures = 1000;
