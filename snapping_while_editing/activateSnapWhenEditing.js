@@ -4,7 +4,7 @@ lizSnapEdition = function(){
     var snapLayerName = '';
 
     var snapLayers = {
-	     'Quartiers' : {
+         'Quartiers' : {
          'layers': [
             'SousQuartiers'
         ],
@@ -12,7 +12,7 @@ lizSnapEdition = function(){
         snapToEdge: false,
         snapToVertex: true
        },
-	     'SousQuartiers' : {
+         'SousQuartiers' : {
          'layers': [
             'Quartiers'
         ],
@@ -63,14 +63,18 @@ lizSnapEdition = function(){
         },
 
         'lizmapeditionformdisplayed': function(evt){
-            // Get layer config
+            // Get editing layer config
             var getLayerConfig = lizMap.getLayerConfigById(evt['layerId']);
 
-            // verifiying  related children objects
+            // verifiying config
             if ( !getLayerConfig )
               return true;
             var layerConfig = getLayerConfig[1];
             var featureType = getLayerConfig[0];
+
+            // verifying editing layer has snap config
+            if ( !(featureType in snapLayers) )
+                return true;
 
             var getSnapLayer = snapLayers[featureType]['layers'];
 
@@ -81,10 +85,10 @@ lizSnapEdition = function(){
             snapLayer.destroyFeatures();
             for(var i=0; i<getSnapLayer.length; i++){
               snapLayerName = getSnapLayer[i];
-		  
+
               lizMap.getFeatureData(snapLayerName, null, null, 'geom', snapRestrictToMapExtent, null, snapMaxFeatures,
                   function(fName, fFilter, fFeatures, fAliases) {
-		      
+
                       // Transform features
                       var snapLayerConfig = lizMap.config.layers[snapLayerName];
                       var snapLayerCrs = snapLayerConfig['featureCrs'];
@@ -92,7 +96,7 @@ lizSnapEdition = function(){
                           snapLayerCrs = snapLayerConfig['crs'];
 
                       var gFormat = new OpenLayers.Format.GeoJSON({
-			  ignoreExtraDims: true,
+              ignoreExtraDims: true,
                           externalProjection: snapLayerCrs,
                           internalProjection: lizMap.map.getProjection()
                       });
