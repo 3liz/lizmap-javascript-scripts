@@ -4,6 +4,8 @@ lizMap.events.on({
         var gkey = '';
         if ( typeof(google) == 'undefined' ) {
             $('body').append('<script async defer src="https://maps.googleapis.com/maps/api/js?key='+gkey+'&callback=initGoogleStreetView">');
+        } else {
+            window.setTimeout(initGoogleStreetView, 1000);
         }
     }
 });
