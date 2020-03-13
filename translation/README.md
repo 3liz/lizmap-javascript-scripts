@@ -1,2 +1,4 @@
-# translation folder
-Python and javascript files to translate layers, groups, aliases or field and print layout names in lizmap webclient according to the browser language
+# Translation
+In this folder there are:
+1* a python script to retrieve translatable strings from a QGIS project and its related .cfg file created with the lizmap plugin
+2* a javascript file which translate the project content in lizmapwebclient according to the browser language
