@@ -49,7 +49,7 @@ lizMap.events.on({
                             $("div#content div#mini-dock div#print.tab-pane div.print div.menu-content table tbody tr td select#print-template option").filter(function(){
                                 return $(this).text() === italian
                             }).html(translationIT_FR[italian]);
-                            // translate layers and groups name in the layer tree
+                            // translate layers and groups name in the attribute layer tool
                             $("div#content div#bottom-dock div#attributeLayers.tab-pane div.tab-content div#attribute-layer-list table tbody tr td").filter(function(){
                                 return $(this).text() === italian
                             }).html(translationIT_FR[italian]);
@@ -125,7 +125,6 @@ lizMap.events.on({
                             $("div#content div#edition.tab-pane div.edition div.menu-content div#edition-form-container div h3").filter(function(){
                                 return $(this).text() === italian
                             }).html(italian);
-                            // translate aliases or fields name in the edition form
                             $("div#content div#edition.tab-pane div.edition div.menu-content div#edition-form-container form#jforms_view_edition.form-horizontal div.control-group label").filter(function(){
                                 return $(this).text() === italian
                             }).html(italian);

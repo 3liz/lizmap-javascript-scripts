@@ -49,7 +49,7 @@ for l in projectLayoutManager.layouts():
 info_dict['\n          {}\n        '.format(projectInstance.readEntry('WMSServiceTitle', '')[0])] = ""
 
 #retrieves the aliases or the fields names of all vector layer in a specified group
-#and put them in the related project.
+#and put them in the related dictionary.
 #It works over the whole layer tree too. Comment the lines related to the specified group
 #to retrieve the alias/fields name of all vector layers in the project
 root = projectInstance.layerTreeRoot()
