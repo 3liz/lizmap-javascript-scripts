@@ -2,7 +2,7 @@
 In this folder there are:
 
 * a python script to retrieve translatable strings from a QGIS project and its related .cfg file created with the lizmap plugin
-* a javascript file which translate the project content in lizmapwebclient according to the browser language
+* a javascript file which translate the project content in Lizmap-Web-Client according to the browser language
 
 The python script (get_translatable_string.py)
 ----------------------------------------------
@@ -44,6 +44,6 @@ At the moment the script translates:
 
 **NB.**
 * The javascript file has to be saved in the media/js folder.
-* Change the path to the .json file according to your media folder path.
+* Change the path to the .json file according to your media folder path (using the link to media folder previously created).
 * If something is not properly translated check the html selector (e.g. *$("div#header div#title h1")*), they can be different depending on your lizmap properties (e.g the container of the popup), or the json file.
 * For further details about the script see the comments in the code.
