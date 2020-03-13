@@ -1,9 +1,15 @@
-## This python script retrieves all possible translatable strings (layers name, groups name,
-#layouts name, fields or aliases name, etc.) from the project and the .cfg file and saves a
-#json file in which the key is the retrived string and the value should contain the translation
-#of the string. The translation has to be provided manually by editing the file.
-#The script has to be run from the qgis python console of the project.
-#It requires the .cfg file created with the lizmap plugin
+#! usr/bin/env python
+# Author: Roberta Fagandini roberta.fagandini@gter.it 
+# GTER copyleft 2020 - https://creativecommons.org/licenses/by/4.0/
+#############################################################################################
+# This python script retrieves all possible translatable strings (layers name, groups name,
+# layouts name, fields or aliases name, etc.) from the project and the .cfg file and saves a
+# json file in which the key is the retrived string and the value should contain the translation
+# of the string. The translation has to be provided manually by editing the file.
+# The script has to be run from the qgis python console of the project.
+# It requires the .cfg file created with the lizmap plugin
+#############################################################################################
+
 import json
 import os
 
@@ -17,7 +23,7 @@ translation = {}
 fields_dict = {}
 projectInstance = QgsProject.instance()
 
-#retrieves layers and groups titels and abstracts from the .cfg file
+#retrieves layers and groups titles and abstracts from the .cfg file
 prjName = projectInstance.fileName() #the project .qgs file
 prjPath = projectInstance.homePath() #the project .qgs folder
 
@@ -42,9 +48,9 @@ projectLayoutManager = projectInstance.layoutManager()
 for l in projectLayoutManager.layouts():
     layout_dict[l.name()] = ""
 
-#retrives the title of the project defined in the Qgis server tab of the project properties
+#retrieves the title of the project defined in the Qgis server tab of the project properties
 #and put it in the related dictionary
-#The sub title i.e. the name of the repository cannot be retrived from the project or the .cfg file
+#The sub title i.e. the name of the repository cannot be retrieved from the project or the .cfg file
 #hence it has to be translated directly in the translation.js file
 info_dict['\n          {}\n        '.format(projectInstance.readEntry('WMSServiceTitle', '')[0])] = ""
 
