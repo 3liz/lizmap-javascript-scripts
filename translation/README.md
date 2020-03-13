@@ -6,11 +6,11 @@ In this folder there are:
 
 The python script (get_translatable_string.py)
 ----------------------------------------------
-This python script retrieves all possible translatable strings (layers name, groups name, layouts name, fields or aliases name, etc.) from the QGIS project and the related .cfg file. It saves a json file in which the key is the retrived string and the value should contain the translation of the string. The json file is automatically saved in the media folder. Following an example of the json structure:
+This python script retrieves all possible translatable strings (layers name, groups name, layouts name, fields or aliases name, etc.) from the QGIS project and the related .cfg file. It saves a json file in which the key is the retrieved string and the value should contain the translation of the string. The json file is automatically saved in the media folder. Following an example of the json structure:
 
 *{"Original layer name": "", "Original group name": "", ..}*
 
-The translation has to be provided manually by editing the file and putting the translated string in the double quotes. Following an example of the translated json:
+The translation has to be provided manually by editing the file and putting the translated string in the double-quotes. Following an example of the translated json:
 
 *{"Original layer name": "Translated layer name", "Original group name": "Translated group name", ..}*
 
@@ -23,9 +23,9 @@ The js script (translation.js)
 ----------------------------------------------
 This javascript script translates layers and groups names, the title of the project, the print layouts names and the aliases or fileds names according to the language of the browser and using the json file created with the python script *get_translatable_string.py*
 If a translated string is provided in the json file the original string is translated, otherwise the original string is shown in lizmap web client.
-The json file must be saved in the media folder which need to be available from the web. Therefore it is necessary to create 
+The json file must be saved in the media folder which needs to be available from the web. Therefore it is necessary to create 
 a symbolic link on the apache directory (e.g. /var/www/html/) to the media folder in the user repository.
-The javascript retrives the original string (key) and the translated string (value) from the json file. Then for each key found in the jason check the text of the provided html selector (e.g. *$("div#header div#title h1")*). If the two strings (the one from the json file e the one found in the html page) match the text of the provided html selector is replaced with the translated string, if provided in the json file.
+The javascript retrieves the original string (key) and the translated string (value) from the json file. Then for each key found in the jason check the text of the provided html selector (e.g. *$("div#header div#title h1")*). If the two strings (the one from the json file e the one found in the html page) match the text of the provided html selector is replaced with the translated string, if provided in the json file.
 
 At the moment the script translates:
 * layers and groups name in the layer tree
