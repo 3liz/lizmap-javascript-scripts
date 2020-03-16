@@ -4,6 +4,8 @@ with the python script get_translatable_string.py
 If a translated string is provided in the json file the original string is translated, otherwise the original string is shown.
 The json file must be saved in the media folder.*/
 
+var translated_string = {};
+
 var json_url = OpenLayers.Util.urlAppend(
      lizUrls.media,
      OpenLayers.Util.getParameterString({
@@ -18,9 +20,7 @@ lizMap.events.on({
     uicreated: function(e) {
         // get browser language
         var userLang = navigator.language || navigator.userLanguage;
-        if (userLang === 'fr' || userLang === 'fr-FR'){      
-            
-            var translated_string = {};
+        if (userLang === 'fr' || userLang === 'fr-FR'){
 
             // get the json file with transalted strings
             // the path to the json file must be provided as relative path, using the web url the browser can return a security error
@@ -102,44 +102,29 @@ lizMap.events.on({
         // get browser language
         var userLang = navigator.language || navigator.userLanguage;
         if (userLang === 'fr' || userLang === 'fr-FR'){
-
-            var translated_string2 = {};
-
-            // get the json file with transalted strings
-            // the path to the json file must be provided as relative path, using the web url the browser can return a security error
-            fetch(json_url).then(function(response) {
-                if (response.ok)
-                    return response.json();
-                throw new Error('Network response was not ok.');
-                }).then(function(translation) {
-
-                    // put the json content in to the dictionary
-                    translated_string2 = translation;
-                    //console.log(translated_string2);
-                    // iterate over dictionary key
-                    Object.keys(translated_string2).forEach((inputLang) => {
-                        //check if a translation is provided for each string
-                        if (translated_string2[inputLang] != ""){
-                            // translate layers name in the edition form
-                            $("div#content div#edition.tab-pane div.edition div.menu-content div#edition-form-container div h3").filter(function(){
-                                return $(this).text() === inputLang
-                            }).html(translated_string2[inputLang]);
-                            // translate aliases or fields name in the edition form
-                            $("div#content div#edition.tab-pane div.edition div.menu-content div#edition-form-container form#jforms_view_edition.form-horizontal div.control-group label").filter(function(){
-                                return $(this).text() === inputLang
-                            }).html(translated_string2[inputLang]);
-                        }
-                        else {
-                            $("div#content div#edition.tab-pane div.edition div.menu-content div#edition-form-container div h3").filter(function(){
-                                return $(this).text() === inputLang
-                            }).html(inputLang);
-                            $("div#content div#edition.tab-pane div.edition div.menu-content div#edition-form-container form#jforms_view_edition.form-horizontal div.control-group label").filter(function(){
-                                return $(this).text() === inputLang
-                            }).html(inputLang);
-                        }
-                    });
+            //console.log(translated_string);
+            // iterate over dictionary key
+            Object.keys(translated_string).forEach((inputLang) => {
+                //check if a translation is provided for each string
+                if (translated_string[inputLang] != ""){
+                    // translate layers name in the edition form
+                    $("div#content div#edition.tab-pane div.edition div.menu-content div#edition-form-container div h3").filter(function(){
+                        return $(this).text() === inputLang
+                    }).html(translated_string[inputLang]);
+                    // translate aliases or fields name in the edition form
+                    $("div#content div#edition.tab-pane div.edition div.menu-content div#edition-form-container form#jforms_view_edition.form-horizontal div.control-group label").filter(function(){
+                        return $(this).text() === inputLang
+                    }).html(translated_string[inputLang]);
+                }
+                else {
+                    $("div#content div#edition.tab-pane div.edition div.menu-content div#edition-form-container div h3").filter(function(){
+                        return $(this).text() === inputLang
+                    }).html(inputLang);
+                    $("div#content div#edition.tab-pane div.edition div.menu-content div#edition-form-container form#jforms_view_edition.form-horizontal div.control-group label").filter(function(){
+                        return $(this).text() === inputLang
+                    }).html(inputLang);
+                }
             });
-
         }
     }
 });
@@ -150,42 +135,27 @@ lizMap.events.on({
         // get browser language
         var userLang = navigator.language || navigator.userLanguage;
         if (userLang === 'fr' || userLang === 'fr-FR'){
-
-            var translated_string3 = {};
-
-            // get the json file with transalted strings
-            // the path to the json file must be provided as relative path, using the web url the browser can return a security error
-            fetch(json_url).then(function(response) {
-                if (response.ok)
-                    return response.json();
-                throw new Error('Network response was not ok.');
-                }).then(function(translation) {
-
-                    // put the json content in to the dictionary
-                    translated_string3 = translation;
-                    //console.log(translated_string3);
                     // iterate over dictionary key
-                    Object.keys(translated_string3).forEach((inputLang) => {
-                        //check if a translation is provided for each string
-                        if (translated_string3[inputLang] != ""){
-                            // translate layers name in the popup
-                            $("div#content div#map-content div#map.olMap div#OpenLayers_Map_377_OpenLayers_ViewPort div#OpenLayers_Map_377_OpenLayers_Container div#liz_layer_popup.olPopup.lizmapPopup div#liz_layer_popup_GroupDiv div#liz_layer_popup_contentDiv.olPopupContent.lizmapPopupContent h4").filter(function(){
-                                return $(this).text() === inputLang
-                            }).html(translated_string3[inputLang]);
-                            // translate aliases or fields name in the popup
-                            $("div#content div#map-content div#map.olMap div#OpenLayers_Map_377_OpenLayers_ViewPort div#OpenLayers_Map_377_OpenLayers_Container div#liz_layer_popup.olPopup.lizmapPopup div#liz_layer_popup_GroupDiv div#liz_layer_popup_contentDiv.olPopupContent.lizmapPopupContent div.lizmapPopupDiv table.lizmapPopupTable tbody tr th").filter(function(){
-                                return $(this).text() === inputLang
-                            }).html(translated_string3[inputLang]);
-                        }
-                        else {
-                            $("div#content div#map-content div#map.olMap div#OpenLayers_Map_377_OpenLayers_ViewPort div#OpenLayers_Map_377_OpenLayers_Container div#liz_layer_popup.olPopup.lizmapPopup div#liz_layer_popup_GroupDiv div#liz_layer_popup_contentDiv.olPopupContent.lizmapPopupContent h4").filter(function(){
-                                return $(this).text() === inputLang
-                            }).html(inputLang);
-                            $("div#content div#map-content div#map.olMap div#OpenLayers_Map_377_OpenLayers_ViewPort div#OpenLayers_Map_377_OpenLayers_Container div#liz_layer_popup.olPopup.lizmapPopup div#liz_layer_popup_GroupDiv div#liz_layer_popup_contentDiv.olPopupContent.lizmapPopupContent div.lizmapPopupDiv table.lizmapPopupTable tbody tr th").filter(function(){
-                                return $(this).text() === inputLang
-                            }).html(inputLang);
-                        }
-                    });
+            Object.keys(translated_string).forEach((inputLang) => {
+                //check if a translation is provided for each string
+                if (translated_string[inputLang] != ""){
+                    // translate layers name in the popup
+                    $("div#content div#map-content div#map.olMap div#OpenLayers_Map_377_OpenLayers_ViewPort div#OpenLayers_Map_377_OpenLayers_Container div#liz_layer_popup.olPopup.lizmapPopup div#liz_layer_popup_GroupDiv div#liz_layer_popup_contentDiv.olPopupContent.lizmapPopupContent h4").filter(function(){
+                        return $(this).text() === inputLang
+                    }).html(translated_string[inputLang]);
+                    // translate aliases or fields name in the popup
+                    $("div#content div#map-content div#map.olMap div#OpenLayers_Map_377_OpenLayers_ViewPort div#OpenLayers_Map_377_OpenLayers_Container div#liz_layer_popup.olPopup.lizmapPopup div#liz_layer_popup_GroupDiv div#liz_layer_popup_contentDiv.olPopupContent.lizmapPopupContent div.lizmapPopupDiv table.lizmapPopupTable tbody tr th").filter(function(){
+                        return $(this).text() === inputLang
+                    }).html(translated_string[inputLang]);
+                }
+                else {
+                    $("div#content div#map-content div#map.olMap div#OpenLayers_Map_377_OpenLayers_ViewPort div#OpenLayers_Map_377_OpenLayers_Container div#liz_layer_popup.olPopup.lizmapPopup div#liz_layer_popup_GroupDiv div#liz_layer_popup_contentDiv.olPopupContent.lizmapPopupContent h4").filter(function(){
+                        return $(this).text() === inputLang
+                    }).html(inputLang);
+                    $("div#content div#map-content div#map.olMap div#OpenLayers_Map_377_OpenLayers_ViewPort div#OpenLayers_Map_377_OpenLayers_Container div#liz_layer_popup.olPopup.lizmapPopup div#liz_layer_popup_GroupDiv div#liz_layer_popup_contentDiv.olPopupContent.lizmapPopupContent div.lizmapPopupDiv table.lizmapPopupTable tbody tr th").filter(function(){
+                        return $(this).text() === inputLang
+                    }).html(inputLang);
+                }
             });
         }
     }
@@ -206,37 +176,23 @@ lizMap.events.on({
 lizMap.events.on({
     lizmapswitcheritemselected: function(){
         var userLang = navigator.language || navigator.userLanguage;
-        if (userLang === 'fr' || userLang === 'fr-FR'){        
-            
-            var translated_string = {};
-
-            // get the json file with transalted strings
-            // the path to the json file must be provided as relative path, using the web url the browser can return a security error
-            fetch(json_url).then(function(response) {
-                if (response.ok)
-                    return response.json();
-                throw new Error('Network response was not ok.');
-                }).then(function(translation) {
-
-                    // put the json content in to the dictionary
-                    translated_string = translation;
-                    console.log(translated_string);
-                    // iterate over dictionary key
-                    Object.keys(translated_string).forEach((inputLang) => {
-                        //check if a translation is provided for each string
-                        if (translated_string[inputLang] != ""){
-                            // translate the content of the layer information sub-dock
-                            $("div#content div#sub-dock div.sub-metadata div.menu-content dl dd").filter(function(){
-                                return $(this).text() === inputLang
-                            }).html(translated_string[inputLang]);
-                        }
-                        else{
-                            $("div#content div#sub-dock div.sub-metadata div.menu-content dl dd").filter(function(){
-                                return $(this).text() === inputLang
-                            }).html(inputLang);
-                        }
-                    });
-                });
+        if (userLang === 'fr' || userLang === 'fr-FR'){         
+            //console.log(translated_string);
+            // iterate over dictionary key
+            Object.keys(translated_string).forEach((inputLang) => {
+                //check if a translation is provided for each string
+                if (translated_string[inputLang] != ""){
+                    // translate the content of the layer information sub-dock
+                    $("div#content div#sub-dock div.sub-metadata div.menu-content dl dd").filter(function(){
+                        return $(this).text() === inputLang
+                    }).html(translated_string[inputLang]);
+                }
+                else{
+                    $("div#content div#sub-dock div.sub-metadata div.menu-content dl dd").filter(function(){
+                        return $(this).text() === inputLang
+                    }).html(inputLang);
+                }
+            });
         }
     }
 });
@@ -246,20 +202,7 @@ lizMap.events.on({
     mouseover: function(){
         console.log('Ciao!')
         var userLang = navigator.language || navigator.userLanguage;
-        if (userLang === 'fr' || userLang === 'fr-FR'){    
-            
-            var translated_string = {};
-
-            // get the json file with transalted names
-            fetch(json_url).then(function(response) {
-                if (response.ok)
-                    return response.json();
-                throw new Error('Network response was not ok.');
-                }).then(function(translation) {
-
-                    // put the json content in to the dictionary
-                    translated_string = translation;
-                    console.log(translated_string);
+        if (userLang === 'fr' || userLang === 'fr-FR'){
                     // iterate over dictionary key
                     Object.keys(translated_string).forEach((inputLang) => {
                         if (translated_string[inputLang] != ""){
@@ -273,7 +216,6 @@ lizMap.events.on({
                             }).html(inputLang);
                         }
                     });
-                });
         }
     }
 });*/
