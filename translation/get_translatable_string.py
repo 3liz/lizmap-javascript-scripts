@@ -5,14 +5,19 @@
 # This python script retrieves all possible translatable strings (layers name, groups name,
 # layouts name, fields or aliases name, etc.) from the project and the .cfg file and saves a
 # json file in which the key is the retrived string and the value should contain the translation
-# of the string. The translation has to be provided manually by editing the file.
-# The script has to be run from the qgis python console of the project.
-# It requires the .cfg file created with the lizmap plugin
+# of the string. ATTENTION: this script uses the attributeAliases() method to retrieve fields
+# names/aliases. This method does not read aliases of layers added during the active session
+# of QGIS. If you add layers in the project, you have to save and close the project, open
+# the project again and then launch this script.
+# The translation has to be provided manually by editing the json file.
+# This script has to be run from the qgis python console of the project.
+# It requires the .cfg file created with the lizmap plugin.
 #############################################################################################
 
 import json
 import os
 
+sel_gr = 'ConcertEaux' #the name of the group containing the layers from which fields name/aliases are retrieved, to be commented if not necessary 
 lyrs = []
 lyrs_tmp = []
 title_dict = {}
@@ -23,6 +28,7 @@ translation = {}
 fields_dict = {}
 diff_dict = {}
 projectInstance = QgsProject.instance()
+root = projectInstance.layerTreeRoot()
 
 #retrieves layers and groups titles and abstracts from the .cfg file
 prjName = projectInstance.fileName() #the project .qgs file
@@ -60,8 +66,7 @@ info_dict['\n          {}\n        '.format(projectInstance.readEntry('WMSServic
 #and put them in the related dictionary.
 #It works over the whole layer tree too. Comment the lines related to the specified group
 #to retrieve the alias/fields name of all vector layers in the project
-root = projectInstance.layerTreeRoot()
-sel_gr = 'ConcertEaux' #the name of the desired group, to be commented if not necessary 
+
 for child in root.children():
     if isinstance(child, QgsLayerTreeGroup):
         if child.name() == sel_gr: #to be commented if not necessary 
