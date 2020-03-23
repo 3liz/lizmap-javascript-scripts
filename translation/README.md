@@ -8,7 +8,11 @@ The python script (get_translatable_string.py)
 ----------------------------------------------
 This python script retrieves all possible translatable strings (layers name, groups name, layouts name, fields or aliases name, etc.) from the QGIS project and the related .cfg file. It saves a json file in which the key is the retrieved string and the value should contain the translation of the string. The json file is automatically saved in the media folder. Following an example of the json structure:
 
-*{"Original layer name": "", "Original group name": "", ..}*
+```json
+{
+    "Original layer name": "",
+    "Original group name": "",
+}
 
 The translation has to be provided manually by editing the file and putting the translated string in the double-quotes. Following an example of the translated json:
 
