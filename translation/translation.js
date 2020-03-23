@@ -6,6 +6,13 @@ The json file must be saved in the media folder.*/
 
 var translated_string = {};
 
+// get browser language
+var userLang = navigator.language || navigator.userLanguage;
+// to be changed with the desired language ID code
+var langId = 'fr'
+// to be changed with the desired language ID code + country (e.g. fr-FR = French (France), fr-BE = French (Belgium), etc.)
+var langIdCountry = 'fr-FR'
+
 var json_url = OpenLayers.Util.urlAppend(
      lizUrls.media,
      OpenLayers.Util.getParameterString({
@@ -18,10 +25,7 @@ var json_url = OpenLayers.Util.urlAppend(
 //This function is executed when the uicreated event is triggered
 lizMap.events.on({
     uicreated: function(e) {
-        // get browser language
-        var userLang = navigator.language || navigator.userLanguage;
-        if (userLang === 'fr' || userLang === 'fr-FR'){
-
+        if (userLang === langId || userLang === langIdCountry){
             // get the json file with transalted strings
             // the path to the json file must be provided as relative path, using the web url the browser can return a security error
             fetch(json_url).then(function(response) {
@@ -99,9 +103,7 @@ lizMap.events.on({
 //This function is executed when the lizmapeditionformdisplayed event is triggered
 lizMap.events.on({
     lizmapeditionformdisplayed: function(e) {
-        // get browser language
-        var userLang = navigator.language || navigator.userLanguage;
-        if (userLang === 'fr' || userLang === 'fr-FR'){
+        if (userLang === langId || userLang === langIdCountry){
             //console.log(translated_string);
             // iterate over dictionary key
             Object.keys(translated_string).forEach((inputLang) => {
@@ -132,9 +134,7 @@ lizMap.events.on({
 //This function is executed when the lizmappopupdisplayed event is triggered
 lizMap.events.on({
     lizmappopupdisplayed: function(e) {
-        // get browser language
-        var userLang = navigator.language || navigator.userLanguage;
-        if (userLang === 'fr' || userLang === 'fr-FR'){
+        if (userLang === langId || userLang === langIdCountry){
                     // iterate over dictionary key
             Object.keys(translated_string).forEach((inputLang) => {
                 //check if a translation is provided for each string
@@ -164,8 +164,7 @@ lizMap.events.on({
 //This function is executed when the minidockopened event is triggered (it works only if the location tool is opened clicking on the related button of the toolbar)
 lizMap.events.on({
     minidockopened: function(){
-        var userLang = navigator.language || navigator.userLanguage;
-        if (userLang === 'fr' || userLang === 'fr-FR'){
+        if (userLang === langId || userLang === langIdCountry){
             // translate the layer name shown in the location tool 
             $("div#content div#map-content div#mini-dock div.tabbable.tabs-below div#mini-dock-content.tab-content div#locate.tab-pane.active div.locate div.menu-content div.locate-layer span.custom-combobox input[placeholder='Comuni Roia']").attr("placeholder", "Vive la revolucion");
         }
@@ -175,8 +174,7 @@ lizMap.events.on({
 //This function is executed when the lizmapswitcheritemselected event is triggered
 lizMap.events.on({
     lizmapswitcheritemselected: function(){
-        var userLang = navigator.language || navigator.userLanguage;
-        if (userLang === 'fr' || userLang === 'fr-FR'){         
+        if (userLang === langId || userLang === langIdCountry){         
             //console.log(translated_string);
             // iterate over dictionary key
             Object.keys(translated_string).forEach((inputLang) => {
@@ -201,8 +199,7 @@ lizMap.events.on({
 /*lizMap.events.on({
     mouseover: function(){
         console.log('Ciao!')
-        var userLang = navigator.language || navigator.userLanguage;
-        if (userLang === 'fr' || userLang === 'fr-FR'){
+        if (userLang === langId || userLang === langIdCountry){
                     // iterate over dictionary key
                     Object.keys(translated_string).forEach((inputLang) => {
                         if (translated_string[inputLang] != ""){
