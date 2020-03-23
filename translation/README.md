@@ -13,10 +13,15 @@ This python script retrieves all possible translatable strings (layers name, gro
     "Original layer name": "",
     "Original group name": "",
 }
-
+```
 The translation has to be provided manually by editing the file and putting the translated string in the double-quotes. Following an example of the translated json:
 
-*{"Original layer name": "Translated layer name", "Original group name": "Translated group name", ..}*
+```json
+{
+    "Original layer name": "Translated layer name", 
+    "Original group name": "Translated group name",
+}
+```
 
 **NB.**
 * The script has to be run from the QGIS python console of the project.
