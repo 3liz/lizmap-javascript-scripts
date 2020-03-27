@@ -105,7 +105,7 @@ if os.path.exists(jsonFilePath):
         exist_dict.update(diff_dict)
         try:
             with open(jsonFilePath, 'w', encoding='utf-8') as fp:
-                json.dump(exist_dict, fp, ensure_ascii=False)
+                json.dump(exist_dict, fp, ensure_ascii=False, indent=4)
             print('The .json file has been updated')
         except:
             print('Unable to update the .json file')
@@ -114,7 +114,8 @@ if os.path.exists(jsonFilePath):
 else:
     try:
         with open(jsonFilePath, 'w', encoding='utf-8') as fp:
-            json.dump(translation, fp, ensure_ascii=False)
+            json.dump(translation, fp, ensure_ascii=False, indent=4)
         print('The .json file has been saved')
     except:
-        print('Unable to save the .json file')
+        print('Unable to save the .json file to "{}"'.format(jsonFilePath))
+        print('Check that the folder exists.')
