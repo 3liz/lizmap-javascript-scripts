@@ -4,11 +4,11 @@
 #############################################################################################
 # This python script retrieves all possible translatable strings (layers name, groups name,
 # layouts name, fields or aliases name, etc.) from the project and the .cfg file and saves a
-# json file in which the key is the retrived string and the value should contain the translation
-# of the string. ATTENTION: this script uses the attributeAliases() method to retrieve fields
-# names/aliases. This method does not read aliases of layers added during the active session
-# of QGIS. If you add layers in the project, you have to save and close the project, open
-# the project again and then launch this script.
+# json file, for eache specified language, in which the key is the retrived string and the
+# value should contain the translation of the string. ATTENTION: this script uses the
+# attributeAliases() method to retrieve fields names/aliases. This method does not read
+# aliases of layers added during the active sessionof QGIS. If you add layers in the project,
+# you have to save and close the project, open the project again and then launch this script.
 # The translation has to be provided manually by editing the json file.
 # This script has to be run from the qgis python console of the project.
 # It requires the .cfg file created with the lizmap plugin.
@@ -18,6 +18,7 @@ import json
 import os
 
 sel_gr = 'ConcertEaux' #the name of the group containing the layers from which fields name/aliases are retrieved, to be commented if not necessary 
+languages = ['fr', 'en'] #the list of the desired language ID Code. This code must be the same provided in the translation.js for the langId variable.
 lyrs = []
 lyrs_tmp = []
 title_dict = {}
@@ -33,7 +34,6 @@ root = projectInstance.layerTreeRoot()
 #retrieves layers and groups titles and abstracts from the .cfg file
 prjName = projectInstance.fileName() #the project .qgs file
 prjPath = projectInstance.homePath() #the project .qgs folder
-jsonFilePath = '{}/media/translation.json'.format(prjPath) #the output .json file
 
 json_file = '{}.cfg'.format(prjName) #the .cfg file
 if os.path.exists(json_file): #check if the file esists
@@ -95,27 +95,29 @@ translation = {**title_dict, **abstract_dict, **layout_dict, **info_dict, **fiel
 
 #creates a .json file in the media folder with the dictionary containing all strings to be translated
 #if the .json file already exists, only possible new string found will be added to the .json file
-if os.path.exists(jsonFilePath):
-    with open(jsonFilePath, 'r') as jf:
-        exist_dict = json.load(jf)
-    for key_t, value_t in translation.items():
-        if not key_t in exist_dict:
-            diff_dict[key_t] = ""
-    if diff_dict != {}:
-        exist_dict.update(diff_dict)
+for lang in languages:
+    jsonFilePath = '{}/media/translation_{}.json'.format(prjPath, lang) #the output .json file
+    if os.path.exists(jsonFilePath):
+        with open(jsonFilePath, 'r') as jf:
+            exist_dict = json.load(jf)
+        for key_t, value_t in translation.items():
+            if not key_t in exist_dict:
+                diff_dict[key_t] = ""
+        if diff_dict != {}:
+            exist_dict.update(diff_dict)
+            try:
+                with open(jsonFilePath, 'w', encoding='utf-8') as fp:
+                    json.dump(exist_dict, fp, ensure_ascii=False, indent=4)
+                print('The translation_{}.json file has been updated'.format(lang))
+            except:
+                print('Unable to update the translation_{}.json file'.format(lang))
+        else:
+            print('The translation_{}.json file already contains all translatable strings. It will not be updated.'.format(lang))
+    else:
         try:
             with open(jsonFilePath, 'w', encoding='utf-8') as fp:
-                json.dump(exist_dict, fp, ensure_ascii=False, indent=4)
-            print('The .json file has been updated')
+                json.dump(translation, fp, ensure_ascii=False, indent=4)
+            print('The translation_{}.json file has been saved'.format(lang))
         except:
-            print('Unable to update the .json file')
-    else:
-        print('The .json file already contains all translatable strings. It will not be updated.')
-else:
-    try:
-        with open(jsonFilePath, 'w', encoding='utf-8') as fp:
-            json.dump(translation, fp, ensure_ascii=False, indent=4)
-        print('The .json file has been saved')
-    except:
-        print('Unable to save the .json file to "{}"'.format(jsonFilePath))
-        print('Check that the folder exists.')
+            print('Unable to save the translation_{}.json file to "{}"'.format(lang, jsonFilePath))
+            print('Check that the folder exists.')
