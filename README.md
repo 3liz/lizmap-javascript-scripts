@@ -20,5 +20,6 @@ You might have a `README.md` inside the directory with more information.
 * [Simple filter](./simplefilter)
 * [Smart filter](./smartfilter)
 * [Snapping while editing](./snapping_while_editing) Deprecated since LWC 3.4
+* [Translation](./translation) To provide a Lizmap project in many languages
 * [UI](./ui)
 * [WMTS direct access](./wmts_direct_access)
