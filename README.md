@@ -16,6 +16,7 @@ You might have a `README.md` inside the directory with more information.
 * [Hide value popup](./hide_value_popup)
 * [IGN web services](./ign_web_services)
 * [Multiple atlas](./multipleatlas) Deprecated since LWC 3.4
+* [Point buffer on map](./point_buffer_on_map) Display a buffer on the map
 * [Remove button](./remove_button)
 * [Simple filter](./simplefilter)
 * [Smart filter](./smartfilter)
