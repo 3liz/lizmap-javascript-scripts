@@ -3,12 +3,13 @@ lizMap.events.on({
         // declare here your google maps key compatible with google street view
         var gkey = '';
         if ( typeof(google) == 'undefined' ) {
-            $('body').append('<script async defer src="https://maps.googleapis.com/maps/api/js?key='+gkey+'&callback=initGoogleStreetView">');
+            $('body').append('<script async defer src="https://maps.googleapis.com/maps/api/js?key=' + gkey + '&callback=initGoogleStreetView">');
         } else {
             window.setTimeout(initGoogleStreetView, 1000);
         }
     }
 });
+
 function initGoogleStreetView() {
 
     var gsvMessageTimeoutId;
@@ -83,7 +84,7 @@ function initGoogleStreetView() {
         },
         onComplete: function(feature, pixel) {
             layer.events.triggerEvent("featuremodified",
-                                       {feature: feature});
+                {feature: feature});
         }
     });
     map.addControls([drawCtrl, dragCtrl]);
@@ -146,10 +147,10 @@ function initGoogleStreetView() {
     );
 
     var panorama = new google.maps.StreetViewPanorama(
-                    document.getElementById('gsv-pano'), {
-                      position: {lat: 37.869, lng: -122.255},
-                      visible: false
-                });
+        document.getElementById('gsv-pano'), {
+            position: {lat: 37.869, lng: -122.255},
+            visible: false
+        });
     panorama.addListener('position_changed', function() {
         if ( layer.features.length == 0 )
             return;
@@ -185,13 +186,23 @@ function initGoogleStreetView() {
                 // regarding the width/height of its host (gsv-pano). So we must
                 // set width/height of gsv-pano manually. These values depends
                 // of the width/height of screen.
-                var sidemenuStyles = window.getComputedStyle(document.getElementById('mapmenu'))
                 var headerStyles = window.getComputedStyle(document.getElementById('header'))
-                var minidockStyles = window.getComputedStyle(document.getElementById('mini-dock'));
+                var height, width;
 
-                // we assume that minidockStyles.maxWidth is in %, other values in px
-                var height = (parseFloat(sidemenuStyles.height) * 45 / 100) - 15;
-                var width = ((parseFloat(headerStyles.width)-parseFloat(sidemenuStyles.width))  *  (parseFloat(minidockStyles.maxWidth)-1) / 100) -15;
+                if (headerStyles.display == 'none') {
+                    // we are in the iframe mode. No header displayed
+                    var mapStyles = window.getComputedStyle(document.getElementById('map'));
+                    height = (parseFloat(mapStyles.height) * 45 / 100) - 15;
+                    width = document.getElementById('mini-dock').getBoundingClientRect().width - 20 ;
+                }
+                else {
+                    // we are in the normal mode
+                    var sidemenuStyles = window.getComputedStyle(document.getElementById('mapmenu'))
+                    var minidockStyles = window.getComputedStyle(document.getElementById('mini-dock'));
+                    height = (parseFloat(sidemenuStyles.height) * 45 / 100) - 15;
+                    width = ((parseFloat(headerStyles.width)-parseFloat(sidemenuStyles.width))  *  (parseFloat(minidockStyles.maxWidth)-1) / 100) -15;
+                }
+
                 var gsvPano = document.getElementById('gsv-pano');
                 gsvPano.style.width = width+'px';
                 gsvPano.style.height = height+'px';
