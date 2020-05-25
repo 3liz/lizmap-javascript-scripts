@@ -2,19 +2,26 @@ var lizZoomAtStratup = function() {
 
     var show_popup = true;
 
-    function getUrlParameterByName(sVar) {
-        return unescape(
-            window.location.search.replace(
-                new RegExp(
-                    "^(?:.*[&\\?]" + escape(sVar).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"
-                ),
-                "$1"
-            )
-        );
+    function getHashParamFromUrl(hash_key) {
+        var ret_val = null;
+        var hash = location.hash.replace('#', '');
+        var hash_items = hash.split(',');
+        for (var i in hash_items) {
+            var item = hash_items[i];
+            var param = item.split(':');
+            if (param.length == 2) {
+                var key = param[0];
+                var val = param[1];
+                if (key == hash_key) {
+                    return val;
+                }
+            }
+        }
+        return ret_val;
     }
 
     function getFeatureId() {
-        var fid = getUrlParameterByName('FEATUREID');
+        var fid = getHashParamFromUrl('fid');
         if (!fid || fid.split('.').length != 2) {
             return null;
         }
@@ -49,9 +56,7 @@ var lizZoomAtStratup = function() {
                 $('#mapmenu li.popupcontent:not(.active) a').click();
 
                 // Add geometry
-                if( lizSmartLayerConfig.display_geometry ){
-                    lizMap.addGeometryFeatureInfo(null);
-                }
+                lizMap.addGeometryFeatureInfo(null, null);
 
                 // Trigger Lizmap event to add popup toolbar
                 lizMap.events.triggerEvent(
