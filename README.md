@@ -24,3 +24,4 @@ You might have a `README.md` inside the directory with more information.
 * [Translation](./translation) To provide a Lizmap project in many languages
 * [UI](./ui)
 * [WMTS direct access](./wmts_direct_access)
+* [Zoom to feature at startup and show popup](./zoom_to_feature_at_startup)
