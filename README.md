@@ -1,7 +1,8 @@
 ![3Liz](icon.png) Lizmap JavaScript scripts
 ================================================================
 
-You can use those JavaScript scripts to enhance Lizmap Web Client. Documentation is [here](https://docs.lizmap.com/next/en/publish/customization/javascript.html).
+You can use those JavaScript scripts to enhance Lizmap Web Client.
+Documentation is [here](https://docs.lizmap.com/next/en/publish/customization/javascript.html).
 
 You might have a `README.md` inside the directory with more information.
 
@@ -17,6 +18,7 @@ You might have a `README.md` inside the directory with more information.
 * [IGN web services](./library/ign_web_services)
 * [Multiple atlas](./library/multipleatlas) Deprecated since LWC 3.4
 * [Point buffer on map](./library/point_buffer_on_map) Display a buffer on the map
+* [Popup when opening the project with metadata information](./library/popup_metadata_info)
 * [Remove button](./library/remove_button)
 * [Simple filter](./library/simplefilter)
 * [Smart filter](./library/smartfilter)
