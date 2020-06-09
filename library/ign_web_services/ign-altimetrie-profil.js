@@ -42,7 +42,7 @@ var lizmapIgnAltimetrieProfil = function() {
 
     }
 
-    function initIgnAltiView() {
+    function initIgnAltiProfilView() {
         var map = lizMap.map;
 
          var html = '<button">Réinitialiser</button>';
