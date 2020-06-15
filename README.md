@@ -7,6 +7,7 @@ Documentation is [here](https://docs.lizmap.com/next/en/publish/customization/ja
 You might have a `README.md` inside the directory with more information.
 
 * [Add documentation](./library/add_documentation)
+* [Add hamburger button](./library/add_hamburger_button)
 * [Add shortcuts](./library/add_shortcuts)
 * [Attribute table column filter](./library/attribute_table_column_filter)
 * [Background selector](./library/background_selector)
