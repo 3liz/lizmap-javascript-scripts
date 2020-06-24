@@ -31,8 +31,8 @@ function addGpxDock(){
     html+= '<div class="control-group">';
 
     html+= '    <div class="controls">';
-    html+= '        <h4 style="font-weight:bold !important;">Ajouter une trace</h4>';
-    html+= '        <input type="file" style="margin-bottom:5px;" class="form-control-file" id="gpx_file" name="gpx_file" accept=".gpx, .kml">';
+    html+= '        <h4 style="font-weight:bold !important;">Ajouter une trace GPX/KML/GeoJSON</h4>';
+    html+= '        <input type="file" style="margin-bottom:5px;" class="form-control-file" id="gpx_file" name="gpx_file" accept=".gpx, .kml, .geojson">';
     html+= '    </div>';
 
     html+= '    <div id="controlToggle" class="controls">';
@@ -66,7 +66,7 @@ function addGpxDock(){
     // Add Lizmap minidock
     lizMap.addDock(
         'gpx-manager',
-        'Gestion de traces GPX/KML',
+        'Gestion de traces',
         'minidock',
         html,
         'icon-road'
@@ -274,6 +274,8 @@ function initGpxView(activateGpxOnStartup) {
             format = (new OpenLayers.Format.GPX());
         }else if(ext.toLowerCase() == 'kml'){
             format = (new OpenLayers.Format.KML());
+        }else if(ext.toLowerCase() == 'geojson'){
+            format = (new OpenLayers.Format.GeoJSON());
         }
         gpxFileFormat = format;
         gpxFileExt = ext;
@@ -314,9 +316,8 @@ function initGpxView(activateGpxOnStartup) {
         }
     });
 
-    // Export layers to GPX or KML
-    $("#gpx_export").click(function(){
-        fileName = prompt("Entrez le nom du fichier (sans extension)", fileName);
+    function export_file() {
+        fileName = prompt("Entrez le nom du fichier (avec extension .gpx, .geojson ou .kml)", fileName);
         if(fileName != null && fileName != ""){
             var features = vectors.features;
             var features_clone = [];
@@ -329,11 +330,23 @@ function initGpxView(activateGpxOnStartup) {
                 );
                 features_clone.push(feat_clone);
             }
-
+            var pieces = fileName.split('.');
+            var ext = pieces[pieces.length-1];
+            if(ext.toLowerCase() == 'gpx'){
+                format = (new OpenLayers.Format.GPX());
+            }else if(ext.toLowerCase() == 'kml'){
+                format = (new OpenLayers.Format.KML());
+            }else if(ext.toLowerCase() == 'geojson'){
+                format = (new OpenLayers.Format.GeoJSON());
+            }else {
+                alert("Veuillez saisir une extension parmi .gpx, .geojson ou .kml. Exemple: export.kml !")
+                export_file();
+            }
+            gpxFileFormat = format;
             var gpxContent = gpxFileFormat.write(features_clone);
             var element = document.createElement('a');
             element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(gpxContent));
-            element.setAttribute('download', fileName + "." + gpxFileExt);
+            element.setAttribute('download', fileName);
             element.style.display = 'none';
             document.body.appendChild(element);
             save = 1;
@@ -341,6 +354,11 @@ function initGpxView(activateGpxOnStartup) {
         }else{
             alert("Veuillez saisir un nom de fichier !")
         }
+    }
+
+    // Export layers to GPX or KML or GeoJSON
+    $("#gpx_export").click(function(){
+        export_file();
     });
 
     // Clear layer: destroy all features
