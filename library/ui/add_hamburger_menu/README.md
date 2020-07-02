@@ -14,4 +14,4 @@ Mockup for mobile behaviour. It adds some buttons
 
 Have a look at all the variables at the top of the JS script to change some default behaviours.
 
-[Screenshot](add_hamburger_menu.png)
+![Screenshot](add_hamburger_menu.png)
