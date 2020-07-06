@@ -21,5 +21,6 @@ A table layer with fieldname, code and description label must be uploaded in liz
 The table layer can be automatically filled running the python script get_cod_label_widget.py from the python console of the QGIS project.
 
 **NB.**
+* At the moment the js file works only if the columns with Value Map widget are type text. If the column is integer the js script doesn't work (see the PR https://github.com/3liz/lizmap-web-client/pull/1712).
 * The javascript file has to be saved in the media/js folder.
 * For further details about the script see the comments in the code.
