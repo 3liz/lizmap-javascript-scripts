@@ -22,6 +22,7 @@ Examples of available Javascript code:
 * Tools:
   * [Attribute table column filter](./library/tools/attribute_table_column_filter)
   * [Dynamic form field visibility](./library/tools/dynamic_form_field_visibility)
+  * [Group time too](./library/tools/group_time_tool), Display a temporal layers' group as a GIF and generate it
   * [Multiple atlas](./library/tools/multipleatlas), deprecated since LWC 3.4
   * [Point buffer on map](./library/tools/point_buffer_on_map) Display a buffer on the map
   * [Simple filter](./library/tools/simplefilter)

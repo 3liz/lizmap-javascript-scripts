@@ -1,0 +1,56 @@
+<div id="timetool" class="tab-pane">
+	<style>
+		#timetool-date-label{
+			display:none; 
+			position:absolute; 
+			z-index:1000; 
+			left:18.5%; 
+			top:20px; 
+			font-size:xx-large; 
+			line-height:35px;
+		}
+		
+		#timetool-legend-div{
+			display:none;
+			position:absolute;
+			z-index: 2000;
+			left:18.5%;
+			bottom:10px;
+		}
+	</style>
+
+	<div id="timetool-menu" class="timetool" style="display:none;">
+		<h3>
+			<span class="title">
+				<button class="btn-timetool-clear btn btn-mini btn-error btn-link" title="Arrêter">×</button>
+				<span class="icon"></span>
+				Group Time Tool
+			</span>
+		</h3>
+		<div class="menu-content">
+			<div>
+				<p>Select a group:
+				<select id="groupSelector" name="grp-selector" style="width:150px;">
+					<option id="defaultOpt">---</option>
+				</select></span><br>
+				Frame duration:
+				<input id="frame-dur" type="number" name="duration" value=3000 min=1000 max=60000 step=500 style="width: 100px;"> ms</p>
+				<p>Loop series <input id="w-loop" type="checkbox" name="w-loop" value=false> | Generate GIF <input id="w-gif" type="checkbox" name="w-gif" value=false></p>
+			</div>
+			<div>
+				<div style="text-align:center;">
+					<button id="firstDate" class="btn-print-launch btn btn-small btn-primary" disabled=true>First</button>
+					<button id="previousDate" class="btn-print-launch btn btn-small btn-primary" disabled=true>Previous</button>
+					<button id="playGroup" class="btn-print-launch btn btn-small btn-primary" disabled=true>Play</button>
+					<button id="nextDate" class="btn-print-launch btn btn-small btn-primary" disabled=true>Next</button>
+					<button id="lastDate" class="btn-print-launch btn btn-small btn-primary" disabled=true>Last</button>
+				</div>
+				<br>
+				<div style="text-align:center;">
+					<button id="downloadGif" class="btn-print-launch btn btn-small btn-primary" disabled=true>Download GIF</button>
+					<a id="aGif" href="" download="" style="display: none;"></a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
