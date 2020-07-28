@@ -1,4 +1,4 @@
-<h2>Script de traitement de fichier GPX sur Lizmap</h2>
+<h2>Script de traitement de fichier GPX sur Lizmap <= 3.3</h2>
 
 Pour utiliser cette fonctionnalité il faut cliquer sur l’icône à droite de l'écran,
 icone de couleur blanche quand il est sélectionner comme sur l'image ci-dessous. Ensuite s'ouvre la petite fenêtre présente
