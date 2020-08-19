@@ -32,7 +32,7 @@ repositoryName/
 			    |__ gif.worker.js.map
 ```
 
-For more details, consult the documentation available [here](https://github.com/Brun04/lizmap-javascript-scripts/blob/master/library/tools/group_time_tool/doc/Group_time_tool.pdf?inline=false)
+For more details, consult the documentation available [here](./doc/Group_time_tool.pdf)
 
 ## Example
 
