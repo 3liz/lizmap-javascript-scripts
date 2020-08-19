@@ -2,7 +2,8 @@
 # Group Time Tool
 
 A LizMap custom JavaScript to display time series as a video or a GIF.
-<img style="float: right;" src="/images/timetool500.png" alt="Logo" width="20"/>
+<img src="https://github.com/Brun04/lizmap-javascript-scripts/blob/master/library/tools/group_time_tool/images/timetool500.png" width=20px style="float: right;">
+
 
 ## Requirements and install
 
@@ -31,11 +32,11 @@ repositoryName/
 			    |__ gif.worker.js.map
 ```
 
-For more details, consult the documentation available [here](/doc/Group_time_tool.pdf?inline=false)
+For more details, consult the documentation available [here](https://github.com/Brun04/lizmap-javascript-scripts/blob/master/library/tools/group_time_tool/doc/Group_time_tool.pdf?inline=false)
 
 ## Example
 
-![](/doc/covid19-Deaths_FR.gif)
+![](https://github.com/Brun04/lizmap-javascript-scripts/blob/master/library/tools/group_time_tool/doc/covid19-Deaths_FR.gif)
 
 *Data source: OpenCOVID19-fr*
 
