@@ -36,7 +36,7 @@ For more details, consult the documentation available [here](./doc/Group_time_to
 
 ## Example
 
-![](https://github.com/Brun04/lizmap-javascript-scripts/blob/master/library/tools/group_time_tool/doc/covid19-Deaths_FR.gif)
+![](./doc/covid19-Deaths_FR.gif)
 
 *Data source: OpenCOVID19-fr*
 
