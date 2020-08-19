@@ -2,7 +2,7 @@
 # Group Time Tool
 
 A LizMap custom JavaScript to display time series as a video or a GIF.
-<img src="https://github.com/Brun04/lizmap-javascript-scripts/blob/master/library/tools/group_time_tool/images/timetool500.png" width=20px style="float: right;">
+![](./images/timetool500.png)
 
 
 ## Requirements and install
