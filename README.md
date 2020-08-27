@@ -19,6 +19,7 @@ Examples of available Javascript code:
   * [Add keyboard shortcuts](./library/misc/add_shortcuts)
   * [Google Street View](./library/misc/google_street_view) 
   * [Translation](./library/misc/translation) To provide a Lizmap project in many languages
+  * [Refresh some layers periodically](./library/misc/refresh_layers_every_n_seconds)
 * Tools:
   * [Attribute table column filter](./library/tools/attribute_table_column_filter)
   * [Dynamic form field visibility](./library/tools/dynamic_form_field_visibility)
