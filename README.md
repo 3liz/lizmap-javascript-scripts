@@ -33,6 +33,7 @@ Examples of available Javascript code:
   * [Add documentation](./library/ui/add_documentation) with buttons and a dock
   * [Add hamburger menu](./library/ui/add_hamburger_menu) for a better UX on a small screen
   * [Background selector](./library/ui/background_selector), like on Google Maps
+  * [Expand/collapse legend when layer toggled](./library/ui/expand-collapse-legend-when-layer-toggled)
   * [Group collapse](./library/ui/group_collapse)
   * [Hide value popup](./library/ui/hide_value_popup)
   * [Popup when opening the project with metadata information](./library/ui/popup_metadata_info)
