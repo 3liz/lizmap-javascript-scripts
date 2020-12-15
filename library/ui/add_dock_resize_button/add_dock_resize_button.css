@@ -1,0 +1,17 @@
+
+#dock-resize {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+
+#dock.dock-full-size {
+    max-width: none;
+    flex-grow: 1;
+}
+
+#dock.dock-full-size #jforms_view_edition select,
+#dock.dock-full-size #jforms_view_edition input.jforms-ctrl-input,
+#dock.dock-full-size #jforms_view_edition textarea {
+    width: 100%;
+}

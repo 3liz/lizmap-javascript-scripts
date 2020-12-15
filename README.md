@@ -39,3 +39,4 @@ Examples of available Javascript code:
   * [Popup when opening the project with metadata information](./library/ui/popup_metadata_info)
   * [Remove button](./library/ui/remove_button) to make the UI lighter and easier
   * [Simplify print options](./library/ui/simplify-print-options)
+  * [Add button to toggle dock full width](./library/ui/add_dock_resize_button)
