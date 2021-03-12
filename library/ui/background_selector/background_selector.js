@@ -44,13 +44,9 @@ lizMap.events.on({
             var nextbl_val = nextbl.attr('value');
             var cur_image_url = $('#baselayer-image-selector').css('background-image');
             var cur_image_spl = cur_image_url.split('/');
-            var cur_image = cur_image_spl.pop();
+            cur_image_spl.pop();
             var nextbl_image = cur_image_spl.join('/') + '/' + nextbl_val + '.png';
-            var begin = window.location.protocol + "//" + window.location.host + "/";
-            nextbl_image = nextbl_image.replace(
-                begin,
-                lizUrls.basepath
-            ) + '")';
+
             $('#baselayer-image-selector')
                 .css(
                     'background-image',
