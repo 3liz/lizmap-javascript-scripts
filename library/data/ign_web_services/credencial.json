@@ -1,5 +1,5 @@
 {
-	"ignServiceKey" : "your-ign-key",
+	"ignServiceKey" : "essentiels",
 	"ignServiceUrl" : "https://wxs.ign.fr/",
 	"services": {
 		"alti":{
