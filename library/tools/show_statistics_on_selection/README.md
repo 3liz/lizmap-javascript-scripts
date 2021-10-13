@@ -4,6 +4,8 @@ The script will show a small window on the right side of the map with computed s
 
 ![Show statistics on selection GIF demo](./show_statistics_on_selection.gif)
 
+You should add both the **CSS** file `show_statistics_on_selection.css` and the **JS** file `show_statistics_on_selection.js` in your `media/js/project_name` folder, as described in [Lizmap Web Client documentation](https://docs.lizmap.com/current/en/publish/customization/javascript.html?#adding-your-own-javascript)
+
 You can configure the layer, fields and aggregate functions by updating the `statistics_config` variable.
 
 ```javascript
@@ -25,7 +27,7 @@ The `layers` keys can contains one or several layers objects.
 
 * For each layer, you should add a new key with its name (as written in QGIS layers panel), for example `Parcelles`.
 * This key contains an object with a `fields` key listing the fields for which to calculate the stats.
-* For each field, you can have an array of one or several aggregate functions, among `count`, `sum`, `average`, `minimum, `maximum`
+* For each field, you can have an array of one or several aggregate functions, among `count`, `sum`, `average`, `minimum`, `maximum`
 
 In the example above, the statistics window shows:
 
