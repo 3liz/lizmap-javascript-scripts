@@ -1,0 +1,27 @@
+#content #lizmap-selection-statistics {
+    max-width: 300px;
+    max-height: 500px;
+    overflow: auto;
+    position: absolute;
+    bottom: 250px;
+    right: 10px;
+    z-index: 1000;
+    border: 2px solid white;
+    border-radius: 4px;
+    background-color: #F0F0F0;;
+    box-shadow: 2px 2px 2px 2px #aaa;
+}
+#content.mobile #lizmap-selection-statistics {
+    bottom: revert;
+    right: revert;
+    left: 40px;
+    top: 10px;
+}
+#lizmap-selection-statistics-table {
+    margin-bottom: 0px;
+    font-size: 12px;
+}
+#lizmap-selection-statistics-table tr th{
+    margin-bottom: 0px;
+    font-size: 14px;
+}

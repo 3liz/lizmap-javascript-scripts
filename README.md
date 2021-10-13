@@ -30,6 +30,7 @@ Examples of available Javascript code:
   * [Smart filter](./library/tools/smartfilter)
   * [Snapping while editing](./library/tools/snapping_while_editing), deprecated since LWC 3.4
   * [Zoom to feature at startup and show popup](./library/tools/zoom_to_feature_at_startup)
+  * [Display statistics on the current layer selection](./library/tools/show_statistics_on_selection)
 * UI:
   * [Add documentation](./library/ui/add_documentation) with buttons and a dock
   * [Add hamburger menu](./library/ui/add_hamburger_menu) for a better UX on a small screen, deprecated since LWC 3.4
