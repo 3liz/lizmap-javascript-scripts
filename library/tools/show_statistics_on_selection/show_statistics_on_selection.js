@@ -193,7 +193,7 @@ var lizSelectionStatistics = function() {
             lizMap.getFeatureData(layer_name, null, feature_id_param.split(',')[0], 'none', false, 0, 1,
                 function( aName, aFilter, cFeatures, cAliases ){
                     // Request layer features filtered for all the selected ids
-                    lizMap.getFeatureData(layer_name, null, feature_id_param, 'none', false, 0, 100,
+                    lizMap.getFeatureData(layer_name, null, feature_id_param, 'none', false, null, null,
                         function( aName, aFilter, cFeatures, cAliases ){
                             displaySelectionStatistics(layer_name, cFeatures, cAliases);
                         }
