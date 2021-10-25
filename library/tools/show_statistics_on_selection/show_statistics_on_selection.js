@@ -9,11 +9,17 @@ var lizSelectionStatistics = function() {
                     'geo_parcelle': ['count'],
                     'surface_geo': ['sum', 'minimum', 'maximum']
                 }
+            },
+            'Sections': {
+                fields: {
+                    'geo_section': ['count'],
+                    'ogc_fid': ['minimum', 'maximum']
+                }
             }
         }
     };
 
-    var aggregate_function_locales = {
+    var selection_statisticts_locales = {
         'count': 'Count',
         'sum': 'Sum',
         'average': 'Average',
@@ -95,7 +101,7 @@ var lizSelectionStatistics = function() {
         for (var field in layer_stat_config['fields']) {
             // Get alias
             var field_alias = field;
-            if (field_aliases) {
+            if (field_aliases && field in field_aliases && field_aliases[field] != '') {
                 field_alias = field_aliases[field];
             }
 
@@ -103,7 +109,7 @@ var lizSelectionStatistics = function() {
             var html_tds = '';
             for (var a in layer_stat_config['fields'][field]) {
                 var aggregate_function = layer_stat_config['fields'][field][a];
-                if (!(aggregate_function in aggregate_function_locales)) {
+                if (!(aggregate_function in selection_statisticts_locales)) {
                     continue;
                 }
                 var aggregate_value = aggregateArray(
@@ -111,7 +117,7 @@ var lizSelectionStatistics = function() {
                     aggregate_function
                 );
                 html_tds+= '<tr>';
-                html_tds+= '<td>'+aggregate_function_locales[aggregate_function]+'</td><td>'+aggregate_value+'</td>';
+                html_tds+= '<td>'+selection_statisticts_locales[aggregate_function]+'</td><td>'+aggregate_value+'</td>';
                 html_tds+= '</tr>';
             }
 
@@ -124,7 +130,9 @@ var lizSelectionStatistics = function() {
             }
         }
         // Replace html table
-        $('#lizmap-selection-statistics-table').html(html);
+        var clean_name = lizMap.cleanName(layer_name);
+        $('#lizmap-selection-statistics-table-'+clean_name).html(html);
+        $('#lizmap-selection-statistics-table-'+clean_name).parent('div').show();
         $('#lizmap-selection-statistics').show();
 
     }
@@ -132,8 +140,18 @@ var lizSelectionStatistics = function() {
     function addStatsView() {
         var html = '';
         html += '<div id="lizmap-selection-statistics" style="display: none;">';
-        html += '<table id="lizmap-selection-statistics-table" class="table table-condensed">';
-        html += '</table>';
+
+        // Add a div, label, table per layer
+        for (var l in statistics_config.layers) {
+            var layer_name = l;
+            var clean_name = lizMap.cleanName(layer_name);
+            layer_stat_config = statistics_config.layers[l];
+            html+= '<div>';
+            html+= '<b>'+layer_name+'</b>';
+            html += '<table id="lizmap-selection-statistics-table-'+clean_name+'" class="table table-condensed lizmap-selection-statistics-table">';
+            html += '</table>';
+            html += '</div>';
+        }
         html += '</div>';
         $('#map-content').append(html);
         if($('#overview-box').length == 1) {
@@ -151,8 +169,10 @@ var lizSelectionStatistics = function() {
 
             // Quit if there is no selection
             if (e.featureIds.length == 0) {
-                $('#lizmap-selection-statistics-table').html('');
-                $('#lizmap-selection-statistics').hide();
+                var clean_name = lizMap.cleanName(e.featureType);
+                $('#lizmap-selection-statistics-table-'+clean_name).html('');
+                $('#lizmap-selection-statistics-table-'+clean_name).parent('div').hide();
+
                 return true;
             }
 
@@ -200,8 +220,6 @@ var lizSelectionStatistics = function() {
                     );
                 }
             );
-
-
 
         }
     });

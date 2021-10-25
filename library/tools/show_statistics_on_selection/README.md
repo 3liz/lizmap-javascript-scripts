@@ -6,7 +6,7 @@ The script will show a small window on the right side of the map with computed s
 
 You should add both the **CSS** file `show_statistics_on_selection.css` and the **JS** file `show_statistics_on_selection.js` in your `media/js/project_name` folder, as described in [Lizmap Web Client documentation](https://docs.lizmap.com/current/en/publish/customization/javascript.html?#adding-your-own-javascript)
 
-You can configure the layer, fields and aggregate functions by updating the `statistics_config` variable.
+You can configure the layers, fields and aggregate functions by updating the `statistics_config` variable.
 
 ```javascript
     // Aggregate functions can be:
@@ -18,6 +18,12 @@ You can configure the layer, fields and aggregate functions by updating the `sta
                     'geo_parcelle': ['count'],
                     'surface_geo': ['sum', 'minimum', 'maximum']
                 }
+            },
+            'Sections': {
+                fields: {
+                    'geo_section': ['count'],
+                    'ogc_fid': ['minimum', 'maximum']
+                }
             }
         }
     };
@@ -25,7 +31,7 @@ You can configure the layer, fields and aggregate functions by updating the `sta
 
 The `layers` keys can contains one or several layers objects.
 
-* For each layer, you should add a new key with its name (as written in QGIS layers panel), for example `Parcelles`.
+* For each **layer**, you should add a new key with its name (as written in QGIS layers panel), for example `Parcelles`.
 * This key contains an object with a `fields` key listing the fields for which to calculate the stats.
 * For each field, you can have an array of one or several aggregate functions, among `count`, `sum`, `average`, `minimum`, `maximum`
 
@@ -33,6 +39,8 @@ In the example above, the statistics window shows:
 
 * the number of the `geo_parcelle` field, which is the primary key of the table: this will show the number of selected features
 * the sum of the parcels area taken from the field `surface_geo`, and the minimum and maximum area.
+
+and the statistics for the other `Sections` layer: number of selected features (count of `geo_section`), and minimum/maximum of the `ogc_fid` field
 
 You can also adapt the locales for the aggregated functions labels. At present, only one translation is possible:
 
