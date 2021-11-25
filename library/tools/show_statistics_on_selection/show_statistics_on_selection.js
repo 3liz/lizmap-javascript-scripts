@@ -1,4 +1,4 @@
-var lizSelectionStatistics = function() {
+var lizSelectionStatistics = function () {
 
     // Aggregate functions can be:
     // count, sum, average, minimum, maximum
@@ -28,41 +28,60 @@ var lizSelectionStatistics = function() {
     }
 
 
-    function getVectorLayerSelectionFeatureIdsString( aName ) {
-        var featureidParameter = '';
-        if( aName in lizMap.config.layers && lizMap.config.layers[aName]['selectedFeatures'] ){
-            var fids = [];
+    /** Get features from WFS
+     * We must use a personalized function to get only the selected features
+     *
+     */
+    function getWfsFeatures(aName, aCallBack) {
+        // Get selected features
+        var cleanName = lizMap.cleanName(aName);
+        var selectionLayer = lizMap.getLayerNameByCleanName(cleanName);
 
-            // Get WFS typename
-            var configLayer = lizMap.config.layers[aName];
-            var typeName = aName.split(' ').join('_');
-            if ( 'shortname' in configLayer && configLayer.shortname != '' )
-                typeName = configLayer.shortname;
-
-            for( var id in configLayer['selectedFeatures'] ) {
-                fids.push( typeName + '.' + configLayer['selectedFeatures'][id] );
-            }
-            if( fids.length )
-                featureidParameter = fids.join();
+        if (!selectionLayer) {
+            selectionLayer = aName;
         }
 
-        return featureidParameter;
+        // Get WFS url and options
+        let restrictToMapExtent = false;
+        var getFeatureUrlData = lizMap.getVectorLayerWfsUrl(aName, null, null, null, restrictToMapExtent);
+
+        // Set export format
+        getFeatureUrlData['options']['OUTPUTFORMAT'] = 'GeoJSON';
+        getFeatureUrlData['options']['GEOMETRYNAME'] = 'none';
+
+        // Add selection token
+        var layer_config = lizMap.config.layers[selectionLayer];
+
+        // We need to wait a little bit so that the selectiontoken is refreshed in the request_params
+        // This is a workaround
+        setTimeout(function () {
+            if ('request_params' in layer_config && 'selectiontoken' in layer_config['request_params']) {
+                var selection_token = layer_config['request_params']['selectiontoken'];
+                if (selection_token != '') {
+                    getFeatureUrlData['options']['SELECTIONTOKEN'] = selection_token;
+                }
+            }
+            $.post(getFeatureUrlData['url'], getFeatureUrlData['options'], function (data) {
+                aCallBack(selectionLayer, data.features);
+            });
+        }, 500);
+
+
     }
 
     function aggregateArray(input_array, aggregate_function) {
         var computed_value = null;
-        switch(aggregate_function)
-        {
+        switch (aggregate_function) {
             case 'count':
                 computed_value = input_array.length;
                 break;
 
             case 'sum':
-                computed_value = input_array.reduce((a,b) => a + b, 0);
+                computed_value = input_array.reduce((a, b) => a + b, 0);
                 break;
 
             case 'average':
-                computed_value = input_array.reduce((a,b) => a + b, 0) / input_array.length
+                computed_value = input_array.reduce((a, b) => a + b, 0) / input_array.length
                 break;
 
             case 'minimum':
@@ -116,23 +135,23 @@ var lizSelectionStatistics = function() {
                     stats[field],
                     aggregate_function
                 );
-                html_tds+= '<tr>';
-                html_tds+= '<td>'+selection_statisticts_locales[aggregate_function]+'</td><td>'+aggregate_value+'</td>';
-                html_tds+= '</tr>';
+                html_tds += '<tr>';
+                html_tds += '<td>' + selection_statisticts_locales[aggregate_function] + '</td><td>' + aggregate_value + '</td>';
+                html_tds += '</tr>';
             }
 
             // Create row with field name
             if (html_tds != '') {
-                html+= '<tr>';
-                html+= '<th colspan=2 align=center>'+field_alias+'</th>';
-                html+= '</tr>';
-                html+= html_tds;
+                html += '<tr>';
+                html += '<th colspan=2 align=center>' + field_alias + '</th>';
+                html += '</tr>';
+                html += html_tds;
             }
         }
         // Replace html table
         var clean_name = lizMap.cleanName(layer_name);
-        $('#lizmap-selection-statistics-table-'+clean_name).html(html);
-        $('#lizmap-selection-statistics-table-'+clean_name).parent('div').show();
+        $('#lizmap-selection-statistics-table-' + clean_name).html(html);
+        $('#lizmap-selection-statistics-table-' + clean_name).parent('div').show();
         $('#lizmap-selection-statistics').show();
 
     }
@@ -146,15 +165,15 @@ var lizSelectionStatistics = function() {
             var layer_name = l;
             var clean_name = lizMap.cleanName(layer_name);
             layer_stat_config = statistics_config.layers[l];
-            html+= '<div>';
-            html+= '<b>'+layer_name+'</b>';
-            html += '<table id="lizmap-selection-statistics-table-'+clean_name+'" class="table table-condensed lizmap-selection-statistics-table">';
+            html += '<div>';
+            html += '<b>' + layer_name + '</b>';
+            html += '<table id="lizmap-selection-statistics-table-' + clean_name + '" class="table table-condensed lizmap-selection-statistics-table">';
             html += '</table>';
             html += '</div>';
         }
         html += '</div>';
         $('#map-content').append(html);
-        if($('#overview-box').length == 1) {
+        if ($('#overview-box').length == 1) {
             $('#lizmap-selection-statistics').addClass('with-overview-box');
         }
     }
@@ -165,13 +184,13 @@ var lizSelectionStatistics = function() {
     // Listen to Lizmap selection changed event and trigger action
     lizMap.events.on({
 
-        'layerSelectionChanged': function(e) {
+        'layerSelectionChanged': function (e) {
 
             // Quit if there is no selection
             if (e.featureIds.length == 0) {
                 var clean_name = lizMap.cleanName(e.featureType);
-                $('#lizmap-selection-statistics-table-'+clean_name).html('');
-                $('#lizmap-selection-statistics-table-'+clean_name).parent('div').hide();
+                $('#lizmap-selection-statistics-table-' + clean_name).html('');
+                $('#lizmap-selection-statistics-table-' + clean_name).parent('div').hide();
 
                 return true;
             }
@@ -207,20 +226,23 @@ var lizSelectionStatistics = function() {
 
             // Request layer features with filtered ids
             // First build the FEATUREID parameter string value based on the layer selection
-            let feature_id_param = getVectorLayerSelectionFeatureIdsString(layer_name);
+            var first_feature_id = lizMap.config.layers[layer_name]['selectedFeatures'][0];
+            if (!first_feature_id) {
+                return true;
+            }
+            first_feature_id = layer_name + '.' + first_feature_id;
 
             // First get feature with only one selected id to get aliases (bug...)
-            lizMap.getFeatureData(layer_name, null, feature_id_param.split(',')[0], 'none', false, 0, 1,
-                function( aName, aFilter, cFeatures, cAliases ){
+            lizMap.getFeatureData(layer_name, null, first_feature_id, 'none', false, 0, 1,
+                function (aName, aFilter, cFeatures, cAliases) {
                     // Request layer features filtered for all the selected ids
-                    lizMap.getFeatureData(layer_name, null, feature_id_param, 'none', false, null, null,
-                        function( aName, aFilter, cFeatures, cAliases ){
-                            displaySelectionStatistics(layer_name, cFeatures, cAliases);
+                    getWfsFeatures(layer_name,
+                        function (aName, cFeatures) {
+                            displaySelectionStatistics(aName, cFeatures, cAliases);
                         }
                     );
                 }
             );
-
         }
     });
 }();
