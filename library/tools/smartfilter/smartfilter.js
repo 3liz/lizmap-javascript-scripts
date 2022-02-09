@@ -40,7 +40,7 @@ var lizSmartLayer = function() {
             select_fields: ['liste_services'],
 
             // Separators to use for each field to split the values into smaller pieces
-            // For example "banana, orange, kiwi" can be splited into 3 values (checkboxes) "banana", "orange" and "kiwi"
+            // For example "banana, orange, kiwi" can be split into 3 values (checkboxes) "banana", "orange" and "kiwi"
             valueSeparator: {
                 'lib_type_vente1': ',',
                 'liste_famille_produit': '-',
@@ -61,7 +61,7 @@ var lizSmartLayer = function() {
 
             // Zoom to filtered features automatically ?
             zoom_to_features: true,
-            // If true, should we zoom exactly, or apply the followin factor
+            // If true, should we zoom exactly, or apply the following factor
             // 0 zooms exactly, -1 zooms one zoom above
             zoom_factor: -1,
 
@@ -108,7 +108,7 @@ var lizSmartLayer = function() {
 
             // Should we add a checkbox (or select option) for the features with NULL or empty ('') values ?
             add_other_item_for_null_values: false,
-            // If so, choose the label of the "empty value" checbox
+            // If so, choose the label of the "empty value" checkbox
             other_label: 'Autres',
 
             // Which words or regular expression trigger the checkbox to be place at the bottom
@@ -272,8 +272,6 @@ var lizSmartLayer = function() {
                     var add_feature = true;
                     var field_count = {};
 
-//console.log('FEATURE');
-
                     var feat_matches_some_field = 0;
                     var feat_matches_field = 0;
                     var number_of_fields = 0;
@@ -306,12 +304,10 @@ var lizSmartLayer = function() {
                             ){
                                 // Then we need to add this feature in the counter
                                 if( achecked ){
-                                    //console.log('matched & checked');
                                     field_count[cfield][cval] = 1;
                                     feat_matches_checked_value += 1;
                                 }
                                 else{
-                                    //console.log('matched & NON coché');
                                     field_count[cfield][cval] = 1;
                                 }
                                 feat_matches_checked_or_unchecked_value += 1;
@@ -320,17 +316,14 @@ var lizSmartLayer = function() {
                             // The values does not match this checkbox value
                             else{
                                 if( achecked ){
-                                    //console.log('NO MATCH & checked');
                                     field_count[cfield][cval] = 0;
                                     // We remove from counter
                                     // And further not add it to the filteredFeaturesIds
                                     add_feature_for_field = false;
                                 }else{
-                                    //console.log('NO MATCH & NON coché');
                                     field_count[cfield][cval] = 0;
                                 }
                             }
-//console.log('---------');
                         } // End loop over values
 
                         if( lizSmartLayerConfig.field_intra_filter == 'and'
@@ -355,9 +348,6 @@ var lizSmartLayer = function() {
                         add_feature = false;
                     }
 
-//console.log(field_count);
-//console.log('add_feature = ' + add_feature);
-
                     if(add_feature){
                         // Add feature ids
                         filteredFeaturesIds.push(fid);
@@ -373,13 +363,7 @@ var lizSmartLayer = function() {
                 }else{
                     filteredFeaturesIds.push(fid);
                 }
-//console.log('==============');
             }
-            //console.log('TOTAL');
-            //console.log(lizSmartLayerConfig.total_counter);
-            //console.log('FILTER');
-            //console.log(lizSmartLayerConfig.filter_counter);
-            //console.log(filteredFeaturesIds);
 
             // Sort features
             if( initialCount && lizSmartLayerConfig.card_order_field){
@@ -429,7 +413,6 @@ var lizSmartLayer = function() {
         }
 
         function triggerLayerFilter(layername, filter){
-//console.log(filter);
             // Show all features if filter = all
             if(filter == 'showall'){
                 // We deactivate the filter
@@ -467,7 +450,6 @@ var lizSmartLayer = function() {
         function updateCounters(){
             for( var cfield in checkedFieldValues ){
                 if ( lizSmartLayerConfig['select_fields'].indexOf(cfield) >= 0 ) {
-                    //console.log(checkedFieldValues[cfield]);
                     var selectId = '#liz-sml-field-' + cfield;
                     for( var cval in checkedFieldValues[cfield] ){
                         var nb = lizSmartLayerConfig.filter_counter[cfield][cval];
@@ -532,7 +514,6 @@ var lizSmartLayer = function() {
                 has_filter = false;
             }
             $('#liz-sml-item-layer-total-count').html(total);
-
         }
 
         function getSmartLayerHome(){
@@ -592,7 +573,7 @@ var lizSmartLayer = function() {
                     else
                         afkeys.push(f_val);
                 }
-                if(other !== null) // we need to keep the '' value, wich means there are NULL values to be pushed in other_label checkbox
+                if(other !== null) // we need to keep the '' value, which means there are NULL values to be pushed in other_label checkbox
                     afkeys.push(other);
                 fkeys = afkeys;
                 for( var z in fkeys ){
@@ -670,7 +651,6 @@ var lizSmartLayer = function() {
                 var fid = feature.id.split('.').pop();
 
                 if( filteredFeaturesIds.length != [] && !($.inArray(fid, filteredFeaturesIds) != -1) ){
-                    //console.log( i + ' n est pas dans ffids (-> on passe');
                     continue;
                 }
 
@@ -923,23 +903,20 @@ var lizSmartLayer = function() {
             title+= '<i class="icon-search icon-white" style="margin: 4px;"></i>';
             title+= lizMap.config.layers[lizSmartLayerConfig.layername]['title'];
             title+= '</h3>';
-            //$('#sml').prepend(title);
 
             // Add right dock
             if ( lizSmartLayerConfig.card_display ) {
-            var dock = 'right-dock';
-            if( lizMap.checkMobile() )
-                dock = 'minidock';
-            lizMap.addDock(
-                'smlcontent',
-                //lizDict['smartlayer.toolbar.title'],
-                lizSmartLayerConfig.result_panel_name,
-                dock,
-                '',
-                'icon-comment'
-            );
+                var dock = 'right-dock';
+                if( lizMap.checkMobile() )
+                    dock = 'minidock';
+                lizMap.addDock(
+                    'smlcontent',
+                    lizSmartLayerConfig.result_panel_name,
+                    dock,
+                    '',
+                    'icon-comment'
+                );
             }
-
 
             // Add events
             activateSmartLayerTrigger();
@@ -1119,11 +1096,7 @@ var lizSmartLayer = function() {
                     if(change_style)
                         layer.redraw();
                 }
-
-            }
-
-            });
-
+            }});
         }
 
         function activateSmartLayerTrigger(){
@@ -1151,16 +1124,12 @@ var lizSmartLayer = function() {
                 // Filter the data
                 setSmartLayerFilter();
             });
-
         }
 
         // Launch SmartLayer feature
         getSmartLayerData(lizSmartLayerConfig.layername);
-
         } // uicreated
     });
-
-
 }();
 
 var todo = `
