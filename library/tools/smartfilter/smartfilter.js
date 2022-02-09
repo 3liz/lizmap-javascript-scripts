@@ -796,7 +796,7 @@ var lizSmartLayer = function() {
                 // Compute the list of words to replace
                 var words = feature.properties;
                 var reg = '';
-                reg+= '\\[ %"';
+                reg+= '\\[% "';
                 reg+= Object.keys(words).join('" %\\]|\\[% "');
                 reg+= '" %\\]';
                 var re = new RegExp(reg, 'gi');
