@@ -121,3 +121,9 @@ span.psw {
      float: none;
   }
 }
+
+/* Customisation Lizmap */
+
+#button-Oxalis.connected{
+  background-color: #9DBE3E;
+}

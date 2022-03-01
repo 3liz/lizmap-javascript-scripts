@@ -955,6 +955,9 @@ function wsOnOpen(_evt) {
 			lancerTimer();
 		}
 	}
+
+	// Background du bouton Oxalis en vert pour visualiser la connexion
+	document.getElementById('button-Oxalis').classList.add('connected');
 }
 
 /**
@@ -964,6 +967,9 @@ function wsOnOpen(_evt) {
  */
 function wsOnClose(_evt) {
 	getOperisFlexConnect().WS_TraiterDeconnexion(_evt.currentTarget, _evt.code, _evt.reason, _evt.timeStamp);
+
+	// Background du bouton Oxalis par défaut pour visualiser la déconnexion
+	document.getElementById('button-Oxalis').classList.remove('connected');
 }
 
 /**
