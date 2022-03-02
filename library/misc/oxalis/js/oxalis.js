@@ -1,8 +1,40 @@
 lizMap.events.on({
+  lizmappopupdisplayed: () => {
 
-    uicreated: () => {
+    // Veuillez indiquer le nom de la couche contenant les parcelles ainsi
+    // que le nom de la colonne contenant l'identifiant de la parcelle
+    const NOM_COUCHE_PARCELLE = 'Parcelles';
+    const NOM_ATTRIBUT_ID_PARCELLE = 'geo_parcelle';
 
-        const oxalisContent = `
+    const layerFidNode = document.querySelector(`input[value^="${NOM_COUCHE_PARCELLE}_"].lizmap-popup-layer-feature-id`);
+
+    if (layerFidNode) {
+      const featureId = layerFidNode.value.split('.')[1];
+
+      fetch(lizUrls.wms, {
+        method: "POST",
+        body: new URLSearchParams({
+          repository: lizUrls.params.repository,
+          project: lizUrls.params.project,
+          SERVICE: 'WFS',
+          REQUEST: 'GetFeature',
+          VERSION: '1.0.0',
+          FEATUREID: NOM_COUCHE_PARCELLE + '.' + featureId,
+          PROPERTYNAME: NOM_ATTRIBUT_ID_PARCELLE,
+          OUTPUTFORMAT: 'GeoJSON'
+        })
+      }).then(function (response) {
+        return response.json();
+      }).then(response => {
+        const parcelleId = response.features[0].properties[NOM_ATTRIBUT_ID_PARCELLE];
+        OP_RechercherDossiersParcelles("", parcelleId);
+      });
+    }
+  },
+
+  uicreated: () => {
+
+    const oxalisContent = `
         <script type="text/javascript">
         
         </script>
@@ -35,15 +67,7 @@ lizMap.events.on({
         <input type="button" id="btAppairage" value="Appairer" onClick="requestPair();">
         `;
 
-        lizMap.addDock('Oxalis', 'Oxalis', 'dock', oxalisContent, ' icon-th-large');
+    lizMap.addDock('Oxalis', 'Oxalis', 'dock', oxalisContent, ' icon-th-large');
 
-    },
-    lizmappopupdisplayed: (evt) => {
-      const identifiantUniqueTH = Array.from(document.getElementById(evt.containerId).querySelectorAll('.lizmapPopupSingleFeature th'))
-        .filter(el => el.textContent === 'Identifiant unique');
-        const parcelleId = identifiantUniqueTH[0].nextElementSibling.innerText;
-
-        OP_RechercherDossiersParcelles("", parcelleId);
-    }
-
+  }
 });
