@@ -27,7 +27,18 @@ lizMap.events.on({
         return response.json();
       }).then(response => {
         const parcelleId = response.features[0].properties[NOM_ATTRIBUT_ID_PARCELLE];
-        OP_RechercherDossiersParcelles("", parcelleId);
+        // Remplacement des 0 dans le préfixe de la section par des espaces
+        let parcelleIdOxalis = '';
+
+        for (let i = 0; i < parcelleId.length; i++) {
+          if ((i == 6 || i == 7 || i == 8) && parcelleId.charAt(i) === '0') {
+            parcelleIdOxalis += ' ';
+          } else {
+            parcelleIdOxalis += parcelleId.charAt(i);
+          }
+        }
+
+        OP_RechercherDossiersParcelles("", parcelleIdOxalis);
       });
     }
   },
