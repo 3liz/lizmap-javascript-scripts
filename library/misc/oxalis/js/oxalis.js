@@ -1,10 +1,10 @@
+// Veuillez indiquer le nom de la couche contenant les parcelles ainsi
+// que le nom de la colonne contenant l'identifiant de la parcelle
+const NOM_COUCHE_PARCELLE = 'Parcelles';
+const NOM_ATTRIBUT_ID_PARCELLE = 'geo_parcelle';
+
 lizMap.events.on({
   lizmappopupdisplayed: () => {
-
-    // Veuillez indiquer le nom de la couche contenant les parcelles ainsi
-    // que le nom de la colonne contenant l'identifiant de la parcelle
-    const NOM_COUCHE_PARCELLE = 'Parcelles';
-    const NOM_ATTRIBUT_ID_PARCELLE = 'geo_parcelle';
 
     const layerFidNode = document.querySelector(`input[value^="${NOM_COUCHE_PARCELLE}_"].lizmap-popup-layer-feature-id`);
 

@@ -124,32 +124,89 @@ function CreerDossier(dossierSerial)
  */
 function SIG_Cadrer(_dossier, _parcelles, _dossierRef)
 {
-    var dossier=CreerDossier(_dossier);
-    var parcelles=_parcelles.split(';');
-	var dossierRef=CreerDossier(_dossierRef);
-	
-	if (debug == 1)
-		alert("SIG_Cadrer(" + dossier.nom + ", " + parcelles.length + " parcelles" + ", " + dossierRef.nom +")");
-		
-	var message = "Dossier :\nCode ADS : " + dossier.codeADS + "\nCode INSEE : "   + dossier.codeINSEE   + "\nAnnée : " 
-	                                       + dossier.annee   + "\nInstructeur : "  + dossier.instructeur + "\nNuméro : "
-	                                       + dossier.numero  + "\nModificatif : "  + dossier.modificatif + "\nTransfert : "
-	                                       + dossier.transfert  + "\nSurface déclarée : "  +  dossier.surfaceDeclaree + "\n\n";	
+	// var dossier=CreerDossier(_dossier);
+	var parcelles = _parcelles.split(';');
+	// var dossierRef=CreerDossier(_dossierRef);
 
-    if (_dossierRef!="")
-	{
-		message += "Dossier de référence :\nCode ADS : " + dossierRef.codeADS + "\nCode INSEE : "   + dossierRef.codeINSEE   + "\nAnnée : " 
-	                                       + dossierRef.annee   + "\nInstructeur : "  + dossierRef.instructeur + "\nNuméro : "
-	                                       + dossierRef.numero  + "\nModificatif : "  + dossierRef.modificatif + "\nTransfert : "
-	                                       + dossierRef.transfert  + "\nSurface déclarée : "  +  dossierRef.surfaceDeclaree + "\n\n";	
+	// Fusion de deux emprises
+	// Source : https://github.com/openlayers/openlayers/blob/v6.9.0/src/ol/extent.js#L318
+	function extend(extent1, extent2) {
+		if (extent2[0] < extent1[0]) {
+			extent1[0] = extent2[0];
+		}
+		if (extent2[2] > extent1[2]) {
+			extent1[2] = extent2[2];
+		}
+		if (extent2[1] < extent1[1]) {
+			extent1[1] = extent2[1];
+		}
+		if (extent2[3] > extent1[3]) {
+			extent1[3] = extent2[3];
+		}
+		return extent1;
 	}
-										   
-	message += "Parcelles :\n";
-    for (var i = 0; i < parcelles.length; i++)
-        message += parcelles[i] + "\n";
-		
-	if (debug == 1)		
-		alert(message);
+
+	// Transformation du tableau de parcelles en EXP_FILTER
+	// Avec remplacement des espaces de la section par des 0
+	// e.g. : 800016   AK0145;800016   ZA0002 => '800016000AK0145','800016000ZA0002'
+	const parcelleIdentForExp_Filter = parcelles
+		.map((parcelleIdent) => {
+			let parcelleIdSansEspace = '';
+			for (let i = 0; i < parcelleIdent.length; i++) {
+				if ((i == 6 || i == 7 || i == 8) && parcelleIdent.charAt(i) == ' ') {
+					parcelleIdSansEspace += '0';
+				} else {
+					parcelleIdSansEspace += parcelleIdent.charAt(i);
+				}
+			}
+			return `'${parcelleIdSansEspace}'`;
+		})
+		.join(',');
+
+	fetch(lizUrls.wms, {
+		method: "POST",
+		body: new URLSearchParams({
+			repository: lizUrls.params.repository,
+			project: lizUrls.params.project,
+			SERVICE: 'WFS',
+			REQUEST: 'GetFeature',
+			VERSION: '1.1.0',
+			TYPENAME: NOM_COUCHE_PARCELLE,
+			GEOMETRYNAME: 'extent',
+			OUTPUTFORMAT: 'GeoJSON',
+			EXP_FILTER: `"${NOM_ATTRIBUT_ID_PARCELLE}" IN (${parcelleIdentForExp_Filter})`
+		})
+	}).then(function (response) {
+		return response.json();
+	}).then(response => {
+		if (response?.features.length > 0) {
+			let extent = response.features[0].bbox;
+			const parcellesIds = [];
+
+			for (const feature of response.features) {
+				// L'emprise zoomée est celle de l'ensemble des parcelles
+				extent = extend(extent, feature.bbox);
+				// ids des parcelles
+				parcellesIds.push(feature.id.split(NOM_COUCHE_PARCELLE + '.')[1]);
+			}
+
+			// Conversion de l'extent de 4326 vers la projection de la carte
+			const topleft = lizMap.mainLizmap.transform([extent[0], extent[1]], 'EPSG:4326', lizMap.mainLizmap.projection);
+			const bottomright = lizMap.mainLizmap.transform([extent[2], extent[3]], 'EPSG:4326', lizMap.mainLizmap.projection);
+
+			// Zoom sur l'emprise de la/les parcelles en paramètre
+			lizMap.mainLizmap.map.getView().fit([topleft[0], topleft[1], bottomright[0], bottomright[1]]);
+
+			// Sélection
+			for (let index = 0; index < parcellesIds.length; index++) {
+				lizMap.events.triggerEvent("layerfeatureselected", {
+					'featureType': NOM_COUCHE_PARCELLE,
+					'fid': parcellesIds[index],
+					'updateDrawing': index === (parcellesIds.length - 1) // update drawing only for last element
+				});
+			}
+		}
+	});
 }
 
 /**
