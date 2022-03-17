@@ -1,4 +1,5 @@
 var lizmapIgnIsochrone = function () {
+    var ignServiceKey = 'essentiels';
     var ignServiceUrl = 'https://wxs.ign.fr/';
     var ignEntryPoints = {
         'isochrone': 'calcul/isochrone/isochrone.json?',
