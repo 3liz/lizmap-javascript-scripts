@@ -48,5 +48,6 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 * [Hide value popup](./library/ui/hide_value_popup)
 * [Popup when opening the project with metadata information](./library/ui/popup_metadata_info)
 * [Remove button](./library/ui/remove_button) to make the UI lighter and easier
+* [Resize Dock with splitter](./library/ui/resize_dock_with_splitter)
 * [Simplify print options](./library/ui/simplify-print-options)
 * [Add button to toggle dock full width](./library/ui/add_dock_resize_button)
