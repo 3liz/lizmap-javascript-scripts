@@ -1,6 +1,7 @@
 // Veuillez indiquer le nom de la couche contenant les parcelles ainsi
 // que le nom de la colonne contenant l'identifiant des parcelles
 const NOM_COUCHE_PARCELLE = 'Parcelles';
+const NOM_COUCHE_REGLEMENT = 'oxalis_reglement';
 const NOM_ATTRIBUT_ID_PARCELLE = 'geo_parcelle';
 
 lizMap.events.on({

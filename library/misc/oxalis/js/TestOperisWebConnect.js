@@ -323,34 +323,46 @@ function SIG_LancerIMC(_dossier, _requeteID, _to, _websocket)
  * @param _websocket (interne OPERIS)
  * 
  */
-function SIG_RechercherReglements(_parcelles, _requeteID, _to, _websocket)
+ function SIG_RechercherReglements(_parcelles, _requeteID, _to, _websocket)
  {
-    var parcelles=_parcelles.split(';');
-    
-	if (debug == 1)		
-		alert("SIG_RechercherReglements(" + parcelles + ")");
-    var message = "Parcelles :\n";   
-    for (var i = 0; i < parcelles.length; i++)
-        message += parcelles[i] + "\n";
+	const parcelles=_parcelles.split(';');
 
-	if (debug == 1)		
-		alert(message);
-    
-    // Retour de la réponse au format xml
-    var codeErreur = 0;
-    var message = 0;
-	var retour="";
-	
-	if (parcelles[0])
-		retour+="<PARCELLEREGLEMENTS><PARCELLEREGLEMENT><IDPARC>"+parcelles[0]+"</IDPARC><COMMUNE>"+parcelles[0].toString().substr(0,2)+parcelles[0].toString().substr(3,3)+"</COMMUNE><CATEGORIE>SER</CATEGORIE><NOMCOURT>T7</NOMCOURT><NOMLONG>T7 - Servitude établie à  l'extérieur des zones de dégagement - Zone de protection</NOMLONG><LIEN/><TYPE>T7</TYPE><COMMENTAIRE/><SURFACE>1663.9172999934722</SURFACE><POURCENTAGE>100.0</POURCENTAGE></PARCELLEREGLEMENT><PARCELLEREGLEMENT><IDPARC>"+parcelles[0]+"</IDPARC><COMMUNE>"+parcelles[0].toString().substr(0,2)+parcelles[0].toString().substr(3,3)+"</COMMUNE><CATEGORIE>TAX</CATEGORIE><NOMCOURT>TLE</NOMCOURT><NOMLONG>Taxe locale d''équipement</NOMLONG><LIEN/><TYPE>TAX</TYPE><COMMENTAIRE/><SURFACE>200</SURFACE><POURCENTAGE>100.0</POURCENTAGE></PARCELLEREGLEMENT><PARCELLEREGLEMENT><IDPARC>"+parcelles[0]+"</IDPARC><COMMUNE>"+parcelles[0].toString().substr(0,2)+parcelles[0].toString().substr(3,3)+"</COMMUNE><CATEGORIE>ZON</CATEGORIE><NOMCOURT>A</NOMCOURT><NOMLONG>A - Espace lié et nécessaire à  l'activité agricole</NOMLONG><LIEN>29031_reglement_20131219.pdf</LIEN><TYPE>A</TYPE><COMMENTAIRE/><SURFACE>1.054788517758677</SURFACE><POURCENTAGE>0.06339188358476802</POURCENTAGE></PARCELLEREGLEMENT><PARCELLEREGLEMENT><IDPARC>"+parcelles[0]+"</IDPARC><COMMUNE>"+parcelles[0].toString().substr(0,2)+parcelles[0].toString().substr(3,3)+"</COMMUNE><CATEGORIE>ZON</CATEGORIE><NOMCOURT>UCa</NOMCOURT><NOMLONG>UCa - La zone UC comprend le secteur UCa correspondant aux hameaux de grande tailleUC</NOMLONG><LIEN>29031_reglement_20131219.pdf</LIEN><TYPE>U</TYPE><COMMENTAIRE/><SURFACE>1662.862511474951</SURFACE><POURCENTAGE>99.9366081163694</POURCENTAGE></PARCELLEREGLEMENT>";
-	
-	if (parcelles[1])
-		retour+="<PARCELLEREGLEMENT><IDPARC>"+parcelles[1]+"</IDPARC><COMMUNE>"+parcelles[0].toString().substr(0,2)+parcelles[0].toString().substr(3,3)+"</COMMUNE><CATEGORIE>SER</CATEGORIE><NOMCOURT>T7 - Servitude établie à  l'extérieur des zones de dégagement - Zone de protection</NOMCOURT><NOMLONG>T7</NOMLONG><LIEN/><TYPE>T7</TYPE><COMMENTAIRE/><SURFACE>1083.4745000031446</SURFACE><POURCENTAGE>100.0</POURCENTAGE></PARCELLEREGLEMENT><PARCELLEREGLEMENT><IDPARC>"+parcelles[1]+"</IDPARC><COMMUNE>"+parcelles[0].toString().substr(0,2)+parcelles[0].toString().substr(3,3)+"</COMMUNE><CATEGORIE>ZON</CATEGORIE><NOMCOURT>A - Espace lié et nécessaire à  l'activité agricole</NOMCOURT><NOMLONG>A</NOMLONG><LIEN>29031_reglement_20131219.pdf</LIEN><TYPE>A</TYPE><COMMENTAIRE/><SURFACE>1082.615810059096</SURFACE><POURCENTAGE>99.92074664017971</POURCENTAGE></PARCELLEREGLEMENT><PARCELLEREGLEMENT><IDPARC>"+parcelles[1]+"</IDPARC><COMMUNE>"+parcelles[0].toString().substr(0,2)+parcelles[0].toString().substr(3,3)+"</COMMUNE><CATEGORIE>ZON</CATEGORIE><NOMCOURT>UCa - La zone UC comprend le secteur UCa correspondant aux hameaux de grande taille</NOMCOURT><NOMLONG>U</NOMLONG><LIEN>29031_reglement_20131219.pdf</LIEN><TYPE>U</TYPE><COMMENTAIRE/><SURFACE>0.8586899430183337</SURFACE><POURCENTAGE>0.07925335972520271</POURCENTAGE></PARCELLEREGLEMENT>";
-		
-	retour+="</PARCELLEREGLEMENTS>";
-		
-	getOperisFlexConnect().OPERIS_RetourRechercherReglements(retour, codeErreur, message, _requeteID, _to, _websocket);
-    
+	fetch(lizUrls.wms, {
+		method: "POST",
+		body: new URLSearchParams({
+		  repository: lizUrls.params.repository,
+		  project: lizUrls.params.project,
+		  SERVICE: 'WFS',
+		  REQUEST: 'GetFeature',
+		  VERSION: '1.0.0',
+		  TYPENAME: NOM_COUCHE_REGLEMENT,
+		  EXP_FILTER: `"idparc" IN ('${parcelles[0]}')`,
+		  OUTPUTFORMAT: 'geojson'
+		})
+	}).then(function (response) {
+		return response.json();
+	}).then(response => {
+
+		let XML = '<PARCELLEREGLEMENTS>';
+
+		for (const feature of response.features) {
+			XML += '<PARCELLEREGLEMENT>';
+			for (const property in feature.properties) {
+				if(feature.properties[property]){
+					XML += `<${property.toUpperCase()}>${feature.properties[property]}</${property.toUpperCase()}>`;
+				}
+			}
+			XML += '</PARCELLEREGLEMENT>';
+		}
+
+		XML += '</PARCELLEREGLEMENTS>';
+
+		// Retour de la réponse au format xml
+		const codeErreur = 0;
+		const message = 0;
+			
+		getOperisFlexConnect().OPERIS_RetourRechercherReglements(XML, codeErreur, message, _requeteID, _to, _websocket);
+	});
 }
 
 /**
