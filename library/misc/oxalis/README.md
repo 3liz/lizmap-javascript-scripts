@@ -1,5 +1,18 @@
 # Connecteur Lizmap à Oxalis (https://web.operis.fr/)
 
+Ces scripts permettent la communication entre Lizmap et Oxalis. Il vous faut au préalable disposer d'un projet QGIS avec des parcelles cadastrales (https://github.com/3liz/lizmap-cadastre-module).
+
+## Présentation
+
+Comme illustré ci-dessous, une fois connecté (1) via websocket vous pourrez, depuis Oxalis, zoomer sur l'emprise des parcelles associées aux dossiers (2).
+
+Il vous sera aussi possible de :
+   * cliquer sur une parcelle dans Lizmap et voir les dossiers associés dans la partie **Sélection externe** d'Oxalis
+   * transmettre les règlements de Lizmap vers Oxalis
+
+![ksnip_20220405-173722](https://user-images.githubusercontent.com/2145040/161793681-bfc8d09e-1219-41f2-9028-7c4f3f5bbd31.jpg)
+
+## Installation
 1. Les fichiers Javascript doivent être mis dans le répertoire `media/js/nom_projet` ([documentation](https://docs.lizmap.com/current/fr/publish/customization/javascript.html)).
 2. Dans le fichier oxalis.js il faut indiquer si nécessaire :
    1. Dans la variable `NOM_COUCHE_PARCELLE`, le nom de la couche contenant les parcelles (`Parcelles` par défaut)
