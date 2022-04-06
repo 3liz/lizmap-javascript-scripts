@@ -1,0 +1,35 @@
+#content #lizmap-selection-statistics {
+    max-width: 300px;
+    max-height: 500px;
+    overflow: auto;
+    position: absolute;
+    bottom: 250px;
+    right: 10px;
+    z-index: 1000;
+    border: 2px solid white;
+    border-radius: 4px;
+    box-shadow: 2px 2px 2px 2px #aaa;
+    font-size: 12px;
+    background-color: #F0F0F0;
+}
+#content.mobile #lizmap-selection-statistics {
+    bottom: revert;
+    right: revert;
+    left: 40px;
+    top: 10px;
+}
+#lizmap-selection-statistics div {
+    margin-bottom: 10px;
+    padding: 2px;
+}
+.lizmap-selection-statistics-table {
+    margin-bottom: 0px;
+    background-color: #d8d8d8;
+}
+.lizmap-selection-statistics-table tr th{
+    margin-bottom: 0px;
+}
+.lizmap-selection-statistics-table tr th,
+.lizmap-selection-statistics-table tr td {
+    line-height: 10px;
+}
