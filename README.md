@@ -47,6 +47,7 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 * [Expand legend on load](./library/ui/expand-legend-on-load)
 * [Group collapse](./library/ui/group_collapse)
 * [Hide value popup](./library/ui/hide_value_popup)
+* [Move filter in new panel](./library/ui/move_filter_in_new_panel)
 * [Popup when opening the project with metadata information](./library/ui/popup_metadata_info)
 * [Remove button](./library/ui/remove_button) to make the UI lighter and easier
 * [Resize Dock with splitter](./library/ui/resize_dock_with_splitter)
