@@ -22,7 +22,7 @@ lizMap.events.on({
             $("#filter #filter-container").before('<h3 style="margin-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.5);"><span class="title"><span class="icon" style="background-image: url(/css/filter-icon-white.png); background-position: center; width: 20px; background-size: contain; height: width: 20px; height: 20px; display: inline-block;"></span>&nbsp;<span class="text">Filter</span></span></h3>')
 
             // add filter button on layers panel
-            $('#switcher-layers-actions').append('<button class="btn-custom" id="custom-filter-switcher" style="outline: none;background: rgba(255,255,255,0.9); border-radius: 3px;color: black; margin: 8px; margin-right: 0px;">Filtra dati</button>');
+            $('#switcher-layers-actions').append('<button class="btn-custom" id="custom-filter-switcher" style="outline: none;background: rgba(255,255,255,0.9); border-radius: 3px;color: black; margin: 8px; margin-right: 0px;">Filter</button>');
 
             // open filter panel on click
             $("#custom-filter-switcher").click(function(e) {
