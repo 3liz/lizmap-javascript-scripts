@@ -150,17 +150,7 @@ function SIG_Cadrer(_dossier, _parcelles, _dossierRef)
 	// Avec remplacement des espaces de la section par des 0
 	// e.g. : 800016   AK0145;800016   ZA0002 => '800016000AK0145','800016000ZA0002'
 	const parcelleIdentForExp_Filter = parcelles
-		.map((parcelleIdent) => {
-			let parcelleIdSansEspace = '';
-			for (let i = 0; i < parcelleIdent.length; i++) {
-				if ((i == 6 || i == 7 || i == 8) && parcelleIdent.charAt(i) == ' ') {
-					parcelleIdSansEspace += '0';
-				} else {
-					parcelleIdSansEspace += parcelleIdent.charAt(i);
-				}
-			}
-			return `'${parcelleIdSansEspace}'`;
-		})
+		.map((parcelleIdent) => `'${parcelleIdent.replace(/ /g, '0')}'`)
 		.join(',');
 
 	fetch(lizUrls.wms, {

@@ -32,7 +32,7 @@ lizMap.events.on({
         let parcelleIdOxalis = '';
 
         for (let i = 0; i < parcelleId.length; i++) {
-          if ((i == 6 || i == 7 || i == 8) && parcelleId.charAt(i) === '0') {
+          if ((i == 6 || i == 7 || i == 8 || i == 9) && parcelleId.charAt(i) === '0') {
             parcelleIdOxalis += ' ';
           } else {
             parcelleIdOxalis += parcelleId.charAt(i);
