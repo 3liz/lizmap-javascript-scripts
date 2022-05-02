@@ -191,11 +191,14 @@ function SIG_Cadrer(_dossier, _parcelles, _dossierRef)
 			}
 
 			// Conversion de l'extent de 4326 vers la projection de la carte
-			const topleft = lizMap.mainLizmap.transform([extent[0], extent[1]], 'EPSG:4326', lizMap.mainLizmap.projection);
-			const bottomright = lizMap.mainLizmap.transform([extent[2], extent[3]], 'EPSG:4326', lizMap.mainLizmap.projection);
+			const topleft = new OpenLayers.Geometry.Point(extent[0], extent[1]);
+			const bottomright = new OpenLayers.Geometry.Point(extent[2], extent[3]);
+
+			topleft.transform('EPSG:4326', lizMap.mainLizmap.projection);
+			bottomright.transform('EPSG:4326', lizMap.mainLizmap.projection);
 
 			// Zoom sur l'emprise de la/les parcelles en paramètre
-			lizMap.mainLizmap.map.getView().fit([topleft[0], topleft[1], bottomright[0], bottomright[1]]);
+			lizMap.map.zoomToExtent([topleft.x, topleft.y, bottomright.x, bottomright.y]);
 
 			// Sélection
 			for (let index = 0; index < parcellesIds.length; index++) {
