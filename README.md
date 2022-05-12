@@ -52,4 +52,5 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 * [Remove button](./library/ui/remove_button) to make the UI lighter and easier
 * [Resize Dock with splitter](./library/ui/resize_dock_with_splitter)
 * [Simplify print options](./library/ui/simplify-print-options)
+* [Simplify export options](./library/ui/simplify-export-options)
 * [Add button to toggle dock full width](./library/ui/add_dock_resize_button)
