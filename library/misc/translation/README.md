@@ -1,12 +1,24 @@
 # Translation
+
+## Purpose
+
+To provide a Lizmap project in many languages
+
+## Files
+
 In this folder there are:
 
-* a python script to retrieve translatable strings from a QGIS project and its related .cfg file created with the lizmap plugin
+* a python script to retrieve translatable strings from a QGIS project and its related `.cfg` file created with the Lizmap
+  plugin
 * a javascript file which translate the project content in Lizmap-Web-Client according to the browser language
 
-## The python script (get_translatable_string.py)
+### The python script (get_translatable_string.py)
 
-This python script retrieves all possible translatable strings (layers name, groups name, layouts name, fields or aliases name, etc.) from the QGIS project and the related .cfg file. It saves a json file for each language specified in a list (e.g. translation_fr.json, translation_en.json, etc.). The key of the json file is the retrieved string and the value should contain the translation of the string. The json files are automatically saved in the media folder. Following an example of the json structure:
+This python script retrieves all possible translatable strings (layers name, groups name, layouts name, fields or
+aliases name, etc.) from the QGIS project and the related .cfg file. It saves a json file for each language specified
+in a list (e.g. translation_fr.json, translation_en.json, etc.). The key of the json file is the retrieved string and
+the value should contain the translation of the string. The json files are automatically saved in the media folder.
+Following an example of the json structure:
 
 ```json
 {
@@ -14,7 +26,9 @@ This python script retrieves all possible translatable strings (layers name, gro
     "Original group name": "",
 }
 ```
-The translation has to be provided manually by editing the file and putting the translated string in the double-quotes. Following an example of the translated json:
+
+The translation has to be provided manually by editing the file and putting the translated string in the double-quotes.
+Following an example of the translated json:
 
 ```json
 {
@@ -23,20 +37,31 @@ The translation has to be provided manually by editing the file and putting the 
 }
 ```
 
-**NB.**
+**NB :**
+
 * The script has to be run from the QGIS python console of the project.
-* It requires the .cfg file created with the lizmap plugin.
+* It requires the `.cfg` file created with the Lizmap plugin.
 * For further details about the script see the comments in the code.
 
-## The js script (translation.js)
+### The js script (translation.js)
 
-This javascript script translates layers and groups names, the title of the project, the print layouts names and the aliases or fileds names according to the language of the browser and using the json file created with the python script *get_translatable_string.py*
-If a translated string is provided in the json file the original string is translated, otherwise the original string is shown in lizmap web client.
-The json files must be saved in the media folder which needs to be available from the web. Therefore it is necessary to create 
-a symbolic link on the apache directory (e.g. /var/www/html/) to the media folder in the user repository.
-The javascript retrieves the original string (key) and the translated string (value) from the proper json file that is automatically loaded depending on the language of the browser. Then for each key found in the json it checks the text of the provided html selector (e.g. `$("div#header div#title h1")`). If the two strings (the one from the json file e the one found in the html page) match the text of the provided html selector is replaced with the translated string, if provided in the json file.
+This javascript script translates layers and groups names, the title of the project, the print layouts names and the aliases
+or fields names according to the language of the browser and using the json file created with the python script
+`get_translatable_string.py`.
+
+If a translated string is provided in the json file the original string is translated, otherwise the original string is
+shown in lizmap web client.
+
+The json files must be saved in the `media` folder which needs to be available from the web. Therefore, it is necessary
+to create a symbolic link on the apache directory (e.g. `/var/www/html/`) to the media folder in the user repository.
+The javascript retrieves the original string (key) and the translated string (value) from the proper json file that
+is automatically loaded depending on the language of the browser. Then for each key found in the json it checks the
+text of the provided html selector (e.g. `$("div#header div#title h1")`). If the two strings (the one from the json file
+and the one found in the html page) match the text of the provided html selector is replaced with the translated string,
+if provided in the json file.
 
 At the moment the script translates:
+
 * layers and groups name in the layer tree
 * layers name in the baselayer menu
 * layers name in the editing tool menu
@@ -51,7 +76,9 @@ At the moment the script translates:
 * the layer name shown in the location tool
 * the content of the layer information sub-dock
 
-**NB.**
+**NB :**
+
 * The javascript file has to be saved in the media/js folder.
-* If something is not properly translated check the html selector (e.g. `$("div#header div#title h1")`), they can be different depending on your lizmap properties (e.g the container of the popup), or the json file.
+* If something is not properly translated check the html selector (e.g. `$("div#header div#title h1")`), they can be
+  different depending on your lizmap properties (e.g the container of the popup), or the json file.
 * For further details about the script see the comments in the code.
