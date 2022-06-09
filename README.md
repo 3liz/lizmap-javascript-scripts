@@ -21,9 +21,13 @@ If you are developing a new feature, do not hesitate to let us know so that we c
  
 * [Add keyboard shortcuts](./library/misc/add_shortcuts)
 * [Google Street View](./library/misc/google_street_view) 
-* [Translation](./library/misc/translation) To provide a Lizmap project in many languages
 * [Refresh some layers periodically](./library/misc/refresh_layers_every_n_seconds)
 * [Connecteur vers Oxalis d'Operis (Autorisations du droit des sols (ADS)) (fr)](./library/misc/oxalis)
+
+## Translation
+
+* [Translate the QGIS project](library/translation/qgis_project) To provide a Lizmap project in many languages
+* [Change some labels in the interface](library/translation/interface)
 
 ## Tools
 
