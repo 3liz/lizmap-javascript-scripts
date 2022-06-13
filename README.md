@@ -7,7 +7,7 @@ Documentation is on [docs.lizmap.com](https://docs.lizmap.com/next/en/publish/cu
 
 You might have a `README.md` inside the directory with more information and a demo.
 
-Some of the JavaScript codes presented are self-sufficient while others are examples to help you create the functionality you want.
+Some JavaScript codes presented are self-sufficient while others are examples to help you create the functionality you want.
 
 If you are developing a new feature, do not hesitate to let us know so that we can integrate it.
 
@@ -48,6 +48,7 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 * [Add documentation](./library/ui/add_documentation) with buttons and a dock
 * [Background selector](./library/ui/background_selector), like on Google Maps
 * [Expand/collapse legend when layer toggled](./library/ui/expand-collapse-legend-when-layer-toggled)
+* [Expand legend on load](./library/ui/expand-legend-on-load), partially deprecated
 * [Group collapse](./library/ui/group_collapse)
 * [Hide value popup](./library/ui/hide_value_popup)
 * [Move filter in new panel](./library/ui/move_filter_in_new_panel)
@@ -59,5 +60,3 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 * [Add button to toggle dock full width](./library/ui/add_dock_resize_button)
 * Deprecated since LWC 3.4
   * [Add hamburger menu](./library/ui/add_hamburger_menu) for a better UX on a small screen
-* Deprecated since LWC 3.6
-  * [Expand legend on load](./library/ui/expand-legend-on-load)
