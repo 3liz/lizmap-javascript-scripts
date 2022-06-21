@@ -1,6 +1,6 @@
 # Lizmap JavaScript scripts
 
-![Lizmap logo](icon.png) 
+![Lizmap logo](icon.png)
 
 You can use those JavaScript scripts to enhance Lizmap Web Client.
 Documentation is on [docs.lizmap.com](https://docs.lizmap.com/next/en/publish/customization/javascript.html).
@@ -18,9 +18,9 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 * [WMTS direct access](./library/data/wmts_direct_access)
 
 ## Misc
- 
+
 * [Add keyboard shortcuts](./library/misc/add_shortcuts)
-* [Google Street View](./library/misc/google_street_view) 
+* [Google Street View](./library/misc/google_street_view)
 * [Refresh some layers periodically](./library/misc/refresh_layers_every_n_seconds)
 * [Connecteur vers Oxalis d'Operis (Autorisations du droit des sols (ADS)) (fr)](./library/misc/oxalis)
 
@@ -59,5 +59,6 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 * [Simplify print options](./library/ui/simplify-print-options)
 * [Simplify export options](./library/ui/simplify-export-options)
 * [Add button to toggle dock full width](./library/ui/add_dock_resize_button)
+* [Add a hard-coded legend at the bottom of the map](./library/ui/add_hard_coded_legend_at_map_bottom)
 * Deprecated since LWC 3.4
   * [Add hamburger menu](./library/ui/add_hamburger_menu) for a better UX on a small screen

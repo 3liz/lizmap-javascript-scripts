@@ -1,0 +1,51 @@
+#map-content div.my-legend-container {
+    bottom: 10px;
+    position: absolute;
+    z-index: 1000;
+    margin-left: calc(50% - 100px);
+    background: rgba(255, 255, 255, 0.6);
+    padding: 5px;
+    border-radius: 5px;
+    color: rgb(50, 50, 50);
+}
+
+#map-content div.my-legend-container span#my-legend-title {
+    font-size: 14px;
+    cursor: pointer;
+}
+
+#map-content div#my-legend-items-container {
+    margin: 5px;
+}
+
+#map-content div.my-legend-container div.my-legend-item {
+    background: rgba(255, 255, 255, 0.7);
+}
+
+#map-content div.my-legend-container h4 {
+    margin: 0px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+table.my-legend-table {
+    padding: 0px;
+    font-size: 0.7em;
+    border-collapse: collapse;
+    border-spacing: 0px;
+    min-width: 50%;
+    margin-bottom: 10px;
+}
+
+table.my-legend-table td {
+    padding: 3px;
+}
+
+span.my-legend-symbol {
+    color: white;
+    font-weight: bold;
+    padding: 3px;
+    min-width: 20px;
+    display: inline-block;
+    text-align: center;
+}
