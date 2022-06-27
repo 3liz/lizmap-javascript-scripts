@@ -222,35 +222,60 @@ function SIG_CoordonneesCadrer(_x, _y) {
  * @param _dossierRef   Dossier de référence sérialisé du dossier sur lequel on cadre (le séparateur est le |)
  * 
  */
-function SIG_ImplanterDossier(_dossier, _parcelles, _dossierRef)
-{
-    var dossier=CreerDossier(_dossier);
-    var parcelles=_parcelles.split(';');
-	var dossierRef=CreerDossier(_dossierRef);
-	
-	if (debug == 1)		
-		alert("SIG_ImplanterDossier(" + dossier.nom + ", " + parcelles.length + " parcelles" + ", " + dossierRef.nom +")");
-	
-	var message = "Dossier :\nCode ADS : " + dossier.codeADS + "\nCode INSEE : "   + dossier.codeINSEE   + "\nAnnée : " 
-	                                       + dossier.annee   + "\nInstructeur : "  + dossier.instructeur + "\nNuméro : "
-	                                       + dossier.numero  + "\nModificatif : "  + dossier.modificatif + "\nTransfert : "
-	                                       + dossier.transfert  + "\nSurface déclarée : "  +  dossier.surfaceDeclaree + "\n\n";	
-
-    if (_dossierRef!="")
-	{
-		message += "Dossier de référence :\nCode ADS : " + dossierRef.codeADS + "\nCode INSEE : "   + dossierRef.codeINSEE   + "\nAnnée : " 
-	                                       + dossierRef.annee   + "\nInstructeur : "  + dossierRef.instructeur + "\nNuméro : "
-	                                       + dossierRef.numero  + "\nModificatif : "  + dossierRef.modificatif + "\nTransfert : "
-	                                       + dossierRef.transfert  + "\nSurface déclarée : "  +  dossierRef.surfaceDeclaree + "\n\n";	
-	}
-										   
-	message += "Parcelles :\n";
-    for (var i = 0; i < parcelles.length; i++)
-        message += parcelles[i] + "\n";
-		
-	if (debug == 1)		
-		alert(message);
-}
+ function SIG_ImplanterDossier(_dossier, _parcelles, _dossierRef)
+ {
+	 const COUCHE_IMPLANTATION = 'dossier_oxalis';
+	 const COUCHE_IMPLANTATION_ID_COLUMN = 'id';
+ 
+	 var dossier=CreerDossier(_dossier);
+	 var parcelles=_parcelles.split(';');
+	 var dossierRef=CreerDossier(_dossierRef);
+ 
+	 fetch(lizUrls.wms, {
+		 method: "POST",
+		 body: new URLSearchParams({
+			 repository: lizUrls.params.repository,
+			 project: lizUrls.params.project,
+			 SERVICE: 'WFS',
+			 REQUEST: 'GetFeature',
+			 VERSION: '1.1.0',
+			 TYPENAME: COUCHE_IMPLANTATION,
+			 GEOMETRYNAME: 'extent',
+			 OUTPUTFORMAT: 'GeoJSON',
+			 EXP_FILTER: `"dossiernom" = '${dossier.nom}'`
+		 })
+	 }).then(function (response) {
+		 return response.json();
+	 }).then(response => {
+		 const lid = lizMap.config.layers[COUCHE_IMPLANTATION]['id'];
+ 
+		 // Mise à jour d'un dossier existant
+		 if (response?.features.length) {
+			 const extent = response.features[0].bbox;
+			 const fid = response.features[0].properties[COUCHE_IMPLANTATION_ID_COLUMN];
+ 
+			 // Conversion de l'extent de 4326 vers la projection de la carte
+			 const topleft = new OpenLayers.Geometry.Point(extent[0], extent[1]);
+			 const bottomright = new OpenLayers.Geometry.Point(extent[2], extent[3]);
+ 
+			 topleft.transform('EPSG:4326', lizMap.mainLizmap.projection);
+			 bottomright.transform('EPSG:4326', lizMap.mainLizmap.projection);
+ 
+			 // Zoom sur l'emprise de la/les parcelles en paramètre
+			 lizMap.map.zoomToExtent([topleft.x, topleft.y, bottomright.x, bottomright.y]);
+ 
+			 // Edition
+			 lizMap.launchEdition( lid, fid);
+		 }// Création
+		 else { 
+			 lizMap.launchEdition( lid, null, null, () => {
+				// Saisie du nom du dossier dans le champ du formulaire
+				// Le champ doit s'appeler 'dossiernom'
+				 document.getElementById('jforms_view_edition_dossiernom').value = dossier.nom;
+			 });
+		 }
+	 });
+ }
 
 /**
  * Impression d'un dossier
