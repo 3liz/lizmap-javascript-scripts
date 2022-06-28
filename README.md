@@ -23,6 +23,7 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 * [Google Street View](./library/misc/google_street_view)
 * [Refresh some layers periodically](./library/misc/refresh_layers_every_n_seconds)
 * [Connecteur vers Oxalis d'Operis (Autorisations du droit des sols (ADS)) (fr)](./library/misc/oxalis)
+* [Mapillary viewer](./library/misc/mapillary)
 
 ## Translation
 
