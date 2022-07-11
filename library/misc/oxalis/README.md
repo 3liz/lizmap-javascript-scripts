@@ -20,3 +20,7 @@ Il vous sera aussi possible de :
    3. Dans la variable `NOM_ATTRIBUT_ID_PARCELLE`, le nom de la colonne contenant l'identifiant des parcelles (`geo_parcelle` par défaut)
 3. Le fichier `maps.css` ne doit pas être renommé et doit aller dans `media/themes/nom_projet/css` ([documentation](https://docs.lizmap.com/current/fr/publish/customization/themes.html)).
 4. Afin de permettre la transmisson de règlements de Lizmap vers Oxalis, il faut une table/vue avec des champs bien définis. Le fichier `sql/oxalis_reglement.sql` défini une structure de base de cette table/vue.
+5. Afin de permettre l'implantation d'un dossier (bouton en-dessous le bouton 2 sur la capture d'écran), il vous faut :
+   1. Ajouter la table `vl_ox_sigdosparc_aos` en utilisant un foreign data wrapper pointant sur la base de donnée d'Oxalis (nécessite le pont niveau 3)
+   2. Exécuter le fichier `sql/oxalis_implanter_dossier.sql` (à adapter) afin de préparer la base
+   3. Ajouter la vue `dossier_oxalis` en édition dans votre projet Lizmap
