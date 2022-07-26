@@ -1,0 +1,19 @@
+{
+  "name": "lizmap-mapillary",
+  "version": "1.0.0",
+  "description": "",
+  "main": "mapillary.js",
+  "scripts": {
+    "build": "webpack --config webpack.prod.js",
+    "watch": "webpack --watch --config webpack.dev.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "mapillary-js": "^4.1.0",
+    "ol": "^6.15.1",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-merge": "^5.8.0"
+  }
+}
