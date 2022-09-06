@@ -11,19 +11,22 @@ Some JavaScript codes presented are self-sufficient while others are examples to
 
 If you are developing a new feature, do not hesitate to let us know so that we can integrate it.
 
+## API
+
+* [Connecteur vers Oxalis d'Operis (Autorisations du droit des sols (ADS)) 🇫🇷](library/api/oxalis)
+* [IGN web services 🇫🇷](library/api/ign_web_services)
+* [Google Street View](library/api/google_street_view)
+* [Mapillary](library/api/mapillary)
+
 ## Data
 
-* [Edit GPX](./library/data/edit_gpx). Import/Export GPX
-* [IGN web services](./library/data/ign_web_services)
+* [Edit GPX](./library/data/edit_gpx) Import/Export GPX
 * [WMTS direct access](./library/data/wmts_direct_access)
 
-## Misc
+## Miscellaneous 
 
 * [Add keyboard shortcuts](./library/misc/add_shortcuts)
-* [Mapillary](./library/misc/mapillary)
-* [Google Street View](./library/misc/google_street_view)
 * [Refresh some layers periodically](./library/misc/refresh_layers_every_n_seconds)
-* [Connecteur vers Oxalis d'Operis (Autorisations du droit des sols (ADS)) (fr)](./library/misc/oxalis)
 
 ## Translation
 
