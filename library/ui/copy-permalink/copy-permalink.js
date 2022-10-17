@@ -1,5 +1,6 @@
 lizMap.events.on({
 	'uicreated': function(e) {
+	
 		let permaLinkDom = "div#permaLink div#tab-share-permalink a#permalink";
 		var buttonPermaLink = $("div#permaLink div#tab-share-permalink a#permalink");		
 		buttonPermaLink.tooltip({trigger:'click'});
