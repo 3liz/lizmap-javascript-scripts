@@ -1,4 +1,4 @@
-<h2>Permet de remplacer la réponse GetFeatureInfo de la couche WMS DOSSIERS_LOCALISANTS retournée par le WMS GeoFoncier</h2>
+# Permet de remplacer la réponse GetFeatureInfo de la couche WMS DOSSIERS_LOCALISANTS retournée par le WMS GeoFoncier
 
 Si vous utilisez le WMS de GeoFoncier, la réponse retournée par défaut lors d'un GetFeatureInfo n'est pas du tout utile.
 
