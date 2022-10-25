@@ -1,7 +1,7 @@
 import MVT from 'ol/format/MVT';
 import { VectorTile as VectorTileLayer, Vector as VectorLayer } from 'ol/layer';
 import { VectorTile as VectorTileSource, Vector as VectorSource } from 'ol/source';
-import { Icon, Style } from 'ol/style';
+import { Icon, Circle, Fill, Stroke, Style } from 'ol/style';
 import Point from 'ol/geom/Point';
 import Feature from 'ol/Feature';
 import { transform } from 'ol/proj';
@@ -13,7 +13,27 @@ lizMap.events.on({
 
     uicreated: () => {
 
-        lizMap.addDock("Mapillary", "Mapillary", "minidock", `<div id="mapillary-view" style="width:100%;min-width:400px;height:350px"></div>`, "mapillary-icon");
+        const template = `
+            <div>
+                <label for="captured_at_after">Captured after:</label>
+                <input type="date" id="captured_at_after">
+                <label for="captured_at_before">Captured before:</label>
+                <input type="date" id="captured_at_before">
+            </div>
+            <div id="mapillary-view" style="width:100%;min-width:400px;height:350px"></div>`;
+
+        lizMap.addDock("Mapillary", "Mapillary", "minidock", template, "mapillary-icon");
+
+        // Refresh Mapillary layer when 'captured date' filters change
+        document.querySelectorAll('#captured_at_after, #captured_at_before').forEach((element) => {
+            element.addEventListener('change', () => {
+                for (const layer of lizMap.mainLizmap.map.getLayers().getArray()) {
+                    if (layer.get('title')?.startsWith('mapillary-vt')) {
+                        layer.changed();
+                    }
+                }
+            });
+        });
 
         // Load CSS
         $("head").append('<link href="https://unpkg.com/mapillary-js@4.1.0/dist/mapillary.css" rel="stylesheet"/>');
@@ -40,7 +60,7 @@ lizMap.events.on({
 
             // Display Mapillary layers if they exist else init
             for (const layer of lizMap.mainLizmap.map.getLayers().getArray()) {
-                if (layer.get('title').startsWith('mapillary')) {
+                if (layer.get('title')?.startsWith('mapillary')) {
                     layer.setVisible(true);
                     init = false;
                 }
@@ -61,9 +81,45 @@ lizMap.events.on({
                 url: 'https://tiles.mapillary.com/maps/vtp/mly1_computed_public/2/{z}/{x}/{y}?access_token=' + token,
             });
 
+            // Default style
+            const fill = new Fill({
+                color: 'rgba(255,255,255,0.4)',
+            });
+            const stroke = new Stroke({
+                color: '#3399CC',
+                width: 1.25,
+            });
+            const style = new Style({
+                image: new Circle({
+                    fill: fill,
+                    stroke: stroke,
+                    radius: 5,
+                }),
+                fill: fill,
+                stroke: stroke,
+            });
+
             const mapillaryVT = new VectorTileLayer({
                 title: 'mapillary-vt',
-                source: mapillaryVTSource
+                source: mapillaryVTSource,
+                style: (feature) => {
+                    const captured_at_after = document.querySelector('#captured_at_after').value;
+                    const captured_at_after_time = (new Date(captured_at_after)).getTime();
+                    const captured_at_before = document.querySelector('#captured_at_before').value;
+                    const captured_at_before_time = (new Date(captured_at_before)).getTime();
+                    const feat_captured_at = feature.getProperties().captured_at;
+
+                    // Return default style based on captured_at_x inputs
+                    // If the function returns undefined, the feature will not be rendered
+                    if ((!captured_at_after && !captured_at_before) ||
+                        (captured_at_after && !captured_at_before && (feat_captured_at >= captured_at_after_time)) ||
+                        (captured_at_before && !captured_at_after && (feat_captured_at <= captured_at_before_time)) ||
+                        (captured_at_after && captured_at_before && (feat_captured_at >= captured_at_after_time) && feat_captured_at <= captured_at_before_time)) {
+
+                        return style;
+                    }
+                    return undefined;
+                }
             });
 
             lizMap.mainLizmap.map.addLayer(mapillaryVT);
@@ -144,7 +200,7 @@ lizMap.events.on({
 
             // Hide Mapillary vector tile
             for (const layer of lizMap.mainLizmap.map.getLayers().getArray()) {
-                if (layer.get('title').startsWith('mapillary')) {
+                if (layer.get('title')?.startsWith('mapillary')) {
                     layer.setVisible(false);
                 }
             }
