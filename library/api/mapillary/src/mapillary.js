@@ -15,6 +15,8 @@ lizMap.events.on({
 
         const template = `
             <div>
+                <label for="organization_id">Organization ID:</label>
+                <select id="organization_id"></select>
                 <label for="captured_at_after">Captured after:</label>
                 <input type="date" id="captured_at_after">
                 <label for="captured_at_before">Captured before:</label>
@@ -24,11 +26,11 @@ lizMap.events.on({
 
         lizMap.addDock("Mapillary", "Mapillary", "minidock", template, "mapillary-icon");
 
-        // Refresh Mapillary layer when 'captured date' filters change
-        document.querySelectorAll('#captured_at_after, #captured_at_before').forEach((element) => {
+        // Refresh Mapillary layer when `organization_id` or `captured date` filters change
+        document.querySelectorAll('#organization_id, #captured_at_after, #captured_at_before').forEach((element) => {
             element.addEventListener('change', () => {
                 for (const layer of lizMap.mainLizmap.map.getLayers().getArray()) {
-                    if (layer.get('title')?.startsWith('mapillary-vt')) {
+                    if (layer.get('title') === 'mapillary-vt') {
                         layer.changed();
                     }
                 }
@@ -103,6 +105,9 @@ lizMap.events.on({
                 title: 'mapillary-vt',
                 source: mapillaryVTSource,
                 style: (feature) => {
+                    const organization_id = document.querySelector('#organization_id').value;
+                    const feat_organization_id = feature.getProperties().organization_id;
+
                     const captured_at_after = document.querySelector('#captured_at_after').value;
                     const captured_at_after_time = (new Date(captured_at_after)).getTime();
                     const captured_at_before = document.querySelector('#captured_at_before').value;
@@ -111,14 +116,45 @@ lizMap.events.on({
 
                     // Return default style based on captured_at_x inputs
                     // If the function returns undefined, the feature will not be rendered
-                    if ((!captured_at_after && !captured_at_before) ||
+                    if ((!organization_id || (organization_id == feat_organization_id)) &&
+                        ((!captured_at_after && !captured_at_before) ||
                         (captured_at_after && !captured_at_before && (feat_captured_at >= captured_at_after_time)) ||
                         (captured_at_before && !captured_at_after && (feat_captured_at <= captured_at_before_time)) ||
-                        (captured_at_after && captured_at_before && (feat_captured_at >= captured_at_after_time) && feat_captured_at <= captured_at_before_time)) {
+                        (captured_at_after && captured_at_before && (feat_captured_at >= captured_at_after_time) && feat_captured_at <= captured_at_before_time))) {
 
                         return style;
                     }
                     return undefined;
+                }
+            });
+
+            // Refresh `organization_id` list when map load ends
+            lizMap.mainLizmap.map.on('loadend', evt => {
+                for (const layer of evt.map.getLayers().getArray()) {
+                    if (layer.get('title') === 'mapillary-vt') {
+                        const featuresInCurrentExtent = layer.getSource().getFeaturesInExtent(evt.map.getView().calculateExtent());
+
+                        // Get all organization_id...
+                        let organization_id_list = featuresInCurrentExtent.map(
+                            feature => feature.getProperties().organization_id
+                        );
+
+                        // ...keep organization_id selected by user if any
+                        const selected_organization_id = parseInt(document.querySelector('#organization_id').value);
+                        if (selected_organization_id) {
+                            organization_id_list.push(selected_organization_id);
+                        }
+                        // ...remove duplicates 
+                        organization_id_list = [...new Set(organization_id_list)];
+                        // ...remove undefined
+                        organization_id_list = organization_id_list.filter(id => id !== undefined);
+                        // ...sort
+                        organization_id_list = organization_id_list.sort((a, b) => a - b);
+
+                        document.querySelector('#organization_id').innerHTML = `<option></option>` + organization_id_list.map(
+                            id => `<option ${id === selected_organization_id ? 'selected' : ''}>${id}</option>`
+                        ).join('');
+                    }
                 }
             });
 
