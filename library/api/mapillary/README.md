@@ -2,6 +2,10 @@
 
 ![gif_mapillary](mapillary.gif)
 
+## Requirements
+
+Lizmap Web Client 3.5.6 or 3.6.X
+
 ## Production
 
 To use Mapillary in Lizmap:
