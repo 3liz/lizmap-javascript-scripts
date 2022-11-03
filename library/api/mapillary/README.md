@@ -1,6 +1,6 @@
 # Mapillary
 
-![gif_mapillary](mapillary.gif)
+![video_mapillary](mapillary.mp4)
 
 ## Requirements
 
