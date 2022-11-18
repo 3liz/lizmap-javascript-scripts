@@ -4,7 +4,8 @@ https://user-images.githubusercontent.com/2145040/199705616-0cf3c8c4-24bc-4149-b
 
 ## Requirements
 
-Lizmap Web Client 3.5.6 or 3.6.X
+- Lizmap Web Client 3.5.6 or 3.6.X
+- Your map projection must be `ESPG:3857`
 
 ## Production
 
