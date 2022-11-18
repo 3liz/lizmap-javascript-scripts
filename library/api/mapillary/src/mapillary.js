@@ -15,7 +15,7 @@ lizMap.events.on({
 
         const template = `
             <div>
-                <label for="organization_id">Organization ID:</label>
+                <label for="organization_id">Organization:</label>
                 <select id="organization_id"></select>
                 <div id="mapillary-captured_at-filters">
                     <div>
@@ -164,8 +164,25 @@ lizMap.events.on({
                         organization_id_list = organization_id_list.sort((a, b) => a - b);
 
                         document.querySelector('#organization_id').innerHTML = `<option></option>` + organization_id_list.map(
-                            id => `<option ${id === selected_organization_id ? 'selected' : ''}>${id}</option>`
+                            id =>
+                                `<option value="${id}" ${id === selected_organization_id ? 'selected' : ''}>${sessionStorage.getItem("mapillary_" + id) || id}</option>`
                         ).join('');
+
+                        // Get organization names and update on success
+                        const nameRequests = [];
+                        for (const id of organization_id_list) {
+                            if (!sessionStorage.getItem("mapillary_" + id)) {
+                                nameRequests.push(fetch(`https://graph.mapillary.com/${id}?access_token=${token}&fields=name`).then(response => response.json()));
+                            }
+                        }
+
+                        Promise.all(nameRequests).then(responses => {
+                            for (const response of responses) {
+                                // Cache id => name
+                                sessionStorage.setItem("mapillary_" + response.id, response.name);
+                                document.querySelector(`#organization_id option[value='${response.id}']`).text = response.name;
+                            }
+                        });
                     }
                 }
             });
