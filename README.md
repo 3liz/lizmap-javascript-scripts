@@ -17,6 +17,7 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 * [IGN web services 🇫🇷](library/api/ign_web_services)
 * [Google Street View](library/api/google_street_view)
 * [Mapillary](library/api/mapillary)
+* [GeoFoncier Popup🇫🇷](library/data/geofoncier_wms_getFeatureInfo)
 
 ## Data
 
@@ -65,5 +66,6 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 * [Add button to toggle dock full width](./library/ui/add_dock_resize_button)
 * [Add a hard-coded legend at the bottom of the map](./library/ui/add_hard_coded_legend_at_map_bottom)
 * [Add placeholder to input/textarea elements](./library/ui/add_placeholder_on_text_controls)
+* [Permalink copy to clipboard instead of link](./library/ui/copy-permalink)
 * Deprecated since LWC 3.4
   * [Add hamburger menu](./library/ui/add_hamburger_menu) for a better UX on a small screen
