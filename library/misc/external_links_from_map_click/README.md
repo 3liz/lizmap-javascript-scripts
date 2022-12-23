@@ -5,7 +5,7 @@
 This script adds a new tool allowing to click on the map to get the **longitude** and **latitude** (degrees)
 and presenting a list of configurable external links configured with these coordinates.
 
-![External links](./lizmap-web-client-external-links.webm)
+![External links](./lizmap-web-client-external-links-optimized.gif)
 
 ## Configuration
 
