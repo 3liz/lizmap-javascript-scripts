@@ -26,6 +26,7 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 
 ## Miscellaneous 
 
+* [Open external links with map click coordinates](./library/misc/external_links_from_map_click)
 * [Add keyboard shortcuts](./library/misc/add_shortcuts)
 * [Refresh some layers periodically](./library/misc/refresh_layers_every_n_seconds)
 
