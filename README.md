@@ -24,7 +24,7 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 * [Edit GPX](./library/data/edit_gpx) Import/Export GPX
 * [WMTS direct access](./library/data/wmts_direct_access)
 
-## Miscellaneous 
+## Miscellaneous
 
 * [Open external links with map click coordinates](./library/misc/external_links_from_map_click)
 * [Add keyboard shortcuts](./library/misc/add_shortcuts)
@@ -45,6 +45,7 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 * [Smart filter](./library/tools/smartfilter)
 * [Zoom to feature at startup and show popup](./library/tools/zoom_to_feature_at_startup)
 * [Display statistics on the current layer selection](./library/tools/show_statistics_on_selection)
+* [Selection from a popup feature geometry](./library/tools/selection_from_popup_object_geometry)
 * Deprecated since LWC 3.4
   * [Multiple atlas](./library/tools/multipleatlas)
   * [Snapping while editing](./library/tools/snapping_while_editing)
