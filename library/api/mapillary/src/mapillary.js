@@ -28,7 +28,9 @@ lizMap.events.on({
                     </div>
                 </div>
             </div>
-            <div id="mapillary-view" style="width:100%;min-width:400px;height:350px"></div>`;
+            <div id="mapillary-view" style="width:100%;min-width:400px;height:350px">
+                <lizmap-fullscreen selector="#mapillary-view"></lizmap-fullscreen>
+            </div>`;
 
         lizMap.addDock("Mapillary", "Mapillary", "minidock", template, "mapillary-icon");
 
@@ -61,6 +63,12 @@ lizMap.events.on({
             }
             #mapillary-captured_at-filters > div {
                 flex-grow: 1;
+            }
+            #mapillary-view button {
+                background: rgb(0 0 0 / 60%);
+                color: white;
+                border-radius: 8px;
+                border: none;
             }
         </style>`);
 
