@@ -1,6 +1,6 @@
 # Mapillary
 
-https://user-images.githubusercontent.com/2145040/199705616-0cf3c8c4-24bc-4149-b85d-17b940d0592f.mp4
+https://user-images.githubusercontent.com/2145040/222394069-77bfdf4b-0843-4cfb-a849-abfef6166ea9.mp4
 
 ## Requirements
 
