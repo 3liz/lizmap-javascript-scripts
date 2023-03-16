@@ -66,9 +66,6 @@ CREATE OR REPLACE VIEW public.dossier_oxalis
      LEFT JOIN cadastre_2021.parcelle_info parcinfo ON parcinfo.geo_parcelle = replace(dosparc.dosparcnom::text, ' '::text, '0'::text)
   GROUP BY dosparc.dossiernom, oxalis_implanter_dossier.geom;
 
-ALTER TABLE public.dossier_oxalis
-    OWNER TO "morsini@centremorbihancommunaute";
-
 -- Trigger permettant des INSERT et UPDATE sur la vue 'dossier_oxalis'
 CREATE TRIGGER dossier_oxalis_trigger
     INSTEAD OF INSERT OR UPDATE 
