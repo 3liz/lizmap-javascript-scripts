@@ -69,6 +69,7 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 * [Add a hard-coded legend at the bottom of the map](./library/ui/add_hard_coded_legend_at_map_bottom)
 * [Add placeholder to input/textarea elements](./library/ui/add_placeholder_on_text_controls)
 * [Permalink copy to clipboard instead of link](./library/ui/copy-permalink)
+* [Move Layers button after Information](./library/ui/move-button)
 * [Activate geolocation at startup](./library/ui/activate-geolocation)
 * Deprecated since LWC 3.4
   * [Add hamburger menu](./library/ui/add_hamburger_menu) for a better UX on a small screen
