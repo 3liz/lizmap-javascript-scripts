@@ -1,5 +1,8 @@
 lizMap.events.on({
-	uicreated: function(e) {
-		$('#group-groupname td a.expander').click();
+	uicreated: () => {
+		// Replace `groupname` by the group name in the HTML
+		// You can collapse several groups using commas
+		// e.g. `document.getElementById('group-group1 td a.expander, group-group2 td a.expander').click();`
+		document.getElementById('group-groupname td a.expander').click();
 	}
 });
