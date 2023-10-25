@@ -43,9 +43,10 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 * [Point buffer on map](./library/tools/point_buffer_on_map) Display a buffer on the map
 * [Simple filter](./library/tools/simplefilter)
 * [Smart filter](./library/tools/smartfilter)
-* [Zoom to feature at startup and show popup](./library/tools/zoom_to_feature_at_startup)
 * [Display statistics on the current layer selection](./library/tools/show_statistics_on_selection)
 * [Selection from a popup feature geometry](./library/tools/selection_from_popup_object_geometry)
+* Deprecated since LWC 3.6
+  * [Zoom to feature at startup and show popup](./library/tools/zoom_to_feature_at_startup)
 * Deprecated since LWC 3.4
   * [Multiple atlas](./library/tools/multipleatlas)
   * [Snapping while editing](./library/tools/snapping_while_editing)

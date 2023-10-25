@@ -1,3 +1,9 @@
+## Lizmap Web Client 3.6
+
+This feature is now deprecated since [3.6](https://www.3liz.com/en/news/lizmap-web-client-3-6.html)
+
+See "Zoom on an object when opening the map"
+
 ## Installation
 
 Copy this script in the correct `media/js` directory. See [Lizmap documentation](https://docs.lizmap.com/current/fr/publish/advanced_lizmap_config.html#adding-your-own-javascript)
