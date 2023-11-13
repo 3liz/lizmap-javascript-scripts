@@ -6,7 +6,7 @@ See "Zoom on an object when opening the map"
 
 ## Installation
 
-Copy this script in the correct `media/js` directory. See [Lizmap documentation](https://docs.lizmap.com/current/fr/publish/advanced_lizmap_config.html#adding-your-own-javascript)
+Copy this script in the correct `media/js` directory. See [Lizmap documentation](https://docs.lizmap.com/current/en/publish/customization/javascript.html)
 
 ## Usage
 
