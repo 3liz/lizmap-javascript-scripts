@@ -55,9 +55,6 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 
 * [Add documentation](./library/ui/add_documentation) with buttons and a dock
 * [Background selector](./library/ui/background_selector), like on Google Maps
-* [Expand/collapse legend when layer toggled](./library/ui/expand-collapse-legend-when-layer-toggled)
-* [Expand legend on load](./library/ui/expand-legend-on-load), partially deprecated
-* [Group collapse](./library/ui/group_collapse)
 * [Hide value popup](./library/ui/hide_value_popup)
 * [Measure tool custom style](./library/ui/measure_tool_custom_style)
 * [Move filter in new panel](./library/ui/move_filter_in_new_panel)
@@ -65,7 +62,6 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 * [Remove button](./library/ui/remove_button) to make the UI lighter and easier
 * [Resize Dock with splitter](./library/ui/resize_dock_with_splitter)
 * [Resize Dock with splitter 2 (interact.js)](./library/ui/resize_dock_2)
-* [Simplify print options](./library/ui/simplify-print-options)
 * [Simplify export options](./library/ui/simplify-export-options)
 * [Add button to toggle dock full width](./library/ui/add_dock_resize_button)
 * [Add a hard-coded legend at the bottom of the map](./library/ui/add_hard_coded_legend_at_map_bottom)
@@ -73,5 +69,10 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 * [Permalink copy to clipboard instead of link](./library/ui/copy-permalink)
 * [Move Layers button after Information](./library/ui/move-button)
 * [Activate geolocation at startup](./library/ui/activate-geolocation)
+* Deprecated since LWC 3.7
+  * [Group collapse](./library/ui/group_collapse) 
+  * [Expand/collapse legend when layer toggled](./library/ui/expand-collapse-legend-when-layer-toggled)
+  * [Expand legend on load](./library/ui/expand-legend-on-load)
+  * [Simplify print options](./library/ui/simplify-print-options) 
 * Deprecated since LWC 3.4
   * [Add hamburger menu](./library/ui/add_hamburger_menu) for a better UX on a small screen
