@@ -46,10 +46,11 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 * [Display statistics on the current layer selection](./library/tools/show_statistics_on_selection)
 * [Selection from a popup feature geometry](./library/tools/selection_from_popup_object_geometry)
 * Deprecated since LWC 3.6
-  * [Zoom to feature at startup and show popup](./library/tools/zoom_to_feature_at_startup)
+  * [Zoom to feature at startup and show popup](./library/tools/zoom_to_feature_at_startup),
+    now use the [native permalink](https://docs.lizmap.com/current/en/publish/configuration/permalink.html)
 * Deprecated since LWC 3.4
-  * [Multiple atlas](./library/tools/multipleatlas)
-  * [Snapping while editing](./library/tools/snapping_while_editing)
+  * [Multiple atlas](./library/tools/multipleatlas), included by default in the plugin now
+  * [Snapping while editing](./library/tools/snapping_while_editing), included by default in the plugin now
 
 ## UI
 
@@ -70,9 +71,9 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 * [Move Layers button after Information](./library/ui/move-button)
 * [Activate geolocation at startup](./library/ui/activate-geolocation)
 * Deprecated since LWC 3.7
-  * [Group collapse](./library/ui/group_collapse) 
-  * [Expand/collapse legend when layer toggled](./library/ui/expand-collapse-legend-when-layer-toggled)
-  * [Expand legend on load](./library/ui/expand-legend-on-load)
-  * [Simplify print options](./library/ui/simplify-print-options) 
+  * [Group collapse](./library/ui/group_collapse), use a QGIS theme and the checkbox at the "Layers" tab in the plugin
+  * [Expand/collapse legend when layer toggled](./library/ui/expand-collapse-legend-when-layer-toggled), use a QGIS theme and the checkbox at the "Layers" tab in the plugin
+  * [Expand legend on load](./library/ui/expand-legend-on-load), use a QGIS theme and the checkbox at the "Layers" tab in the plugin
+  * [Simplify print options](./library/ui/simplify-print-options), use the "Layouts" panel in the plugin
 * Deprecated since LWC 3.4
-  * [Add hamburger menu](./library/ui/add_hamburger_menu) for a better UX on a small screen
+  * [Add hamburger menu](./library/ui/add_hamburger_menu) for a better UX on a small screen. The menu is now added automatically on smaller screen
