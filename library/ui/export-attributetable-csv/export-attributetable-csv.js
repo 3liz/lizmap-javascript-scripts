@@ -40,14 +40,7 @@ lizMap.events.on({
                             return child.href;
                         }
                     }
-                    const text = cell.innerText;
-                    if (text.includes(',')) {
-                        if (text.includes("'")) {
-                            return "'"+text.replace("'", "\'")+"'";
-                        }
-                        return "'"+text+"'";
-                    }
-                    return text;
+                    return cell.innerText;
                 }));
             });
 
