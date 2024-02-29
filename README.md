@@ -66,6 +66,7 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 * [Resize Dock with splitter](./library/ui/resize_dock_with_splitter)
 * [Resize Dock with splitter 2 (interact.js)](./library/ui/resize_dock_2)
 * [Simplify export options](./library/ui/simplify-export-options)
+* [Export attribute table to CSV](./library/ui/export-attributetable-csv)
 * [Add button to toggle dock full width](./library/ui/add_dock_resize_button)
 * [Add a hard-coded legend at the bottom of the map](./library/ui/add_hard_coded_legend_at_map_bottom)
 * [Add placeholder to input/textarea elements](./library/ui/add_placeholder_on_text_controls)
