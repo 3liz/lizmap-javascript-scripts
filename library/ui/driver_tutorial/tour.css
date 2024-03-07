@@ -1,0 +1,74 @@
+.driver-popover.driverjs-first{
+    margin: 20px;
+    font-size:20px !important;
+    min-width:350px !important;
+    max-width:500px !important;
+}
+
+.close-button {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 25px;
+    cursor: pointer;
+    color:white;
+}
+
+.driverjs-first#showTutoriel:hover {
+    transform: scale(1.1); 
+    transition: 0.3s ease-in-out;
+}
+
+/* Additional CSS */
+.driver-popover.driverjs-theme {
+  background-color: grey;
+  color: white;
+}
+
+.driver-popover.driverjs-theme .driver-popover-title {
+  font-size: 20px;
+}
+
+.driver-popover.driverjs-theme .driver-popover-title,
+.driver-popover.driverjs-theme .driver-popover-description,
+.driver-popover.driverjs-theme .driver-popover-progress-text {
+  color: white;
+}
+
+.driver-popover.driverjs-theme .driver-popover-close-btn{
+    color:white !important;
+    font-size:30px !important;
+    border:none;
+    background:none;
+}
+
+.driver-popover.driverjs-theme .driver-popover-close-btn:hover{
+    transform: scale(1.1); 
+    transition: 0.3s ease-in-out;
+    background:none;
+}
+
+.driver-popover.driverjs-theme button {
+  flex: 1;
+  text-align: center;
+  background-color: grey;
+  color: #ffffff;
+  border: 2px solid black;
+  text-shadow: none;
+  font-size: 14px;
+  padding: 5px 8px;
+  border-radius: 6px;
+}
+
+.driver-popover.driverjs-theme button:hover {
+  color: #ffffff;
+}
+
+.driver-popover.driverjs-theme .driver-popover-navigation-btns {
+  justify-content: space-between;
+  gap: 3px;
+}
+
+.driver-popover.driverjs-theme .driver-popover-close-btn:hover {
+  color: #000;
+}
