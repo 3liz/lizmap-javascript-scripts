@@ -33,10 +33,17 @@ function startTutorial(){
                     popover: { title: `Step ${index + 1}`, description: `Description for step ${index + 1}`, side: "left", align: 'start',}
                 };
             }).get(),
+
+            { element: `span#navbar button.btn.pan`, popover: { title: 'Move the map', description: 'Move the map' }},
+            { element: `span#navbar button.btn.zoom`, popover: { title: 'Zoom', description: 'Zoom' }},
+            { element: `span#navbar button.btn.zoom-extent`, popover: { title: 'Zoom extent', description: 'Zoom extent' }},
+            { element: `div#overview-box`, popover: { title: 'Overview', description: 'Overview' }},
+
             { popover: { title: 'Happy Coding', description: 'And that is all, go ahead and start adding tours to your applications.' } }
         ]
 
     });
+
 
     driverObj.drive();    
 };
@@ -66,7 +73,7 @@ lizMap.events.on({
             var content = 'The content of the popup.'
         
             // Header
-            html += '<div class="modal-header" style="background-color:rgba(0, 0, 0, 0.7);"><div class="close-button" id="buttonClose" onclick="closePopupTuto(' + JSON.stringify() + ');">✖</div>';
+            html += '<div class="modal-header" style="background-color:rgba(0, 0, 0, 0.7);"><div class="close-button" id="buttonClose" onclick="closePopup();">✖</div>';
             html += '<h3 style="color:white;">' + title + '</h3></div>';
         
             // Main content : body
