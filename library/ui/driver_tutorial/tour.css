@@ -1,55 +1,5 @@
-.driver-popover.driverjs-first{
-    margin: 20px;
-    font-size:20px !important;
-    min-width:350px !important;
-    max-width:500px !important;
-}
-
-.close-button {
-    position: absolute;
-    top: 20px;
-    right: 30px;
-    font-size: 25px;
-    cursor: pointer;
-    color:white;
-}
-
-.driverjs-first#showTutoriel:hover {
-    transform: scale(1.1); 
-    transition: 0.3s ease-in-out;
-}
-
 /* Additional CSS */
-.driver-popover.driverjs-theme {
-  background-color: grey;
-  color: white;
-}
-
-.driver-popover.driverjs-theme .driver-popover-title {
-  font-size: 20px;
-}
-
-.driver-popover.driverjs-theme .driver-popover-title,
-.driver-popover.driverjs-theme .driver-popover-description,
-.driver-popover.driverjs-theme .driver-popover-progress-text {
-  color: white;
-}
-
-.driver-popover.driverjs-theme .driver-popover-close-btn{
-    color:white !important;
-    font-size:30px !important;
-    border:none;
-    background:none;
-}
-
-.driver-popover.driverjs-theme .driver-popover-close-btn:hover{
-    transform: scale(1.1); 
-    transition: 0.3s ease-in-out;
-    background:none;
-}
-
-.driver-popover.driverjs-theme button {
-  flex: 1;
+.shepherd-theme-custom button {
   text-align: center;
   background-color: grey;
   color: #ffffff;
@@ -60,15 +10,57 @@
   border-radius: 6px;
 }
 
-.driver-popover.driverjs-theme button:hover {
-  color: #ffffff;
+.shepherd-theme-custom button:hover {
+  transform: scale(1.1); 
+  transition: 0.3s ease-in-out;
+  color:grey;
 }
 
-.driver-popover.driverjs-theme .driver-popover-navigation-btns {
-  justify-content: space-between;
-  gap: 3px;
+.shepherd-cancel-icon {
+  background-color:transparent !important;
+  color:black !important;
+  border:none !important;
+  font-size:25px !important;
 }
 
-.driver-popover.driverjs-theme .driver-popover-close-btn:hover {
-  color: #000;
+.shepherd-cancel-icon:hover{
+  transform: scale(1.5) !important; 
+  transition: 0.3s ease-in-out !important;
+  color:black !important;
+  background:transparent !important;
+}
+
+.shepherd-enabled.shepherd-element {
+  margin-left:15px !important;
+}
+
+.shepherd-enabled.shepherd-element[data-shepherd-step-id="move-map"]{
+  margin-left:0px !important;
+  margin-right:20px !important;
+}
+
+.shepherd-enabled.shepherd-element[data-shepherd-step-id="overview"]{
+  margin-left:0px !important;
+  margin-bottom:20px !important; 
+  margin-right:20px !important;
+}
+
+.shepherd-progress-bar {
+  position: absolute;
+  left: 2%;
+  bottom: 9%;
+  font-size: 14px;
+  border-radius: 9px;
+  height: 20px;
+  width: 100%;
+  max-width: 180px;
+  padding: 3px;
+  background: #e6e6e6
+}
+.shepherd-progress-bar span {
+  display: block;
+  background: grey;
+  width: 50%;
+  height: 100%;
+  border-radius: 9px;
 }
