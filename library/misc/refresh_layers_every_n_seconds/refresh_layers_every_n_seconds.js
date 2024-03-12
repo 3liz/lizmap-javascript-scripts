@@ -1,43 +1,36 @@
 lizMap.events.on({
-
-    'uicreated': function(e) {
-
+    uicreated: () => {
         // List of layer QGIS names to refresh
-        rlayers = [
+        const refreshLayersName = [
             'Quartiers',
             'SousQuartiers'
         ];
 
         // Refresh interval in milliseconds
-        var refreshInterval = 10000;
+        const refreshInterval = 10000;
 
         // ****
         // Do not edit below
         // ****
 
-        // Get layers by name
-        var tlayers = [];
-        for(var i in rlayers){
-            var olayers = lizMap.map.getLayersByName(rlayers[i]);
-            if( olayers.length > 0 ){
-                for(var l in olayers){
-                    var layer = olayers[l];
-                    tlayers.push(layer);
-                }
-            }
+        // Get OL layers by name
+        const olLayers = [];
+        const olMap = lizMap.mainLizmap?.baseLayersMap /* Lizmap = 3.7 */  || lizMap.mainLizmap?.map /* Lizmap > 3.7 */;
+        for (const layerName of refreshLayersName) {
+            const olLayer = olMap.getLayerByName(layerName);
+            olLayers.push(olLayer);
         }
 
         // Refresh all given layers
         function refreshLayers() {
-            for( var l in tlayers ){
-                if( tlayers[l].visibility ){
-                    tlayers[l].redraw();
+            for (const olLayer of olLayers) {
+                if (olLayer.getVisible()) {
+                    olLayer.getSource().changed();
                 }
             }
         }
 
         // Set timer to refresh layers every N milliseconds
-        var tid = setInterval(refreshLayers, refreshInterval);
+        setInterval(refreshLayers, refreshInterval);
     }
-
 });

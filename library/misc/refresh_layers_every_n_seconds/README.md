@@ -1,8 +1,7 @@
 ## Description
 
-Refresh layers every N seconds
+Refresh layers every N seconds.
 
-todo:
+## Configuration
 
-* [ ] explain script
-* [ ] add animated gif ?
+Edit the script to set your **QGIS** layers name in `refreshLayersName` and interval in `refreshInterval`;
