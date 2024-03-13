@@ -63,6 +63,7 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 * [Move filter in new panel](./library/ui/move_filter_in_new_panel)
 * [Popup when opening the project with metadata information](./library/ui/popup_metadata_info)
 * [Interactive guided tour](./library/ui/driver_tutorial)
+* [Transparency Interface](./library/ui/change_opacity)
 * [Remove button](./library/ui/remove_button) to make the UI lighter and easier
 * [Resize Dock with splitter](./library/ui/resize_dock_with_splitter)
 * [Resize Dock with splitter 2 (interact.js)](./library/ui/resize_dock_2)
