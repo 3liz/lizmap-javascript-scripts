@@ -1,5 +1,5 @@
 # Interactive Step-by-Step Guided Tours
-![guided-tour](https://github.com/altheaFeu/lizmap-javascript-scripts/assets/123597411/4e2f95eb-28f5-4f11-b1c6-5db2901d1e05)
+![guided-tour](./demo.gif)
 ## Introduction
 
 This script empowers you to craft a simple interactive guided tour using `shepherd.js`.
