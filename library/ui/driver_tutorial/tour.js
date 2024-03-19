@@ -1,4 +1,4 @@
-// Enable you to create an html Popup startup
+// Enable you to create an HTML Popup startup
 function htmlPopup(tour) {
     var html = '';
     var title = 'My popup';
@@ -13,13 +13,13 @@ function htmlPopup(tour) {
     html += '<p>' + content + '</p>';
 
     // Project Metadata
-    html+= $('#metadata').html();
+    html += $('#metadata').html();
 
     // End of main content body
-    html+= '</div>';
+    html += '</div>';
 
     // Footer
-    html+= '<div class="modal-footer" style="background-color:rgba(0, 0, 0, 0.7);"></div>';
+    html += '<div class="modal-footer" style="background-color:rgba(0, 0, 0, 0.7);"></div>';
 
     // Return shepherd
     return {
@@ -28,13 +28,13 @@ function htmlPopup(tour) {
         attachTo: {
             element: 'body',
         },
-        buttons: [{text: 'See tutorial',action: tour.next,}],
+        buttons: [{ text: 'See tutorial', action: tour.next }],
     }
 }
 
-// Check the browser's localstoarage
-function dismissTour(){
-    if(!localStorage.getItem('shepherd-tour')) {
+// Check the browser's localstorage
+function dismissTour() {
+    if (!localStorage.getItem('shepherd-tour')) {
         localStorage.setItem('shepherd-tour', 'yes');
     }
 }
@@ -43,16 +43,15 @@ function dismissTour(){
 function startTutorial() {
     // Create a tour
     const tour = new Shepherd.Tour({
-        useModalOverlay:true, 
+        useModalOverlay: true,
         defaultStepOptions: {
             classes: 'shepherd-theme-custom',
-            scrollTo : true,
-            cancelIcon: {enabled: true},
-            keyboardNavigation:true,
-            exitOnEsc:true,
+            scrollTo: true,
+            cancelIcon: { enabled: true },
+            keyboardNavigation: true,
+            exitOnEsc: true,
             when: {
 
-                // Create progress bar
                 show() {
 
                     // Don't show the progress bar on first and final step
@@ -61,77 +60,77 @@ function startTutorial() {
                         const header = currentStepElement.querySelector('.shepherd-footer');
                         const progress = document.createElement('div');
                         const innerBar = document.createElement('span');
-                        const progressPercentage = ((tour.steps.indexOf(tour.currentStep) + 1)/tour.steps.length)*100 + '%';
+                        const progressPercentage = ((tour.steps.indexOf(tour.currentStep) + 1) / tour.steps.length) * 100 + '%';
 
-                        progress.className='shepherd-progress-bar';
-                        innerBar.style.width=progressPercentage;
+                        progress.className = 'shepherd-progress-bar';
+                        innerBar.style.width = progressPercentage;
 
                         progress.style.minWidth = '10px';
-                        
+
                         progress.appendChild(innerBar);
                         header.insertBefore(progress, currentStepElement.querySelector('.shepherd-button'));
                     }
                 }
             }
         },
-        
+
     });
-    
+
     tour.addStep(htmlPopup(tour));
 
     // Add automatic tour steps
-    const tourSteps = $('.nav.nav-list li').filter(function() {
-            return this.style.display !== 'none' && !this.classList.contains('hide');
-        }).map(function(index, element) {
-            
-            const aElement = $(element).find('a')[0];
-            
-            return {
-                id: `Step ${index + 1}`,
-                title : `Step ${index + 1}`, 
-                text: $(aElement).attr('data-original-title'),
-                attachTo: {
-                    element: aElement,
-                    on: 'right',
-                },
-                buttons: [{ text: 'Previous', action: tour.back }, {text: 'Next',action: tour.next,}],
-            };
-        }
+    const tourSteps = $('.nav.nav-list li').filter(function () {
+        return this.style.display !== 'none' && !this.classList.contains('hide');
+    }).map(function (index, element) {
+
+        const aElement = $(element).find('a')[0];
+
+        return {
+            id: `Step ${index + 1}`,
+            title: `Step ${index + 1}`,
+            text: $(aElement).attr('data-original-title'),
+            attachTo: {
+                element: aElement,
+                on: 'right',
+            },
+            buttons: [{ text: 'Previous', action: tour.back }, { text: 'Next', action: tour.next }],
+        };
+    }
     ).get();
 
     // Add 3 more personal tour steps
     const stepHappyCoding = [
         {
-            id : 'move-map',
-            title : 'Move the map', 
+            id: 'move-map',
+            title: 'Move the map',
             text: 'Move the map',
             attachTo: {
                 element: 'span#navbar',
                 on: 'left',
             },
-            buttons: [{ text: 'Previous', action: tour.back }, {text: 'Next',action: tour.next,}],
+            buttons: [{ text: 'Previous', action: tour.back }, { text: 'Next', action: tour.next }],
         },
-    
+
         {
-            id : 'overview',
-            title : 'Overview box', 
+            id: 'overview',
+            title: 'Overview box',
             text: 'Overview box',
             attachTo: {
                 element: '#overview-box',
                 on: 'top',
             },
-            buttons: [{ text: 'Previous', action: tour.back }, {text: 'Next',action: tour.next,}],
+            buttons: [{ text: 'Previous', action: tour.back }, { text: 'Next', action: tour.next }],
         },
-        
+
         {
-            id : 'happy-coding', 
-            title : 'Happy Coding', 
+            id: 'happy-coding',
+            title: 'Happy Coding',
             text: 'And that is all, go ahead and start adding tours to your applications.',
             attachTo: {
                 element: 'body',
             },
             buttons: [
-                { text: 'Previous', action: tour.back }, 
+                { text: 'Previous', action: tour.back },
                 {
                     text: 'Finish',
                     action() {
@@ -142,9 +141,9 @@ function startTutorial() {
                 }],
         }
     ];
-    
+
     // Spread the steps into the tour array
-    tourSteps.push(...stepHappyCoding); 
+    tourSteps.push(...stepHappyCoding);
     tour.addSteps(tourSteps);
 
     // Return the
@@ -178,7 +177,7 @@ lizMap.events.on({
         };
 
         script.onerror = function () {
-            console.error('Erreur lors du chargement de shepherd.js');
+            console.error('Error when loading shepherd.js');
         };
 
         document.head.appendChild(script);
