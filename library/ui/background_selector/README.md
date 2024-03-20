@@ -10,3 +10,4 @@ If you want show the base layer switcher, you can comment out the CSS part in ba
     display:none;
 }*/
 ```
+`background_selector-3-6.js` is dedicated for legacy LWC 3.6
