@@ -1,7 +1,10 @@
 lizMap.events.on({
 
     'uicreated':function(evt){
-        //need to replace #switcher-baselayer-select by lizmap-base-layers select
+        /**
+         * diff 3.6 -> 3.7 : replace #switcher-baselayer-select by lizmap-base-layers select
+         * and change lizMap.mainLizmap.state (see below)
+         */
         function addBaselayerImageSelector(){
             var activebl = $('#switcher-baselayer lizmap-base-layers select').val();
             var html = '<div id="baselayer-image-selector" class="'+activebl+'" title="Changer le fond de carte">';
@@ -39,13 +42,8 @@ lizMap.events.on({
             var nextbl_val = nextbl.attr('value');
             var cur_image_url = $('#baselayer-image-selector').css('background-image');
             var cur_image_spl = cur_image_url.split('/');
-            var cur_image = cur_image_spl.pop();
+            cur_image_spl.pop();
             var nextbl_image = cur_image_spl.join('/') + '/' + nextbl_val + '.png';
-            var begin = window.location.protocol + "//" + window.location.host + "/";
-            nextbl_image = nextbl_image.replace(
-                begin,
-                lizUrls.basepath
-            ) + '")';
             $('#baselayer-image-selector')
                 .css(
                     'background-image',
@@ -58,7 +56,7 @@ lizMap.events.on({
         }
 
         // Add baselayer image selector
-       addBaselayerImageSelector();
+        addBaselayerImageSelector();
 
     }
 });
