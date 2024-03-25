@@ -68,10 +68,10 @@ function callCurrentScript() {
             promises.push(readExcelFileAsync(file));
         });
 
-        var colLon = $('#selectLongitude').val();
-        var colLat = $('#selectLatitude').val();
+        var fieldLon = $('#selectLongitude').val();
+        var fieldLat = $('#selectLatitude').val();
 
-        startReadingXY(promises, colLon, colLat);
+        startReadingXY(promises, fieldLon, fieldLat);
 
     } else if ($('#adresses-content').hasClass('active')){
         console.log("adresse");
