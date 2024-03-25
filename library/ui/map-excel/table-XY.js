@@ -1,4 +1,4 @@
-function startReadingXY(promises, colLon, colLat) {
+function startReadingXY(promises, fieldLon, fieldLat) {
     Promise.all(promises)
         .then(dataJson => {
             if (dataJson.length > 0) {
@@ -6,7 +6,7 @@ function startReadingXY(promises, colLon, colLat) {
 
                 iconStyle = createIconStyle($('#selectLogo').val());
 
-                layerXY = new OpenLayers.Layer.Vector('CoucheGPS', {
+                layerXY = new OpenLayers.Layer.Vector('GPSLayer', {
                     styleMap: iconStyle
                 });
 
@@ -14,8 +14,8 @@ function startReadingXY(promises, colLon, colLat) {
 
                 dataJson.forEach(table => {
                     table.forEach(rowData => {
-                        var lon = parseFloat(rowData[colLon]);
-                        var lat = parseFloat(rowData[colLat]);
+                        var lon = parseFloat(rowData[fieldLon]);
+                        var lat = parseFloat(rowData[fieldLat]);
 
                         feature = createPoint(lon, lat, 'EPSG:4326');
 
@@ -42,10 +42,10 @@ function startReadingXY(promises, colLon, colLat) {
                 })
 
             } else {
-                alert("Pas de données à cartographier");
+                alert("No data to map");
             }
         }).catch(error => {
-            alert("Erreur");
+            alert("Error");
             console.log(error);
         });
 }
