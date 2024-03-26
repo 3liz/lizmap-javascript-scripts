@@ -1,3 +1,5 @@
+var workerXY = new Worker('https://your-app/index.php/view/media/getMedia?repository=your-repo&project=your-project&path=media%2Fjs%2Fdefault%2FworkerXY.js');
+
 function startReadingXY(promises) {
     Promise.all(promises)
         .then(dataJson => {
