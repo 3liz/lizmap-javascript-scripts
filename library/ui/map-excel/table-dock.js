@@ -80,7 +80,7 @@ function callCurrentScript() {
 
 lizMap.events.on({
     uicreated: function(e) {
-        var html = '<div id="select_files_container" style="text-align: center; height:200px">';
+       var html = '<div id="select_files_container" style="text-align: center; height:200px">';
         html += '<ul class="nav justify-content-center nav-local-type" role="tablist">';
         html += '<li class="nav-item" role="presentation"><button class="nav-link local-type active" id="GPS-tab" data-bs-toggle="tab" data-bs-target="#GPS-content" type="button" role="tab" aria-controls="GPS" aria-selected="true">GPS</button></li>';
         html += '<li class="nav-item" role="presentation"><button class="nav-link local-type" id="adresses-tab" data-bs-toggle="tab" data-bs-target="#adresses-content" type="button" role="tab" aria-controls="adresses" aria-selected="false">Adresses</button></li>';
@@ -91,8 +91,8 @@ lizMap.events.on({
         html += '</div>';
 
         // Content of panel
-        html += '<div class="tab-content" id="myTabContent">';
-        html += '<div class="tab-pane active show" id="GPS-content" role="tabpanel" aria-labelledby="GPS-tab">';
+        html += '<div class="tab-content-excel" id="myTabContent">';
+        html += '<div class="tab-pane-excel active show" id="GPS-content" role="tabpanel" aria-labelledby="GPS-tab">';
         
         // For GPS
         html += '<label for="selectLongitude">Longitude :</label>';
@@ -105,7 +105,7 @@ lizMap.events.on({
         html += '</select></div>';
 
         // For adresses
-        html += ' <div class="tab-pane" id="adresses-content" role="tabpanel" aria-labelledby="adresses-tab">';
+        html += ' <div class="tab-pane-excel" id="adresses-content" role="tabpanel" aria-labelledby="adresses-tab">';
         html += '<label for="selectAdresse">Adresse :</label>';
         html += '<select id="selectAdresse"></select>';
         html += '<label for="selectCodePostal">Code Postal :</label>';
@@ -119,7 +119,6 @@ lizMap.events.on({
 
         html += '<button type="button" id="sendfiles" style="margin:10px;" onclick="callCurrentScript()">Envoyer</button>';
         
-        html += '<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js" defer></script>';
         html += '<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>';
         html += '<script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>';
 
@@ -137,6 +136,21 @@ lizMap.events.on({
             $("a.nav-link.local-type").removeClass("active");
             $(this).addClass("active");
 
+        });
+
+        $('.nav-link.local-type').on('click', function(event) {
+            event.preventDefault();
+            var target = $(this).attr('data-bs-target');
+        
+            $('.tab-pane-excel').removeClass('active');
+            $('.tab-pane-excel').removeClass('show');
+        
+            $('.nav-link.local-type').removeClass('active');
+            $(target).addClass('active');
+        
+            $(target).addClass('active show');
+        
+            $(this).addClass('active');
         });
     }
 });
