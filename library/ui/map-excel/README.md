@@ -1,4 +1,4 @@
-# Excel Table Mapping.
+# Excel Table Mapping
 
 WARNING: This UI is still under modification.
 
