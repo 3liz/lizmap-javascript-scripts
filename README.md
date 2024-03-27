@@ -65,6 +65,7 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 * [Remove button](./library/ui/remove_button) to make the UI lighter and easier
 * [Resize Dock with splitter](./library/ui/resize_dock_with_splitter)
 * [Resize Dock with splitter 2 (interact.js)](./library/ui/resize_dock_2)
+* [A tooltip if your tooltip doesn't work (tooltip.js)](./library/ui/tooltip)
 * [Simplify export options](./library/ui/simplify-export-options)
 * [Export attribute table to CSV](./library/ui/export-attributetable-csv)
 * [Add button to toggle dock full width](./library/ui/add_dock_resize_button)
