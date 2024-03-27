@@ -76,7 +76,7 @@ lizMap.events.on({
                 
             })        
         }catch (error) {
-            console.error('Une erreur s\'est produite pendant le traitement.', error);
+            console.error('An error occurred during processing: ', error);
         }
 
     }
@@ -88,14 +88,14 @@ async function getData(url) {
         const response = await fetch(url); 
 
         if (!response.ok) {
-            throw new Error(`Erreur HTTP! Statut : ${response.status}`);
+            throw new Error(`HTTP Error! Status: ${response.status}`);
         }
 
         const data = await response.json();
         return data.features;
 
     } catch (error) {
-       console.error('Une erreur s\'est produite lors de la récupération des lignes.', error);
+       console.error('An error occurred while retrieving the data', error);
        throw error; 
    }
 };
