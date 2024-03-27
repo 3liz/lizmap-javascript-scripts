@@ -57,14 +57,12 @@ If you are developing a new feature, do not hesitate to let us know so that we c
 ## UI
 
 * [Add documentation](./library/ui/add_documentation) with buttons and a dock
-* [Display a right-docked table of data](./library/ui/data_table)
 * [Background selector](./library/ui/background_selector), like on Google Maps
 * [Hide value popup](./library/ui/hide_value_popup)
 * [Measure tool custom style](./library/ui/measure_tool_custom_style)
 * [Move filter in new panel](./library/ui/move_filter_in_new_panel)
 * [Popup when opening the project with metadata information](./library/ui/popup_metadata_info)
 * [Interactive guided tour](./library/ui/driver_tutorial)
-* [Excel Table Mapping](./library/ui/map-excel)
 * [Remove button](./library/ui/remove_button) to make the UI lighter and easier
 * [Resize Dock with splitter](./library/ui/resize_dock_with_splitter)
 * [Resize Dock with splitter 2 (interact.js)](./library/ui/resize_dock_2)
