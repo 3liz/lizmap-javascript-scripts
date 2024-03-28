@@ -6,31 +6,31 @@
  * @param {string} featureCrs The CRS of the geometry
  */
 function addSelectionButton(featureToolbar, featureGeometry, featureCrs) {
-
-    const featureToolbarDiv = featureToolbar.querySelector('div.feature-toolbar');
+    var featureToolbarDiv = featureToolbar.find('div.feature-toolbar');
 
     // Get the button if it already exists
     const buttonValue = `${featureGeometry}@${featureCrs}`;
 
     // Selection button HTML
     const selectionButtonHtml = `
-    <button class="btn btn-mini popup-select-by-geometry" value="${buttonValue}" type="button" data-original-title="Selection" title="Selection">
-        <i class="icon-star"></i>
-    &nbsp;</button>
+        <button class="btn btn-mini popup-select-by-geometry" value="${buttonValue}" type="button" data-original-title="Selection" title="Selection">
+            <i class="icon-star"></i>
+            &nbsp;
+        </button>
     `;
 
-    const existingButton = featureToolbarDiv.querySelector(`button.popup-select-by-geometry[value="${buttonValue}"]`);
-    if (existingButton) {
+    // Check if the button already exists
+    const existingButton = featureToolbarDiv.find(`button.popup-select-by-geometry[value="${buttonValue}"]`);
+    if (existingButton.length > 0) {
         return false;
     }
 
     // Append the button to the toolbar
-    featureToolbarDiv.insertAdjacentHTML('beforeend', selectionButtonHtml);
-    const selectionButton = featureToolbarDiv.querySelector(`button.popup-select-by-geometry[value="${buttonValue}"]`);
-
+    featureToolbarDiv.append(selectionButtonHtml);
     // Trigger the action when clicking on button
-    selectionButton.addEventListener('click', popupSelectionButtonClickHandler);
+    featureToolbarDiv.on('click', `button.popup-select-by-geometry[value="${buttonValue}"]`, popupSelectionButtonClickHandler);
 }
+
 
 /**
  * Function which wait for te given ms before returning the promise
@@ -149,35 +149,46 @@ function popupSelectionButtonClickHandler(event) {
 lizMap.events.on({
     lizmappopupdisplayed: function (e) {
         // Loop through each layer+feature item
-        const popupContainer = document.getElementById(e.containerId);
-        const items = popupContainer.querySelectorAll('div.lizmapPopupDiv');
-        items.forEach(function (item) {
+        const popupContainer = $('#' + e.containerId); // Container
+        const items = popupContainer.find('div.lizmapPopupDiv');
 
+        items.each(function() {
             // Get the layer ID
-            const featureId = item.querySelector('input.lizmap-popup-layer-feature-id').value;
-
+            const featureId = $(this).find('input.lizmap-popup-layer-feature-id').val();
+            
             // Check if there is a geometry
-            const featureGeometryInput = item.querySelector('input.lizmap-popup-layer-feature-geometry');
-            if (!featureGeometryInput) {
+            const featureGeometryInput = $(this).find('input.lizmap-popup-layer-feature-geometry');
+            if (!featureGeometryInput.length) {
                 return;
             }
-            const featureGeometry = featureGeometryInput.value;
+            const featureGeometry = featureGeometryInput.val();
 
             // Geometry CRS
             let featureCrs = 'EPSG:4326';
-            const featureCrsInput = item.querySelector('input.lizmap-popup-layer-feature-crs');
-            if (featureCrsInput) {
-                featureCrs = featureCrsInput.value
+            const featureCrsInput = $(this).find('input.lizmap-popup-layer-feature-crs');
+            if (featureCrsInput.length) {
+                featureCrs = featureCrsInput.val();
             }
 
             // Get feature toolbar
-            const featureToolbar = item.querySelector(`lizmap-feature-toolbar[value="${featureId}"]`);
-
+            let featureToolbar = $(this).find(`lizmap-feature-toolbar[value="${featureId}"]`);
+            
+            if (!featureToolbar.length) {
+                // Create feature toolbar
+                featureToolbar = $('<lizmap-feature-toolbar>')
+                                    .attr('value', featureId)
+                                    .css('display', 'inline-flex')
+                                    .append($(this).find('input[value="' + featureId + '"]').nextUntil('br'))
+                                    .append($('<div>').addClass('feature-toolbar').css('display', 'inline'));
+                
+                // Insert feature toolbar after input element
+                $(this).find('input[value="' + featureId + '"]').after(featureToolbar);
+            }
+            
             // Add a button in the popup feature bar
             if (featureGeometry && featureCrs) {
                 addSelectionButton(featureToolbar, featureGeometry, featureCrs);
             }
-
         });
     }
 });
