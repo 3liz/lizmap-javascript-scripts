@@ -114,6 +114,11 @@ function popupSelectionButtonClickHandler(event) {
         }
     }
 
+    // change color of feature selected for yellow highlight
+    selectionTool.bufferLayer.styleMap.styles.select.defaultStyle.strokeColor = "yellow";
+    selectionTool.bufferLayer.styleMap.styles.select.defaultStyle.fillColor = "yellow";
+    selectionTool.bufferLayer.styleMap.styles.select.defaultStyle.fillOpacity = 0.3;
+
     // Select only inside
     let oldOperator = lizMap.mainLizmap.selectionTool._geomOperator;
     if (isPolygon) {
