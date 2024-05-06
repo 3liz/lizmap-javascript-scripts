@@ -4,5 +4,9 @@
 Any contributions are welcome to improve this library.
 You can make a pull request with your Javascript file.
 
-* Do not forget to update the main readme in the root repository
-* We encourage you having a readme in the folder too with a screenshot or GIF showing the script. Like this [folder](./library/point_buffer_on_map)
+* Create a new folder
+* Update the main `README.md` in the root repository to add your new folder
+* Add a `README.md` file in Markdown format in your folder explaining your script, with a screenshot or GIF showing the script.
+  * Like this [folder](./library/point_buffer_on_map) for instance.
+  * Host your GIF or screenshot in the folder itself
+* Use English language in the PR description and in the code if possible (exception for country specific code)
