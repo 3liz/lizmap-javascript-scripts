@@ -1,0 +1,69 @@
+name: 🐞 Bug Report
+description: Report errors and problems. The more precise is your bug report, the more quickly it will be fixed.
+title: "[Bug]: "
+labels: [bug]
+body:
+
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+        Tip: small projects and screenshots/gifs help a lot debugging ;)
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What is the bug? (in English)
+      placeholder: When clicking on button...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Logs from the Javascript console
+      placeholder: |
+        1. Developer tools F12
+        2. Check different tabs
+    validations:
+      required: true
+
+  - type: textarea
+    id: versions
+    attributes:
+      label: Versions, safeguards, check summary etc
+      description: |
+        You must go in QGIS Desktop, then Lizmap plugin, right click on your server, then "Copy versions in the clipboard". Finally paste here. There isn't any personal data provided.
+        Check any messages displayed by the plugin if any. Read https://docs.lizmap.com/current/en/publish/lizmap_plugin/information.html#request-for-support
+        Do not make a screenshot, it's not a searchable by a search engine for instance.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: lizmap-plugin
+    attributes:
+      label: Check Lizmap plugin
+      options:
+        - label: I have done the step just before in the Lizmap QGIS desktop plugin before opening this ticket. Otherwise, my ticket is not considered valid and might get closed.
+#          required: true
+
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: Browsers
+      multiple: true
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Microsoft Edge
+    validations:
+      required: true
+
+  - type: input
+    id: browsers-version
+    attributes:
+      label: Browsers version
+      placeholder: Firefox 89, Chrome 90, ...
+    validations:
+      required: true
