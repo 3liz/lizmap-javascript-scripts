@@ -1,5 +1,5 @@
 lizMap.events.on({
-    uicreated: function(e) {
+   mapcreated: function(e) {
        lizMap.map.restrictedExtent = lizMap.map.maxExtent;
     }
  });
