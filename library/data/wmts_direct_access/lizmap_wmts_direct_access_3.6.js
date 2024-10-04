@@ -1,7 +1,7 @@
 lizMap.events.on({
     'uicreated':function(evt){
 
-        var EXTERNAL_LIZMAP_WMTS_URL = 'http://srvsig.avignon.ad/index.php/lizmap/service/?repository=rep9000&project=avignon_wmts&SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetCapabilities';
+        var EXTERNAL_LIZMAP_WMTS_URL = 'https://my-lizmap.com/index.php/lizmap/service/?repository=services&project=wmts&SERVICE=WMTS&REQUEST=GetCapabilities';
         var EXTERNAL_LIZMAP_REPLACEMENT = {
             'openstreetmap': 'openstreetmap',
             'topographie': 'topographie',
