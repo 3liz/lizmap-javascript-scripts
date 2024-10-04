@@ -1,5 +1,11 @@
 # External links
 
+## Requirements
+
+For Lizmap <= 3.7 : use externalLinksFromMapClick-lwc-37.js
+
+For Lizmap 3.8 : use externalLinksFromMapClick.js
+
 ## Presentation
 
 This script adds a new tool allowing to click on the map to get the **longitude** and **latitude** (degrees)

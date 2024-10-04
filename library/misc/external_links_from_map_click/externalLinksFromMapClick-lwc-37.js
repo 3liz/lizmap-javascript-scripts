@@ -102,39 +102,20 @@ function addLinkDock() {
  * @param event Click event
  */
 function onMapClick(event) {
-    // update panel only if active
-    if (document.getElementById(DOCK_ID).classList.contains('active')) {
-        let point  = new lizMap.ol.geom.Point(event.coordinate);
-        if(lizMap.map.projection.projCode != "EPSG:4326"){
-            // reproject point to 4326
-            point.transform(lizMap.map.projection.projCode, 'EPSG:4326');
-        }
 
-        const longitude = point.getCoordinates()[0].toFixed(6);
-        const latitude = point.getCoordinates()[1].toFixed(6)
-        let content = buildHtml(longitude, latitude);
-        divTarget = document.getElementById('lizmap-external-links');
-        if (divTarget) {
-            // Replace content
-            divTarget.innerHTML = content;
-        }
+    let coordinates = lizMap.map.getLonLatFromViewPortPx(event.xy);
+    coordinates.transform(lizMap.map.projection, 'EPSG:4326');
+    const longitude = coordinates.lon.toFixed(6);
+    const latitude = coordinates.lat.toFixed(6)
+    let content = buildHtml(longitude, latitude);
+    divTarget = document.getElementById('lizmap-external-links');
+    if (divTarget) {
+        // Replace content
+        divTarget.innerHTML = content;
     }
-}
 
-function onDockClosed(clickeDockId)
-{
-    if (clickeDockId == DOCK_ID) {
-        // external link dock closed : enable popup behaviour
-        lizMap.mainLizmap.popup.active = true;
-    }
-}
 
-function onDockOpened(clickeDockId)
-{
-    if (clickeDockId == DOCK_ID) {
-        // external link dock closed : disable popup behaviour
-        lizMap.mainLizmap.popup.active = false;
-    }
+    return false;
 }
 
 // Listen to Lizmap Web Client interface creation
@@ -144,26 +125,7 @@ lizMap.events.on({
         // Create the dock
         addLinkDock();
 
-        // Register a click on OpenLayers > 2 map
-        lizMap.mainLizmap.map.on('singleclick', onMapClick);
-    },
-    dockopened: function(e) {
-        onDockOpened(e.id);
-    },
-    minidockopened: function(e) {
-        onDockOpened(e.id);
-    },
-    rightdockopened: function(e) {
-        onDockOpened(e.id);
-    },
-    // Dock closed
-    dockclosed: function(e) {
-        onDockClosed(e.id);
-    },
-    minidockclosed: function(e) {
-       onDockClosed(e.id);
-    },
-    rightdockclosed: function(e) {
-        onDockClosed(e.id);
+        // Register a click on OpenLayers 2 map
+        lizMap.map.events.register('click', map, onMapClick);
     }
 });
