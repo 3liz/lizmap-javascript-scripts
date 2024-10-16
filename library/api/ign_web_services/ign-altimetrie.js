@@ -1,5 +1,5 @@
 var lizmapIgnAltimetrie = function() {
-    //IGN KEYS MUST BE DEFINED inside credencial json file !
+    //IGN KEYS MUST BE DEFINED inside credential json file !
     var ignServiceKey;
     var ignServiceUrl;
     var ignEntryPoints;
