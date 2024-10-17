@@ -23,6 +23,9 @@ be designed for a special need of a project or a customer.
 The API on Lizmap Web Client is not guaranteed across versions. So the compatibility with Lizmap Web Client is not
 guaranteed as well on this repository. They aren't any tests suite done on these snippets to avoid regression.
 
+Each JavaScript file is naming following the pattern `custom_feature_X.Y.js` where `X.Y` is targeting the LWC version when
+the script was written.
+
 ## Scripts
 
 ### API

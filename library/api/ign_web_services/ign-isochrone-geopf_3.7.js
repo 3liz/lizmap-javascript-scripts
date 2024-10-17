@@ -1,5 +1,4 @@
 var lizmapIgnIsochrone = function () {
-    var ignServiceKey = null; // Plus de clé pour la géoplateforme
     var ignServiceUrl = 'https://data.geopf.fr/';
     var ignEntryPoints = {
         'isochrone': 'navigation/isochrone?',

@@ -10,7 +10,7 @@ Il vous sera aussi possible de :
    * cliquer sur une parcelle dans Lizmap et voir les dossiers associés dans la partie **Sélection externe** d'Oxalis
    * transmettre les règlements de Lizmap vers Oxalis
 
-![capture_oxalis_lizmap](ksnip_20220405-173722.jpg)
+![capture_oxalis_lizmap](oxalis-demo.jpg)
 
 ## Installation
 1. Les fichiers Javascript doivent être mis dans le répertoire `media/js/nom_projet` ([documentation](https://docs.lizmap.com/current/fr/publish/customization/javascript.html)).
