@@ -72,6 +72,7 @@ the script was written.
 ### UI
 
 * [Add documentation](./library/ui/add_documentation) with buttons and a dock
+* [Display a right-docked table of data](./library/ui/data_table)
 * [Background selector](./library/ui/background_selector), like on Google Maps
 * [Hide value popup](./library/ui/hide_value_popup)
 * [Measure tool custom style](./library/ui/measure_tool_custom_style)
