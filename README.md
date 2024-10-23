@@ -85,6 +85,7 @@ the script was written.
 * [Export attribute table to CSV](./library/ui/export-attributetable-csv)
 * [Add button to toggle dock full width](./library/ui/add_dock_resize_button)
 * [Add a hard-coded legend at the bottom of the map](./library/ui/add_hard_coded_legend_at_map_bottom)
+* [Show a global legend image for all visible layers](./library/ui/show_global_legend_image)
 * [Add placeholder to input/textarea elements](./library/ui/add_placeholder_on_text_controls)
 * [Permalink copy to clipboard instead of link](./library/ui/copy-permalink)
 * [Move Layers button after Information](./library/ui/move-button)
