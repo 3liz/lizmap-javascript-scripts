@@ -23,6 +23,9 @@ be designed for a special need of a project or a customer.
 The API on Lizmap Web Client is not guaranteed across versions. So the compatibility with Lizmap Web Client is not
 guaranteed as well on this repository. They aren't any tests suite done on these snippets to avoid regression.
 
+Each JavaScript file is naming following the pattern `custom_feature_X.Y.js` where `X.Y` is targeting the LWC version when
+the script was written.
+
 ## Scripts
 
 ### API
@@ -69,6 +72,7 @@ guaranteed as well on this repository. They aren't any tests suite done on these
 ### UI
 
 * [Add documentation](./library/ui/add_documentation) with buttons and a dock
+* [Display a right-docked table of data](./library/ui/data_table)
 * [Background selector](./library/ui/background_selector), like on Google Maps
 * [Hide value popup](./library/ui/hide_value_popup)
 * [Measure tool custom style](./library/ui/measure_tool_custom_style)
@@ -82,10 +86,12 @@ guaranteed as well on this repository. They aren't any tests suite done on these
 * [Export attribute table to CSV](./library/ui/export-attributetable-csv)
 * [Add button to toggle dock full width](./library/ui/add_dock_resize_button)
 * [Add a hard-coded legend at the bottom of the map](./library/ui/add_hard_coded_legend_at_map_bottom)
+* [Show a global legend image for all visible layers](./library/ui/show_global_legend_image)
 * [Add placeholder to input/textarea elements](./library/ui/add_placeholder_on_text_controls)
 * [Permalink copy to clipboard instead of link](./library/ui/copy-permalink)
 * [Move Layers button after Information](./library/ui/move-button)
 * [Activate geolocation at startup](./library/ui/activate-geolocation)
+* [Restrict extent](./library/ui/restrict-extent)
 * Deprecated since LWC 3.7
   * [Group collapse](./library/ui/group_collapse), use a QGIS theme and the checkbox at the "Layers" tab in the plugin
   * [Expand/collapse legend when layer toggled](./library/ui/expand-collapse-legend-when-layer-toggled), use a QGIS theme and the checkbox at the "Layers" tab in the plugin
