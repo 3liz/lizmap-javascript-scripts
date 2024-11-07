@@ -75,7 +75,7 @@ class LizGoogleStreeView {
 	    });
 
 	    this.mainLizmap.map.addInteraction(this._drawInteraction);
-        this._mainLizmap.popup.active = false;
+        this.mainLizmap.popup.active = false;
         
 	    this._drawInteraction.on('drawend', event => {
 	    	this.mainLizmap.map.removeInteraction(this._drawInteraction);
@@ -85,7 +85,7 @@ class LizGoogleStreeView {
             this.gsvSetPosition(this._gsvFeature.getGeometry());
             this.panorama.setVisible(true);
             setTimeout(() => {
-              this._mainLizmap.popup.active = true;
+              this.mainLizmap.popup.active = true;
             }, "1000");
 	    });
 
@@ -107,6 +107,7 @@ class LizGoogleStreeView {
 	    this.mainLizmap.map.removeInteraction(this._selectInteraction);
         this.mainLizmap.map.removeInteraction(this._modifyInteraction);
         this._gsvLayer.getSource().clear();
+	this.mainLizmap.popup.active = true;
     }
 
     setFeatStyle() {
