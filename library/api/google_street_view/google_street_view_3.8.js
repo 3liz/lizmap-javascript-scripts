@@ -63,8 +63,7 @@ class LizGoogleStreeView {
         this._gsvLayer.setProperties({
             name: 'google-street-view'
         });
-
-        this.mainLizmap.map.addLayer(this._gsvLayer);
+	this.mainLizmap.map.addToolLayer(this._gsvLayer);
     }
 
     activateStreetView(){
