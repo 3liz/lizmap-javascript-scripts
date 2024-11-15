@@ -212,7 +212,10 @@ function initGoogleStreetView() {
                     var headerStyles = window.getComputedStyle(document.getElementById('header'));
                     // we are in the normal mode
                     height = (parseFloat(sidemenuStyles.height) * 45 / 100) - 15;
-                    width = ((parseFloat(headerStyles.width)-parseFloat(sidemenuStyles.width))  *  (parseFloat(minidockStyles.maxWidth)-1) / 100) -15;
+		    if (parseFloat(sidemenuStyles.width) > (parseFloat(headerStyles.width) * 30 /100))
+                	width = ((parseFloat(headerStyles.width))  *  (parseFloat(minidockStyles.maxWidth)-1) / 100) -15; // media
+                    else
+                        width = ((parseFloat(headerStyles.width)-parseFloat(sidemenuStyles.width))  *  (parseFloat(minidockStyles.maxWidth)-1) / 100) -15; // desktop
                 }
 
                 var gsvPano = document.getElementById('gsv-pano');
