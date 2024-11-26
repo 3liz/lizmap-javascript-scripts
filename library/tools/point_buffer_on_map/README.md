@@ -1,5 +1,5 @@
 ## Buffer on the map
 
-* Add a button to enable a 1 km buffer centered on the map canvas
+* Add a button to enable a 10 km buffer centered on the map canvas
 
-![demo](demo.gif) 
+![demo](demo_buffer_3.8.gif) 
