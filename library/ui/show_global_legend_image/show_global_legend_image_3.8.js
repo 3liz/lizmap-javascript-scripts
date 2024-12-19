@@ -28,6 +28,9 @@ function refreshGlobalLegendImage(targetElement) {
     params['CRS'] = lizMap.mainLizmap.state.map.projection;
     params['SRCWIDTH'] = lizMap.mainLizmap.state.map.size[0];
     params['SRCHEIGHT'] = lizMap.mainLizmap.state.map.size[1];
+    params['LAYERFONTBOLD'] = 'TRUE';
+    params['ADDLAYERGROUPS'] = 'TRUE';
+    params['LAYERSPACE'] = '6';
 
     // Set GetLegendGraphics WMS request
     lizMap.mainLizmap.utils.fetch(globalThis['lizUrls'].wms, {
