@@ -91,6 +91,7 @@ the script was written.
 * [Permalink copy to clipboard instead of link](./library/ui/copy-permalink)
 * [Move Layers button after Information](./library/ui/move-button)
 * [Activate geolocation at startup](./library/ui/activate-geolocation)
+* [Restrict extent](./library/ui/restrict-extent)
 * Deprecated since LWC 3.7
   * [Group collapse](./library/ui/group_collapse), use a QGIS theme and the checkbox at the "Layers" tab in the plugin
   * [Expand/collapse legend when layer toggled](./library/ui/expand-collapse-legend-when-layer-toggled), use a QGIS theme and the checkbox at the "Layers" tab in the plugin
