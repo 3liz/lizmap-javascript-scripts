@@ -1,6 +1,12 @@
+/**
+ * @license Mozilla Public License Version 2.0
+ * This script has been developed by the "community"
+ * There isn't any guarantee that this script will work on another version of Lizmap Web Client.
+ */
+
 lizMap.events.on({
     'uicreated': function(e) {
-        // declare here your google maps key compatible with google street view
+        // declare here your Google Maps key compatible with Google street view
         var gkey = '_______________________$$$$$$$$$YOUR_KEY$$$$$$$$$_______________________';
         if ( typeof(google) == 'undefined' ) {
             $('body').append('<script async defer src="https://maps.googleapis.com/maps/api/js?key=' + gkey + '&callback=initGoogleStreetView">');
