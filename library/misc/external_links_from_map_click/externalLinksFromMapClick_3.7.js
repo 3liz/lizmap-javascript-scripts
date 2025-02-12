@@ -1,3 +1,9 @@
+/**
+ * @license Mozilla Public License Version 2.0
+ * This script has been developed by the "community"
+ * There isn't any guarantee that this script will work on another version of Lizmap Web Client.
+ */
+
 // ID of the dock (do not change)
 const DOCK_ID = 'external-links';
 // Icon of the dock menu and used before each link

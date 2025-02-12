@@ -1,3 +1,9 @@
+/**
+ * @license Mozilla Public License Version 2.0
+ * This script has been developed by the "community"
+ * There isn't any guarantee that this script will work on another version of Lizmap Web Client.
+ */
+
 const TAILLE_SYMBOLE = '15';
 const COULEUR_ITINERAIRE = 'blue';
 const COULEUR_POINT_DEPART = 'green';

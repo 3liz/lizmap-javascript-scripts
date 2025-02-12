@@ -1,3 +1,9 @@
+/**
+ * @license Mozilla Public License Version 2.0
+ * This script has been developed by the "community"
+ * There isn't any guarantee that this script will work on another version of Lizmap Web Client.
+ */
+
 // Parameters
 const EXTERNAL_LIZMAP_WMTS_MAP_PROJECTION = 'EPSG:2154';
 const EXTERNAL_LIZMAP_WMTS_URL = 'https://my-lizmap.com/index.php/lizmap/service/?repository=services&project=wmts&SERVICE=WMTS&REQUEST=GetCapabilities';

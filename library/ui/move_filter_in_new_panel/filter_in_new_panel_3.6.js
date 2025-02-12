@@ -1,3 +1,9 @@
+/**
+ * @license Mozilla Public License Version 2.0
+ * This script has been developed by the "community"
+ * There isn't any guarantee that this script will work on another version of Lizmap Web Client.
+ */
+
 // add some custom style
 var style = "<style>"
 style += "#dock {max-width:100%; padding: 0px; background: transparent!important;}"

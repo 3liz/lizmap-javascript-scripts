@@ -1,3 +1,9 @@
+/**
+ * @license Mozilla Public License Version 2.0
+ * This script has been developed by the "community"
+ * There isn't any guarantee that this script will work on another version of Lizmap Web Client.
+ */
+
 // Buffer Radius & Projection definitions
 const radius = 10000; // Buffer radius in meters
 const textAdd = `Add a ${radius / 1000} km buffer`; // Dynamic text based on the radius
