@@ -133,7 +133,6 @@ var lizmapIgnIsochrone = function () {
     }
 
     function getIgnJsonResponse(service, params, aCallback) {
-        var fullUrl = '';
         var ep = ignEntryPoints[service];
         var fullUrl = ignServiceUrl + ep;
 
