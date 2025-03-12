@@ -1,3 +1,9 @@
+/**
+ * @license Mozilla Public License Version 2.0
+ * This script has been developed by the "community"
+ * There isn't any guarantee that this script will work on another version of Lizmap Web Client.
+ */
+
 var map_crs = "EPSG:3857"
 var local_crs = "EPSG:2154"  // 3857 is very bad for doing a buffer in meters, so better to use a local projection
 var radius = 1000; // in local crs unit

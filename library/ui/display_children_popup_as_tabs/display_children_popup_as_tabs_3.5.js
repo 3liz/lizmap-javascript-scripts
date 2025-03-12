@@ -1,4 +1,10 @@
-/* 
+/**
+ * @license Mozilla Public License Version 2.0
+ * This script has been developed by the "community"
+ * There isn't any guarantee that this script will work on another version of Lizmap Web Client.
+ */
+
+/*
     This script works with Lizmap >= 3.5.
     It displays all children popups as tabs next to parent popup tab.
     Children are defined in QGIS in 'Project Properties' => Relations.

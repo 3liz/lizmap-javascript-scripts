@@ -1,3 +1,9 @@
+/**
+ * @license Mozilla Public License Version 2.0
+ * This script has been developed by the "community"
+ * There isn't any guarantee that this script will work on another version of Lizmap Web Client.
+ */
+
 // Veuillez indiquer le nom de la couche contenant les parcelles ainsi
 // que le nom de la colonne contenant l'identifiant des parcelles
 const NOM_COUCHE_PARCELLE = 'Parcelles';

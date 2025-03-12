@@ -4,7 +4,9 @@
 * @author    Michaël DOUCHIN
 * @copyright 2020 3liz
 * @link      http://3liz.com
-* @license    Mozilla Public Licence
+* @license Mozilla Public License Version 2.0
+* This script has been developed by the "community"
+* There isn't any guarantee that this script will work on another version of Lizmap Web Client.
 */
 
 var lizHamburger = function() {

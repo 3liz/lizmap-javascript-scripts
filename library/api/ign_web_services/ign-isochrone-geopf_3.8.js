@@ -1,6 +1,7 @@
 /**
  * Script permettant de dessiner un point sur la carte et d'afficher l'isochrone associé
  * @license Mozilla Public License Version 2.0
+ * This script has been developed by the "community"
  * Ce script est compatible avec Lizmap 3.8.
  * Il n'y a aucune garantie de fonctionnement avec une autre version de Lizmap, l'API pouvant changer.
  */
@@ -133,7 +134,6 @@ var lizmapIgnIsochrone = function () {
     }
 
     function getIgnJsonResponse(service, params, aCallback) {
-        var fullUrl = '';
         var ep = ignEntryPoints[service];
         var fullUrl = ignServiceUrl + ep;
 

@@ -1,5 +1,11 @@
-/*This javascript script translate layers and groups names, the title of the project, 
-the print layout name and the aliases or fileds names according to the language of the browser and using the json files created
+/**
+ * @license Mozilla Public License Version 2.0
+ * This script has been developed by the "community"
+ * There isn't any guarantee that this script will work on another version of Lizmap Web Client.
+ */
+
+/*This javascript script translate layers and groups names, the title of the project,
+the print layout name and the aliases or fields names according to the language of the browser and using the json files created
 with the python script get_translatable_string.py
 If a translated string is provided in the json file the original string is translated, otherwise the original string is shown.
 The json file must be saved in the media folder.*/

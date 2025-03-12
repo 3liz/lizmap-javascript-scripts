@@ -1,3 +1,9 @@
+/**
+ * @license Mozilla Public License Version 2.0
+ * This script has been developed by the "community"
+ * There isn't any guarantee that this script will work on another version of Lizmap Web Client.
+ */
+
 // this script will allow you to add placeholder attributes to input text and textarea elements
 // in addition to Fields alias it can help user to understand field usage
 // configure using tabPlaceholder variable :
