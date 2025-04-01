@@ -2,7 +2,7 @@
 
 Ce script permet d'afficher dans votre projet les photos provenant du projet Panoramax (https://panoramax.openstreetmap.fr/ et/ou https://panoramax.ign.fr/) dans Lizmap Web Client. À noter qu'il n'est pas nécessaire que votre projet soit dans une projection spécifique pour que ce script fonctionne. C'est QGIS qui se chargera de la reprojection.
 
-![alt text](image-2.png)
+![alt text](image-3.png)
 
 ## Pré-requis
 
@@ -31,7 +31,7 @@ Vous pouvez également personnaliser l'apparence du bouton ou le comportement d'
 
 This script allows you to display photos from the Panoramax project (https://panoramax.openstreetmap.fr/ and/or https://panoramax.ign.fr/) in your Lizmap Web Client project. It is not necessary for your project to have a specific projection for this script to work. QGIS will handle the reprojection.
 
-![alt text](image-2.png)
+![alt text](image-3.png)
 
 ## Requirements
 
