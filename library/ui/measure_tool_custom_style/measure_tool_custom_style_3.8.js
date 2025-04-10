@@ -5,13 +5,11 @@
  */
 
 lizMap.events.on({
-
-    minidockopened : e => {
+    minidockopened : e => {        
         if(e.id === "measure"){
             // Define the stroke color for all measure tools in `customStrokeColor`
             // or you are free to set style rules individually in `customSymbolizer`
-            const customStrokeColor = '#0000ff';
-            const customSymbolizer = {
+            const sketchSymbolizers = {
                 "Point": {
                     pointRadius: 4,
                     graphicName: "square",
@@ -19,26 +17,26 @@ lizMap.events.on({
                     fillOpacity: 1,
                     strokeWidth: 1,
                     strokeOpacity: 1,
-                    strokeColor: customStrokeColor
+                    strokeColor: "#333333"
                 },
                 "Line": {
                     strokeWidth: 3,
                     strokeOpacity: 1,
-                    strokeColor: customStrokeColor,
-                    strokeDashstyle: "dash"
+                    strokeColor: "white",
+                    strokeDashstyle: "dot"
                 },
                 "Polygon": {
                     strokeWidth: 2,
                     strokeOpacity: 1,
-                    strokeColor: customStrokeColor,
-                    strokeDashstyle: "dash",
+                    strokeColor: "white",
+                    strokeDashstyle: "solid",
                     fillColor: "white",
                     fillOpacity: 0.3
                 }
             };
 
             for (const measureControl of lizMap.map.getControlsByClass('OpenLayers.Control.Measure')) {
-                measureControl.handlerOptions.layerOptions.styleMap.styles.default.rules[0].symbolizer = customSymbolizer;
+                measureControl.handlerOptions.layerOptions.styleMap.styles.default.rules[0].symbolizer = sketchSymbolizers;
             }
         }
     }

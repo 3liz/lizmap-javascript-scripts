@@ -1,3 +1,3 @@
 ## Purpose
 
-Define the stroke color for all measure tools in `customStrokeColor` or you are free to set style rules individually in `customSymbolizer`.
+Change the default style of the measure tool. You can change the color, the opacity, the width...
