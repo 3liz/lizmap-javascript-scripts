@@ -83,7 +83,7 @@ the script was written.
 * [Remove button](./library/ui/remove_button) to make the UI lighter and easier
 * [Resize Dock with splitter](./library/ui/resize_dock_with_splitter)
 * [Resize Dock with splitter 2 (interact.js)](./library/ui/resize_dock_2)
-* [Simplify export options](./library/ui/simplify-export-options)
+* [Simplify export options](./library/ui/simplify-export-options) WfsOutputExtension
 * [Export attribute table to CSV](./library/ui/export-attributetable-csv)
 * [Add button to toggle dock full width](./library/ui/add_dock_resize_button)
 * [Add a hard-coded legend at the bottom of the map](./library/ui/add_hard_coded_legend_at_map_bottom)
