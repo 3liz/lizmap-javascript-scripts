@@ -64,6 +64,10 @@ const SVG_ARROW = `<svg width="100" height="100" xmlns="http://www.w3.org/2000/s
 class LizPanoramax{
     constructor() {
         this.panoramaxLayer = this.#getPanoramaxLayer();
+        if(!this.panoramaxLayer){
+            if (DEBUG_MODE) console.error("No panoramax Layer found !!");
+            return
+        }
         this.panoramaxLayer.setZIndex(1000);
         
         if(!this.panoramaxLayer) {       
@@ -97,6 +101,7 @@ class LizPanoramax{
      */
     async #loadScripts() {
         return new Promise(resolve => {
+            
             const panoramax_js = 'https://cdn.jsdelivr.net/npm/@panoramax/web-viewer@3.2.3/build/index.min.js';
             const panoramax_css = 'https://cdn.jsdelivr.net/npm/@panoramax/web-viewer@3.2.3/build/index.min.css'
 
@@ -218,7 +223,7 @@ class LizPanoramax{
     initPanoramax(){
         this.#setPanoramaxLayerVisibility(true);
         this.#addPanoramaxViewer();
-        this.#addMapEvent();          
+        this.#addMapEvent();
     }
 
     /**
@@ -327,14 +332,9 @@ class LizPanoramax{
     /**
      * Remove all Panoramax object and instance
      */
-    removePanoramax(){
-        // Remove last feature            
-        const oldFeature = this.layerArrowHeading.getFeatures()?.[0];
-
-        if (oldFeature != undefined && oldFeature.length) {
-            this.layerArrowHeading.removeFeature(oldFeature);
-        }
-
+    removePanoramax(){        
+        this.drawSource.clear();
+        
         //Hide layer
         lizPanoramax.#setPanoramaxLayerVisibility(false);
 
