@@ -11,8 +11,8 @@ const DOCK_ID = 'panoramax';
 // See https://getbootstrap.com/2.3.2/base-css.html#icons
 const DOCK_ICON = 'icon-camera';
 
-// Dock position: can be dock, minidock, right-dock
-const DOCK_POSITION = 'minidock';
+// Dock position: can be dock, minidock
+const DOCK_POSITION = 'dock';
 
 // Title of the dock
 const DOCK_TITLE = 'Panoramax';
@@ -62,9 +62,9 @@ const HTML_TEMPLATE = `<div id="panoramax_dock_content">
 const SVG_ARROW = `<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><path d="M48.005 2.666a2.386 2.386 0 0 0-.51.397 2.386 2.386 0 0 0-.531.844l-33.169 90.76a2.386 2.386 0 0 0 3.52 2.836l32.08-20.345 32.186 20.177a2.386 2.386 0 0 0 3.506-2.854L51.442 3.894a2.386 2.386 0 0 0-3.437-1.228Z" style="color:#000;font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000;solid-opacity:1;vector-effect:none;fill:${ARROW_ICON_COLOR};fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000"/></svg>`;
 
 class LizPanoramax{
-    constructor() {
+    constructor(){
+        //Check if Panoramax Layer exists. If not, display an error message and exit directly
         this.panoramaxLayer = this.#getPanoramaxLayer();
-        this.panoramaxLayer.setZIndex(1000);
         
         if(!this.panoramaxLayer) {       
             // check if there is a panoramax layer in the project      
@@ -75,7 +75,8 @@ class LizPanoramax{
             this.#addLizmapDock(`<p style="color:red; font-weight:bold;"> ${error} </p>`);
             return
         }
-        
+
+        //Panoramax Layer has been found. The JS/CSS Script can be loaded
         this.#loadScripts().then(success => {
             if(!success){                
                 const error = "Panoramax external script not fully loaded"
@@ -85,8 +86,9 @@ class LizPanoramax{
             }
             
             // everything is good we can display the "normal" dock content
+            this.#addMapEvent();
             this.#addLizmapDock(HTML_TEMPLATE);
-            this.#setPanoramaxLayerVisibility(false);
+            //this.#setPanoramaxLayerVisibility(false);
             this.#addPanoramaxHeadingLayer(); 
         });            
     }
@@ -97,6 +99,7 @@ class LizPanoramax{
      */
     async #loadScripts() {
         return new Promise(resolve => {
+            
             const panoramax_js = 'https://cdn.jsdelivr.net/npm/@panoramax/web-viewer@3.2.3/build/index.min.js';
             const panoramax_css = 'https://cdn.jsdelivr.net/npm/@panoramax/web-viewer@3.2.3/build/index.min.css'
 
@@ -136,12 +139,12 @@ class LizPanoramax{
      * @returns OpenLayers Layer
      */
     #getPanoramaxLayer(){
-        for (const layer of lizMap.mainLizmap.map.getAllLayers()) {
-            if (layer.get('name')?.startsWith(PANORAMAX_QGIS_LAYER_NAME)) {
-                return layer;
-            }
-        }
-        return;
+        try {
+            let PanoramaxLayer = lizMap.mainLizmap.state.rootMapGroup.getMapLayerByName(PANORAMAX_QGIS_LAYER_NAME);
+            return PanoramaxLayer;
+        } catch (error) {
+            return false
+        }        
     }
 
     /**
@@ -163,10 +166,10 @@ class LizPanoramax{
      * @returns Openlayers Layer
      */
     #addPanoramaxHeadingLayer(){
-        this.drawSource = new lizMap.ol.source.Vector();
+        this.layerArrowHeadingSource = new lizMap.ol.source.Vector({ wrapX: false });
         this.layerArrowHeading = new lizMap.ol.layer.Vector({
             title: 'panoramax-pov',
-            source: this.drawSource,
+            source: this.layerArrowHeadingSource,
             style: new lizMap.ol.style.Style({
                 image: new lizMap.ol.style.Icon({
                     src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(SVG_ARROW),
@@ -184,12 +187,12 @@ class LizPanoramax{
      * @param {Panoramax Picture} picture 
      */
     #setPanoramaxHeadingLayerHeading(picture){
-        const oldFeature = this.drawSource.getFeatures()?.[0];
+        const oldFeature = this.layerArrowHeadingSource.getFeatures()?.[0];
         if (oldFeature) {
-            this.drawSource.removeFeature(oldFeature);
+            this.layerArrowHeadingSource.removeFeature(oldFeature);
         }
         
-        this.drawSource.addFeature(new lizMap.ol.Feature({
+        this.layerArrowHeadingSource.addFeature(new lizMap.ol.Feature({
             geometry: new lizMap.ol.geom.Point([
                 picture.geometry.coordinates[0], 
                 picture.geometry.coordinates[1]
@@ -205,20 +208,21 @@ class LizPanoramax{
      * @param {boolean} visibility 
      */
     #setPanoramaxLayerVisibility(visibility){
-        if (this.panoramaxLayer) {
-            this.panoramaxLayer.setVisible(visibility);
-        } else if (DEBUG_MODE) {
-            if (DEBUG_MODE)  console.error("La couche Panoramax n'existe pas.");
-        } 
+        if(this.panoramaxLayer){
+            this.panoramaxLayer.checked = visibility;
+        }
     }    
 
     /**
      * Init all the method
      */
-    initPanoramax(){
-        this.#setPanoramaxLayerVisibility(true);
-        this.#addPanoramaxViewer();
-        this.#addMapEvent();          
+    initPanoramaxDock(){
+        if(this.panoramaxLayer){
+            lizMap.mainLizmap.popup.active = false;
+            this.panoramaxDockOpen = true;
+            this.#setPanoramaxLayerVisibility(true);
+            this.#addPanoramaxViewer();
+        }
     }
 
     /**
@@ -250,10 +254,10 @@ class LizPanoramax{
         
         this.panoViewer.addEventListener('psv:picture-loaded', (e) => {
             let r = e.detail.x * (Math.PI/180); 
-            if(this.drawSource.getFeatures()[0] && e.detail.lon && e.detail.lat){
+            if(this.layerArrowHeadingSource.getFeatures()[0] && e.detail.lon && e.detail.lat){
                 const coords = lizMap.ol.proj.transform([e.detail.lon, e.detail.lat], 'EPSG:4326', lizMap.mainLizmap.projection);
                 lizMap.mainLizmap.map.getView().setCenter(coords);
-                this.drawSource.getFeatures()[0].getGeometry().setCoordinates(coords);                        
+                this.layerArrowHeadingSource.getFeatures()[0].getGeometry().setCoordinates(coords);                        
             }
             this.layerArrowHeading.getStyle().getImage().setRotation(r);
             this.layerArrowHeading.changed();
@@ -265,8 +269,11 @@ class LizPanoramax{
      */
     #addMapEvent(){
         lizMap.mainLizmap.map.on('singleclick', e => {
-            const extent =this.#getBufferedExtent(e.coordinate);
-            this.#getPanoramaxPicture(extent);            
+            //Fire event only if panoramax dock is opened 
+            if(this.panoramaxDockOpen){             
+                const extent =this.#getBufferedExtent(e.coordinate);
+                this.#getPanoramaxPicture(extent);
+            }            
         });
     }
 
@@ -327,27 +334,26 @@ class LizPanoramax{
     /**
      * Remove all Panoramax object and instance
      */
-    removePanoramax(){
-        // Remove last feature            
-        const oldFeature = this.layerArrowHeading.getFeatures()?.[0];
+    removePanoramaxDock(){      
+        if(this.panoramaxLayer) {
+            lizMap.mainLizmap.popup.active = true;
+            this.panoramaxDockOpen = false;
+            this.layerArrowHeadingSource.clear();
+        
+            //Hide layer
+            lizPanoramax.#setPanoramaxLayerVisibility(false);
 
-        if (oldFeature != undefined && oldFeature.length) {
-            this.layerArrowHeading.removeFeature(oldFeature);
-        }
-
-        //Hide layer
-        lizPanoramax.#setPanoramaxLayerVisibility(false);
-
-        // Remove all viewer references
-        if (this.panoViewer) {
-            this.panoViewer.stopSequence();
-            //this.panoViewer.destroy(); // --> Should be used for removing object but currently throwing an error
-            const panoViewer = document.querySelector(`#panoramax_dock_content #${DOM_ID_PANORAMAX}`);
-            if(panoViewer){
-                panoViewer.remove();
-                 document.querySelector("#panoramax_dock_content").insertAdjacentHTML('beforeend', `<div id="${DOM_ID_PANORAMAX}" style="width: auto; height: 300px;"></div>`);     
+            // Remove all viewer references
+            if (this.panoViewer) {
+                this.panoViewer.stopSequence();
+                //this.panoViewer.destroy(); // --> Should be used for removing object but currently throwing an error
+                const panoViewer = document.querySelector(`#panoramax_dock_content #${DOM_ID_PANORAMAX}`);
+                if(panoViewer){
+                    panoViewer.remove();
+                    document.querySelector("#panoramax_dock_content").insertAdjacentHTML('beforeend', `<div id="${DOM_ID_PANORAMAX}" style="width: auto; height: 300px;"></div>`);     
+                }
+                delete this.panoViewer;
             }
-            delete this.panoViewer;
         }
     }
 }
@@ -359,14 +365,28 @@ lizMap.events.on({
     'uicreated': function(e) {
         lizPanoramax = new LizPanoramax();     
     }, 
+
+    //MINI DOCK
     'minidockopened': e => {
         if (e.id === DOCK_ID) {   
-            lizPanoramax.initPanoramax();               
+            lizPanoramax.initPanoramaxDock();               
         }
     },
-    minidockclosed: e => {
+    'minidockclosed': e => {
         if (e.id === DOCK_ID) {
-            lizPanoramax.removePanoramax();            
+            lizPanoramax.removePanoramaxDock();            
         }
-    }
+    },
+
+    //DOCK
+    'dockopened': e => {
+        if (e.id === DOCK_ID) {   
+            lizPanoramax.initPanoramaxDock();               
+        }
+    },
+    'dockclosed': e => {
+        if (e.id === DOCK_ID) {
+            lizPanoramax.removePanoramaxDock();            
+        }
+    },
 });
