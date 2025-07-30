@@ -5,3 +5,7 @@ An alternative implementation of the other script [resize dock with splitter](..
 ![Resizable dock](./resize_dock_2.gif)
 
 
+Available for Lizmap Web Client:
+* 3.7
+* 3.8
+* 3.9
