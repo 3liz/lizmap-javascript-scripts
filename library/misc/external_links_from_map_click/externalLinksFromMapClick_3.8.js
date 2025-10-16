@@ -178,7 +178,7 @@ const lizmapExternalLinks = function() {
 
     return {
         'id': DOCK_ID,
-        'title': DOCK_Title,
+        'title': DOCK_TITLE,
     }
 
 }();
