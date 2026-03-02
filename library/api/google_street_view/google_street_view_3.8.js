@@ -9,7 +9,7 @@ lizMap.events.on({
         // declare here your Google Maps key compatible with Google street view
         var gkey = '_______________________$$$$$$$$$YOUR_KEY$$$$$$$$$_______________________';
         if ( typeof(google) == 'undefined' ) {
-            $('body').append('<script async defer src="https://maps.googleapis.com/maps/api/js?key=' + gkey + '&callback=initGoogleStreetView">');
+            $('body').append('<script async defer src="https://maps.googleapis.com/maps/api/js?key=' + gkey + '&loading=async&callback=initGoogleStreetView">');
         } else {
             window.setTimeout(initGoogleStreetView, 1000);
         }
