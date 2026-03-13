@@ -93,6 +93,7 @@ the script was written.
 * [Move Layers button after Information](./library/ui/move-button)
 * [Activate geolocation at startup](./library/ui/activate-geolocation)
 * [Restrict extent](./library/ui/restrict-extent)
+* [Add a right panel with an embedded PDF](./library/ui/embed-pdf-on-right-panel/)
 * Deprecated since LWC 3.7
   * [Group collapse](./library/ui/group_collapse), use a QGIS theme and the checkbox at the "Layers" tab in the plugin
   * [Expand/collapse legend when layer toggled](./library/ui/expand-collapse-legend-when-layer-toggled), use a QGIS theme and the checkbox at the "Layers" tab in the plugin
