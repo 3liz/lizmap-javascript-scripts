@@ -21,7 +21,7 @@ La valeur doit être spécifiée via la variable `DISPLAY_MODE`.
 5. Le code interroge ensuite l'API du Géoportail de l'Urbanisme pour récupérer les documents disponibles
 6. Les documents sont affichés classés par type dans un accordéon
 
-![alt text](mode-dock.png)
+![Mode dock](mode_dock.png)
 
 ### En mode popup (le plus personnalisable)
 
@@ -33,7 +33,7 @@ La valeur doit être spécifiée via la variable `DISPLAY_MODE`.
 6. Le code interroge ensuite l'API du Géoportail de l'Urbanisme pour récupérer les documents disponibles
 7. Les documents sont ajoutés à la fin du popup, ou dans un div spécifique si celui-ci a été précisé via `DOM_DOCUMENTS_ID`
 
-![alt text](mode-popup.png)
+![Mode popup](mode_popup.png)
 
 ## Installation
 
