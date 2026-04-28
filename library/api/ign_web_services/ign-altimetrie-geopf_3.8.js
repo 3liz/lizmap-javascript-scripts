@@ -22,24 +22,25 @@ const lizmapIgnAltimetrie = function() {
     // Sentence used when no click has been made on the map yet
     const DOCK_PLEASE_CLICK = 'Veuillez cliquer sur la carte <br />pour connaitre l\'altitude.';
 
-    //
+    // IGN API Configuration
+    const IGN_SERVICE_KEY = '';
+    const IGN_SERVICE_URL = 'https://data.geopf.fr/';
+    const IGN_ENTRY_POINTS = '/altimetrie/1.0/calcul/alti/rest/elevation.json?resource=ign_rge_alti_wld';
+    const FETCH_TIMEOUT_MS = 5000;
+    
+    // Map State
     let _map = null;
     let _drawLayer = null;
+    let _currentFetchController = null;
 
     // Styles tels que définis par OpenLayers
     // https://openlayers.org/en/latest/apidoc/module-ol_style_flat.html
-    let _drawStyle = {
+    const _drawStyle = {
         'circle-radius': 8,
         'circle-stroke-color': 'lightgreen',
         'circle-stroke-width': 3,
         'circle-fill-color': 'rgba(0,128,0,0.6)' //green
     };
-
-    const ignServiceKey = '';
-    const ignServiceUrl = 'https://data.geopf.fr/';
-    const ignEntryPoints = "/altimetrie/1.0/calcul/alti/rest/elevation.json?resource=ign_rge_alti_wld";
-
-    const help = 'Veuillez cliquer sur la carte <br />pour connaitre l\'altitude';
 
     lizMap.events.on({
         'uicreated': function(e) {
@@ -54,100 +55,197 @@ const lizmapIgnAltimetrie = function() {
         }
     });
 
-    function buildHtml(longitude = null, latitude = null, altitude = null) {
-        let dockHtml = '';
-        if (longitude && latitude) {
-            dockHtml += `<p style="padding: 5px;">${DOCK_DESCRIPTION}</p>`;
-            dockHtml += `<p style="padding: 5px;"><b>Longitude</b> : ${longitude}`;
-            dockHtml += `<br><b>Latitude</b> : ${latitude}`;
-            dockHtml += `<br><b>Altitude</b> : ${altitude}</p>`;
-        } else {
-            dockHtml += `<p style="padding: 5px; font-style: italic; font-size: 0.8em; background: lightgray;">${DOCK_PLEASE_CLICK}</p>`;
+    /**
+     * Check if dock is currently active
+     * @returns {boolean} True if dock is active
+     */
+    function isDockActive() {
+        const dock = document.getElementById(DOCK_ID);
+        return dock && dock.classList.contains('active');
+    }
+
+    /**
+     * Get the dock content element
+     * @returns {HTMLElement|null} The dock content element
+     */
+    function getDockContent() {
+        const dock = document.getElementById(DOCK_ID);
+        return dock ? dock.querySelector('.menu-content') : null;
+    }
+
+    /**
+     * Update dock content with safe null checks
+     * @param {string} html - HTML content to display
+     */
+    function updateDockContent(html) {
+        const content = getDockContent();
+        if (content) {
+            content.innerHTML = html;
+        }
+    }
+
+    /**
+     * Validate altitude service response
+     * @param {Object} data - Response data
+     * @returns {boolean} True if valid
+     */
+    function validateAltitudeResponse(data) {
+        return data && 
+            Array.isArray(data.elevations) && 
+            data.elevations.length > 0 && 
+            typeof data.elevations[0].z === 'number';
+    }
+
+    /**
+     * Fetch altitude data from IGN service using Fetch API
+     * @param {number} lon - Longitude
+     * @param {number} lat - Latitude
+     * @param {Function} successCallback - Callback on success
+     * @param {Function} errorCallback - Callback on error
+     */
+    function fetchIgnAltitude(lon, lat, successCallback, errorCallback) {
+        // Cancel previous request if still pending
+        if (_currentFetchController) {
+            _currentFetchController.abort();
         }
 
-        return dockHtml;
-    }
-
-    function getIgnJsonResponse(service, params, aCallback){
-        var fullUrl = '';
-        var ep = ignEntryPoints;
-        var fullUrl = ignServiceUrl + ignServiceKey + ep;
-        $.get(
-            fullUrl,
-            params,
-            function(data) {
-                if(aCallback){
-                        aCallback(data);
-                }
-            }
-            ,'json'
-        );
-    }
-
-    function getIgnAlti(lon,lat){
-        $('#'+DOCK_ID+' .menu-content').html(
-            `<p style="padding: 5px; font-style: italic; font-size: 0.8em; background: lightgray;">${DOCK_WAIT}</p>`
-        );
-        var qParams = {
+        const fullUrl = IGN_SERVICE_URL + IGN_SERVICE_KEY + IGN_ENTRY_POINTS;
+        const params = new URLSearchParams({
             'lon': lon,
-            'lat':lat,
+            'lat': lat,
             'srs': lizMap.map.projection.projCode
-        }
-        getIgnJsonResponse('alti', qParams, function(data){
-            var alt = data['elevations'][0]['z'];
-            $('#'+DOCK_ID+' .menu-content').html(buildHtml(lon,lat,alt));
+        });
+
+        _currentFetchController = new AbortController();
+        const timeoutId = setTimeout(() => _currentFetchController.abort(), FETCH_TIMEOUT_MS);
+
+        fetch(`${fullUrl}&${params.toString()}`, {
+            method: 'GET',
+            signal: _currentFetchController.signal
+        })
+        .then(response => {
+            clearTimeout(timeoutId);
+            if (!response.ok) {
+                throw new Error(`Erreur HTTP ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (validateAltitudeResponse(data)) {
+                successCallback(data);
+            } else {
+                errorCallback('Réponse invalide du service IGN');
+            }
+        })
+        .catch(error => {
+            clearTimeout(timeoutId);
+            if (error.name !== 'AbortError') {                 
+                console.error('Erreur lors de la récupération de l\'altitude:', error.message);
+                errorCallback(`Erreur: ${error.message}`);
+            }
+        })
+        .finally(() => {
+            _currentFetchController = null;
         });
     }
 
     /**
-     * Refresh the content of the external links dock
-     * every time the user clicks on the map
-     *
-     * @param event Click event
+     * Request altitude for coordinates and update dock
+     * @param {number} lon - Longitude coordinate
+     * @param {number} lat - Latitude coordinate
+     */
+    function getIgnAlti(lon, lat){
+        if (!isDockActive()) {
+            return;
+        }
+
+        updateDockContent(`<p style="padding: 5px; font-style: italic; font-size: 0.8em; background: lightgray;">${DOCK_WAIT}</p>`);      
+
+        fetchIgnAltitude(
+            lon,
+            lat,
+            function(data) {                
+                const html = `
+                    <p style="padding: 5px;">${DOCK_DESCRIPTION}</p>
+                    <p style="padding: 5px;">
+                        <b>Longitude</b> : ${lon}<br>
+                        <b>Latitude</b> : ${lat}<br>
+                        <b>Altitude</b> : ${data.elevations[0].z}
+                    </p>
+                `;            
+                updateDockContent(html);   
+            },
+            function(error) {
+                updateDockContent(`<p style="padding: 5px; color: red; font-style: italic;">${error}</p>`);
+         }
+        );
+    }
+
+    // ========================
+    // Event Handlers
+    // ========================
+    /**
+     * Handle map click event
+     * @param {Object} event - OpenLayers click event
      */
     function onMapClick(event) {
         // update panel only if active
-        if (document.getElementById(DOCK_ID).classList.contains('active')) {
-            _drawLayer.getSource().clear();
-            let point  = new lizMap.ol.geom.Point(event.coordinate);
-            _drawLayer.getSource().addFeature(
-                new lizMap.ol.Feature({
-                    geometry: point.clone()
-                })
-            )
-            // draw point in this._drawLayer
-            if(lizMap.map.projection.projCode != "EPSG:4326"){
-                // reproject point to 4326
-                point.transform(lizMap.map.projection.projCode, 'EPSG:4326');
+        if (!isDockActive()) {
+            return;
+        }
+    
+        _drawLayer.getSource().clear();
+        let point  = new lizMap.ol.geom.Point(event.coordinate);
+        
+        _drawLayer.getSource().addFeature(
+            new lizMap.ol.Feature({
+                geometry: point.clone()
+            })
+        )
+        // Reproject to EPSG:4326 if needed
+        if(lizMap.map.projection.projCode !== "EPSG:4326"){
+            point.transform(lizMap.map.projection.projCode, 'EPSG:4326');
+        }
+
+        const [longitude, latitude] = point.getCoordinates();
+        getIgnAlti(longitude.toFixed(6), latitude.toFixed(6));        
+    }
+
+    /**
+     * Handle dock open - disable popup to prevent conflicts
+     * @param {string} dockId - The dock ID
+     */
+    function onDockClosed(dockId){        
+        if (dockId === DOCK_ID) {
+            // Cancel pending fetch if still running
+            if (_currentFetchController) {
+                _currentFetchController.abort();
             }
-
-            const longitude = point.getCoordinates()[0].toFixed(6);
-            const latitude = point.getCoordinates()[1].toFixed(6);
-            getIgnAlti(longitude, latitude);
-        }
-    }
-
-    function onDockClosed(clickeDockId)
-    {
-        if (clickeDockId == DOCK_ID) {
-            // external link dock closed : enable popup behaviour
             lizMap.mainLizmap.popup.active = true;
-            // Reset content
-            $('#'+DOCK_ID+' .menu-content').html(buildHtml());
-            // Clear draw layer
+            updateDockContent(`<p style="padding: 5px; font-style: italic; font-size: 0.8em; background: lightgray;">${DOCK_PLEASE_CLICK}</p>`);
             _drawLayer.getSource().clear();
         }
     }
 
-    function onDockOpened(clickeDockId)
-    {
-        if (clickeDockId == DOCK_ID) {
-            // external link dock closed : disable popup behaviour
+    function onDockOpened(dockId){
+        if (dockId === DOCK_ID) {
             lizMap.mainLizmap.popup.active = false;
-        }
+        }        
     }
 
+    // ========================
+    // Initialization
+    // ========================
+    /**
+     * Initialize the altitude view
+     */
     function initIgnAltiView() {
+        // Validate lizMap availability
+        if (!lizMap || !lizMap.mainLizmap || !lizMap.mainLizmap.map) {
+            console.error('lizmapIgnAltimetrie: lizMap or map not available');
+            return;
+        }
+
         _map = lizMap.mainLizmap.map;
 
         _drawLayer = new lizMap.ol.layer.Vector({
@@ -161,33 +259,26 @@ const lizmapIgnAltimetrie = function() {
         // Register a click on OpenLayers > 2 map
         _map.on('singleclick', onMapClick);
 
-        lizMap.events.on({
-            dockopened: function(e) {
-                onDockOpened(e.id);
-            },
-            minidockopened: function(e) {
-                onDockOpened(e.id);
-            },
-            rightdockopened: function(e) {
-                onDockOpened(e.id);
-            },
-            // Dock closed
-            dockclosed: function(e) {
-                onDockClosed(e.id);
-            },
-            minidockclosed: function(e) {
-               onDockClosed(e.id);
-            },
-            rightdockclosed: function(e) {
-                onDockClosed(e.id);
-            }
+        const dockEventTypes = ['dockopened', 'minidockopened', 'rightdockopened'];
+        const closedEventTypes = ['dockclosed', 'minidockclosed', 'rightdockclosed'];
+
+        const eventHandlers = {};
+        
+        dockEventTypes.forEach(type => {
+            eventHandlers[type] = (e) => onDockOpened(e.id);
         });
+        
+        closedEventTypes.forEach(type => {
+            eventHandlers[type] = (e) => onDockClosed(e.id);
+        });
+
+        lizMap.events.on(eventHandlers);
     }
 
     return {
         'id': DOCK_ID,
         'title': DOCK_TITLE,
-        'serviceUrl': ignServiceUrl,
-        'entryPoints': ignEntryPoints
+        'serviceUrl': IGN_SERVICE_URL,
+        'entryPoints': IGN_ENTRY_POINTS
     };
 }();
