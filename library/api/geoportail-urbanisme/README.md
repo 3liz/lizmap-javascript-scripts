@@ -7,7 +7,7 @@ Plugin Lizmap Web Client permettant d'afficher les documents réglementaires d'u
 - [geo.api.gouv.fr](https://geo.api.gouv.fr) — récupération du code INSEE depuis des coordonnées
 - [Géoportail de l'Urbanisme](https://www.geoportail-urbanisme.gouv.fr/api) — documents réglementaires
 
-## Fonctionnement
+## Mode d'affichage
 
 Deux modes de fonctionnement sont possibles : `dock` ou `popup`.
 La valeur doit être spécifiée via la variable `DISPLAY_MODE`.
