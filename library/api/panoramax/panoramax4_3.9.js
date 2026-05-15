@@ -57,6 +57,7 @@ const lizmapPanoramax = function() {
     const PHOTO_VIEWER = `<pnx-photo-viewer 
                                     endpoint="${PANORAMAX_INSTANCE}"
                                     widgets="false"
+                                    map="false"
                                     url-parameters="false"
                                     style="width: 100%; height: 300px;">
                                 </pnx-photo-viewer>`;
@@ -98,7 +99,8 @@ const lizmapPanoramax = function() {
             
             // Initialize viewer listeners
             this.panoViewerListeners = {
-                'psv:view-rotated': null
+                'psv:view-rotated': null,
+                'psv:picture-loaded': null
             };
 
             // Load external scripts (Panoramax viewer)
@@ -419,7 +421,13 @@ const lizmapPanoramax = function() {
                         
             // Réinitialiser le composant    
             this.panoViewer = viewerElement;
-            this.panoViewer.select(null, null, false);            
+            this.panoViewer.select(null, null, false);     
+            
+            const player = document.createElement('pnx-widget-player');
+            player._parent = viewerElement;
+            player.setAttribute('size', 'md');
+            viewerElement.insertAdjacentElement('afterend', player);
+            
             this.#addPanoramaxViewerEvent();
         }
     
@@ -435,6 +443,25 @@ const lizmapPanoramax = function() {
                     this.layerArrowHeading.changed();
                 }
             };
+
+            this.panoViewerListeners['psv:picture-loaded'] = (e) => {
+                if (!this.layerArrowHeadingSource || !this.layerArrowHeading) return;
+
+                const azimuth = e.detail.x ?? 0; // Valeur par défaut
+                let r = azimuth * (Math.PI/180);
+                const feature = this.layerArrowHeadingSource.getFeatures()[0];
+                if (feature
+                    && typeof e.detail?.lon === 'number'
+                    && typeof e.detail?.lat === 'number') {
+                        const coords = lizMap.ol.proj.transform([e.detail.lon, e.detail.lat], 'EPSG:4326', lizMap.mainLizmap.projection);
+                        lizMap.mainLizmap.map.getView().animate({ center: coords, duration: 750 });
+                        feature.getGeometry().setCoordinates(coords);
+                }
+                this.layerArrowHeading.getStyle().getImage().setRotation(r);
+                this.layerArrowHeading.changed();
+            };
+
+            this.panoViewer.addEventListener('psv:picture-loaded', this.panoViewerListeners['psv:picture-loaded']);
             this.panoViewer.addEventListener('psv:view-rotated', this.panoViewerListeners['psv:view-rotated']);
         }
     
