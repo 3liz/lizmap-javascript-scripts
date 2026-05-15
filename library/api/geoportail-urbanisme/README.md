@@ -16,7 +16,7 @@ La valeur doit être spécifiée via la variable `DISPLAY_MODE`.
 
 1. Un bouton est ajouté dans la barre d'outils
 2. L'utilisateur clique sur le bouton pour ouvrir le panneau
-3. L'utilisateur clique ensuite sur une parcelle de la carte
+3. L'utilisateur clique ensuite sur la carte
 4. Le code interroge l'API geo.api.gouv.fr pour identifier la commune (code INSEE)
 5. Le code interroge ensuite l'API du Géoportail de l'Urbanisme pour récupérer les documents disponibles
 6. Les documents sont affichés classés par type dans un accordéon
@@ -27,7 +27,7 @@ La valeur doit être spécifiée via la variable `DISPLAY_MODE`.
 
 1. Côté QGIS : la configuration Lizmap doit avoir été paramétrée pour qu'un popup s'affiche au clic sur une entité de la couche
 2. Côté code : afin de s'assurer que les documents s'affichent dans le popup de la bonne couche, il est nécessaire de préciser l'identifiant de la couche via la variable `LIZMAP_LAYER`
-3. L'utilisateur clique sur une entité de la carte
+3. L'utilisateur clique sur la carte
 4. Le popup de l'entité s'affiche
 5. Le code interroge l'API geo.api.gouv.fr pour identifier la commune (code INSEE)
 6. Le code interroge ensuite l'API du Géoportail de l'Urbanisme pour récupérer les documents disponibles
@@ -38,7 +38,7 @@ La valeur doit être spécifiée via la variable `DISPLAY_MODE`.
 ## Installation
 
 1. Copier le fichier dans le dossier `media/js/default/` de votre projet Lizmap
-2. Modifier les constantes en haut du fichier
+2. (Si nécessaire) Modifier les constantes en haut du fichier
 
 ## Configuration
 
