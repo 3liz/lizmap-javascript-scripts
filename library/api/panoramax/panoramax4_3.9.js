@@ -15,6 +15,9 @@ const lizmapPanoramax = function() {
     
     // Dock position: can be dock, minidock
     const DOCK_POSITION = 'dock';
+
+    // BUFFER RADIUS FOR PANORAMAX SEARCH (in map units)
+    const BUFFER_RADIUS = 3;
     
     // Title of the dock
     const DOCK_TITLE = 'Panoramax';
@@ -54,12 +57,21 @@ const lizmapPanoramax = function() {
      ###################################
      ******************************** */
     
-     // HTML Content 
-    const DOM_ID_PANORAMAX = "LizPanoramax-viewer";
+    const PANORAMAX_JS_URL = 'https://cdn.jsdelivr.net/npm/@panoramax/web-viewer@latest/build/index.min.js';
+    const PANORAMAX_CSS_URL = 'https://cdn.jsdelivr.net/npm/@panoramax/web-viewer@latest/build/index.min.css'
+    
+    // HTML Content 
+    const PHOTO_VIEWER = `<pnx-photo-viewer 
+                                    endpoint="${PANORAMAX_INSTANCE}"
+                                    widgets="false"
+                                    url-parameters="false"
+                                    style="width: 100%; height: 300px;">
+                                </pnx-photo-viewer>`;
+
     const HTML_TEMPLATE = `<div id="panoramax_dock_content">
-                                <p>${POPUP_TEXT}</p>
-                                <div id="${DOM_ID_PANORAMAX}" style="width: auto; height: 300px;"></div>
-                            </div>`;
+                            <p>${POPUP_TEXT}</p>
+                            ${PHOTO_VIEWER}
+                        </div>`;
     
     const SVG_ARROW = `<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><path d="M48.005 2.666a2.386 2.386 0 0 0-.51.397 2.386 2.386 0 0 0-.531.844l-33.169 90.76a2.386 2.386 0 0 0 3.52 2.836l32.08-20.345 32.186 20.177a2.386 2.386 0 0 0 3.506-2.854L51.442 3.894a2.386 2.386 0 0 0-3.437-1.228Z" style="color:#000;font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000;solid-opacity:1;vector-effect:none;fill:${ARROW_ICON_COLOR};fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000"/></svg>`;
     
@@ -67,7 +79,14 @@ const lizmapPanoramax = function() {
         constructor(){
             //Check if Panoramax Layer exists. If not, display an error message and exit directly
             this.panoramaxLayer = this.#getPanoramaxLayer();
-            
+            this.panoramaxDockOpen = false;
+
+            this.mapClickHandler = null;
+            this.panoViewerListeners = {
+                'psv:view-rotated': null,
+                'psv:picture-loaded': null
+            };
+
             if(!this.panoramaxLayer) {       
                 // check if there is a panoramax layer in the project      
                 const error = `No Panoramax layer available. 
@@ -88,10 +107,7 @@ const lizmapPanoramax = function() {
                 }
                 
                 // everything is good we can display the "normal" dock content
-                this.#addMapEvent();
-                this.#addLizmapDock(HTML_TEMPLATE);
-                //this.#setPanoramaxLayerVisibility(false);
-                this.#addPanoramaxHeadingLayer(); 
+                this.#addLizmapDock(HTML_TEMPLATE);                
             });            
         }
        
@@ -101,37 +117,50 @@ const lizmapPanoramax = function() {
          */
         async #loadScripts() {
             return new Promise(resolve => {
-                
-                const panoramax_js = 'https://cdn.jsdelivr.net/npm/@panoramax/web-viewer@3.2.3/build/index.min.js';
-                const panoramax_css = 'https://cdn.jsdelivr.net/npm/@panoramax/web-viewer@3.2.3/build/index.min.css'
-    
-                if (!document.querySelector(`script[src="${panoramax_js}"]`)) {
-                    // Chargement du script JS
-                    const script = document.createElement('script');
-                    script.src = panoramax_js;
-                    script.setAttribute('type', 'text/javascript');
-    
-                    script.onload = function () {
-                        resolve(true);
-                    };
-    
-                    script.onerror = function () {
-                        if (DEBUG_MODE) console.error("Échec du chargement du script.");
-                        resolve(false);
-                    };
-    
-                    document.head.appendChild(script);
-                    
+
+                let scriptLoaded = !!document.querySelector(`script[src="${PANORAMAX_JS_URL}"]`);
+                let cssLoaded = !!document.querySelector(`link[href="${PANORAMAX_CSS_URL}"]`);
+
+
+                let jsPromise, cssPromise;
+
+                if (!scriptLoaded) {
+                    jsPromise = new Promise(jsResolve => {
+                        const script = document.createElement('script');
+                        script.src = PANORAMAX_JS_URL;
+                        script.type = 'text/javascript';
+                        script.onload = () => jsResolve(true);
+                        script.onerror = () => {
+                            if (DEBUG_MODE) console.error("Échec du chargement du script.");
+                            jsResolve(false);
+                        };
+                        document.head.appendChild(script);
+                    });
+                } else {
+                    jsPromise = Promise.resolve(true);
                 }
-    
-                if (!document.querySelector(`link[href="${panoramax_css}"]`)) {
-                    // Chargement du CSS
-                    const style = document.createElement("link");
-                    style.href = panoramax_css;
-                    style.rel = 'stylesheet';
-                    style.type = 'text/css';
-                    document.head.appendChild(style);
-                }            
+
+                if (!cssLoaded) {
+                    cssPromise = new Promise(cssResolve => {
+                        const style = document.createElement("link");
+                        style.href = PANORAMAX_CSS_URL;
+                        style.rel = 'stylesheet';
+                        style.type = 'text/css';
+                        style.onload = () => cssResolve(true);
+                        style.onerror = () => {
+                            if (DEBUG_MODE) console.error("Échec du chargement du CSS.");
+                            cssResolve(false);
+                        };
+                        document.head.appendChild(style);
+                    });
+                } else {
+                    cssPromise = Promise.resolve(true);
+                }
+
+                Promise.all([jsPromise, cssPromise]).then(results => {
+                    // Si l'un des deux a échoué, on retourne false
+                    resolve(results.every(Boolean));
+                });       
             });
         }
     
@@ -189,6 +218,18 @@ const lizmapPanoramax = function() {
          * @param {Panoramax Picture} picture 
          */
         #setPanoramaxHeadingLayerHeading(picture){
+            // Vérifie l'existence de la couche et de sa source avant de tenter de les utiliser
+            if(!this.layerArrowHeadingSource || !this.layerArrowHeading) {
+                if (DEBUG_MODE) console.warn("Heading layer not initialized");
+                return;
+            }
+
+            // Valider les données
+            if(!picture.geometry?.coordinates || !picture.properties) {
+                if (DEBUG_MODE) console.warn("Invalid picture data", picture);
+                return;
+            }
+
             const oldFeature = this.layerArrowHeadingSource.getFeatures()?.[0];
             if (oldFeature) {
                 this.layerArrowHeadingSource.removeFeature(oldFeature);
@@ -200,7 +241,8 @@ const lizmapPanoramax = function() {
                     picture.geometry.coordinates[1]
                 ]).transform('EPSG:4326', lizMap.map.projection.projCode)
             }));
-            const r = picture.properties["view:azimuth"] * (Math.PI/180);
+            const azimuth = picture.properties["view:azimuth"] ?? 0;
+            const r = azimuth * (Math.PI/180);
             this.layerArrowHeading.getStyle().getImage().setRotation(r);
             this.layerArrowHeading.changed();
         }
@@ -219,26 +261,34 @@ const lizmapPanoramax = function() {
          * Init all the method
          */
         initPanoramaxDock(){
-            if(this.panoramaxLayer){
-                lizMap.mainLizmap.popup.active = false;
-                this.panoramaxDockOpen = true;
+            if(this.panoramaxLayer && !this.panoramaxDockOpen){
+                lizMap.mainLizmap.popup.active = false; //Empêche l'affichage du popup Lizmap au clic sur la carte pour éviter les conflits avec le clic pour récupérer les photos panoramax
+                this.panoramaxDockOpen = true;                
+                this.#addPanoramaxHeadingLayer(); 
                 this.#setPanoramaxLayerVisibility(true);
-                this.#addPanoramaxViewer();
+                //Attendre que le DOM soit prêt
+                setTimeout(() => {
+                    this.#addPanoramaxViewer();
+                    this.#addMapEvent();
+                }, 100);
             }
         }
     
         /**
          * Add Panoramax Viewer 
          */
-        #addPanoramaxViewer(){
-            this.panoViewer = new Panoramax.Viewer(
-                DOM_ID_PANORAMAX,
-                PANORAMAX_INSTANCE,
-                { 
-                    hash:false, // !!! do not change => change Lizmap URL
-                    map: false
-                }  
-            );
+        async #addPanoramaxViewer(){
+            const viewerElement = document.querySelector('#panoramax_dock_content pnx-photo-viewer');         
+            if (!viewerElement) {
+                if (DEBUG_MODE) console.error("Viewer element not found");
+                return;
+            }
+            // Attendre que le Photo Sphere Viewer soit vraiment prêt
+            await viewerElement.oncePSVReady();
+            
+            // Réinitialiser le composant    
+            this.panoViewer = viewerElement;
+            this.panoViewer.select(null, null, false);            
             this.#addPanoramaxViewerEvent();
         }
     
@@ -246,36 +296,71 @@ const lizmapPanoramax = function() {
          * Add all Panoramax Viewer Events
          */
         #addPanoramaxViewerEvent(){
-            this.panoViewer.addEventListener('psv:view-rotated', (e) => {
-                if(e.explicitOriginalTarget._selectedPicId){
-                    let r = e.detail.x * (Math.PI/180); 
+            // Stocker les listeners AVEC les bonnes fonctions
+            this.panoViewerListeners['psv:view-rotated'] = (e) => {
+                
+                if(e.detail?.x){
+                    const azimuth = e.detail.x ?? 0; // Valeur par défaut            
+                    let r = azimuth * (Math.PI/180); 
                     this.layerArrowHeading.getStyle().getImage().setRotation(r);
                     this.layerArrowHeading.changed();
                 }
-            });
+            };
             
-            this.panoViewer.addEventListener('psv:picture-loaded', (e) => {
-                let r = e.detail.x * (Math.PI/180); 
-                if(this.layerArrowHeadingSource.getFeatures()[0] && e.detail.lon && e.detail.lat){
+            this.panoViewerListeners['psv:picture-loaded'] = (e) => {
+                const azimuth = e.detail?.x ?? 0; // Valeur par défaut
+                let r = azimuth * (Math.PI/180);  
+                if(this.layerArrowHeadingSource.getFeatures()[0] 
+                && typeof e.detail?.lon === 'number' 
+                && typeof e.detail?.lat === 'number' ){
                     const coords = lizMap.ol.proj.transform([e.detail.lon, e.detail.lat], 'EPSG:4326', lizMap.mainLizmap.projection);
                     lizMap.mainLizmap.map.getView().setCenter(coords);
                     this.layerArrowHeadingSource.getFeatures()[0].getGeometry().setCoordinates(coords);                        
                 }
                 this.layerArrowHeading.getStyle().getImage().setRotation(r);
                 this.layerArrowHeading.changed();
-            }); 
+            };
+
+            this.panoViewer.addEventListener('psv:view-rotated', this.panoViewerListeners['psv:view-rotated']);
+            this.panoViewer.addEventListener('psv:picture-loaded', this.panoViewerListeners['psv:picture-loaded']);
         }
     
         /**
          * Fetch picture on single map cick
          */
         #addMapEvent(){
-            lizMap.mainLizmap.map.on('singleclick', e => {
+            // Créer une méthode nommée pour pouvoir la désabonner
+            this.mapClickHandler = (e) => {
                 //Fire event only if panoramax dock is opened 
                 if(this.panoramaxDockOpen){             
-                    const extent =this.#getBufferedExtent(e.coordinate);
+                    const extent = this.#getBufferedExtent(e.coordinate);
                     this.#getPanoramaxPicture(extent);
                 }            
+            };
+            lizMap.mainLizmap.map.on('singleclick', this.mapClickHandler);
+        }
+
+        /**
+         * Remove map click event listener
+         */
+        #removeMapEvent(){
+            if(this.mapClickHandler){
+                lizMap.mainLizmap.map.un('singleclick', this.mapClickHandler);
+                this.mapClickHandler = null;
+            }
+        }
+
+        /**
+         * Remove all Panoramax Viewer Events
+         */
+        #removePanoramaxViewerEvent(){
+            if(!this.panoViewer) return;
+
+            Object.keys(this.panoViewerListeners).forEach(eventName => {
+                if(this.panoViewerListeners[eventName]){
+                    this.panoViewer.removeEventListener(eventName, this.panoViewerListeners[eventName]);
+                    this.panoViewerListeners[eventName] = null;
+                }
             });
         }
     
@@ -287,13 +372,12 @@ const lizmapPanoramax = function() {
         #getBufferedExtent(p){
             const point  = new lizMap.ol.geom.Point(p);
             const extent = point.getExtent();
-            const radius = 3;
-            const bufferedExtent = new lizMap.ol.extent.buffer(extent,radius);
+            const bufferedExtent = new lizMap.ol.extent.buffer(extent,BUFFER_RADIUS);
     
             const pbl = new lizMap.ol.geom.Point([bufferedExtent[0], bufferedExtent[1]]); //bottom left
             const pur = new lizMap.ol.geom.Point([bufferedExtent[2], bufferedExtent[3]]); //upper right
     
-            if(lizMap.map.projection.projCode != "EPSG:4326"){
+            if(lizMap.map.projection.projCode !== "EPSG:4326"){
                 // reproject extent to 4326
                 pbl.transform(lizMap.map.projection.projCode, 'EPSG:4326');
                 pur.transform(lizMap.map.projection.projCode, 'EPSG:4326');              
@@ -323,8 +407,8 @@ const lizmapPanoramax = function() {
                     throw new Error(error);                
                 }
                 const picture = await response.json();
-                if(picture.features.length){
-                    this.panoViewer.select(null, picture.features[0].id, true);
+                if(picture?.features?.length > 0 && this.panoViewer){
+                    this.panoViewer?.select?.(null, picture.features[0].id, true);
                     this.#setPanoramaxHeadingLayerHeading(picture.features[0]);
                 }
             } catch (error) {
@@ -340,21 +424,29 @@ const lizmapPanoramax = function() {
             if(this.panoramaxLayer) {
                 lizMap.mainLizmap.popup.active = true;
                 this.panoramaxDockOpen = false;
+
+                // Remove map click listener
+                this.#removeMapEvent();
+                
+                // Remove Panoramax viewer listeners
+                this.#removePanoramaxViewerEvent();
+                
+                // Clear layer used for heading arrow
                 this.layerArrowHeadingSource.clear();
             
                 //Hide layer
-                lizPanoramax.#setPanoramaxLayerVisibility(false);
+                this.#setPanoramaxLayerVisibility(false);
     
                 // Remove all viewer references
                 if (this.panoViewer) {
-                    this.panoViewer.stopSequence();
+                    this.panoViewer.psv?.stopSequence?.();
                     //this.panoViewer.destroy(); // --> Should be used for removing object but currently throwing an error
-                    const panoViewer = document.querySelector(`#panoramax_dock_content #${DOM_ID_PANORAMAX}`);
+                    const panoViewer = document.querySelector('#panoramax_dock_content pnx-photo-viewer');
                     if(panoViewer){
                         panoViewer.remove();
-                        document.querySelector("#panoramax_dock_content").insertAdjacentHTML('beforeend', `<div id="${DOM_ID_PANORAMAX}" style="width: auto; height: 300px;"></div>`);     
+                        document.querySelector("#panoramax_dock_content").insertAdjacentHTML('beforeend', PHOTO_VIEWER);    
                     }
-                    delete this.panoViewer;
+                    this.panoViewer = null;
                 }
             }
         }
@@ -363,6 +455,8 @@ const lizmapPanoramax = function() {
     /**
      * Lizmap event
      */
+    let lizPanoramax;
+
     lizMap.events.on({
         'uicreated': function(e) {
             lizPanoramax = new LizPanoramax();     
@@ -370,24 +464,24 @@ const lizmapPanoramax = function() {
     
         //MINI DOCK
         'minidockopened': e => {
-            if (e.id === DOCK_ID) {   
+            if (e.id === DOCK_ID && lizPanoramax) {   
                 lizPanoramax.initPanoramaxDock();               
             }
         },
         'minidockclosed': e => {
-            if (e.id === DOCK_ID) {
+            if (e.id === DOCK_ID && lizPanoramax) {
                 lizPanoramax.removePanoramaxDock();            
             }
         },
     
         //DOCK
         'dockopened': e => {
-            if (e.id === DOCK_ID) {   
+            if (e.id === DOCK_ID && lizPanoramax) {   
                 lizPanoramax.initPanoramaxDock();               
             }
         },
         'dockclosed': e => {
-            if (e.id === DOCK_ID) {
+            if (e.id === DOCK_ID && lizPanoramax) {
                 lizPanoramax.removePanoramaxDock();            
             }
         },
