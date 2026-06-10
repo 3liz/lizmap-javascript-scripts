@@ -24,13 +24,20 @@ chargera de la reprojection.
 ![alt text](image-1.png)
 
 ## Utilisation
+Deux fichiers JavaScript sont disponibles :
+- **panoramax3_3.9.js** : utilise l'API V3 de Panoramax (historique, stable)
+- **panoramax4_3.9.js** : utilise l'API V4 de Panoramax (Web Components, recommandé)
+
+**Nous recommandons d'utiliser la V4** qui est plus moderne et mieux maintenue.
 
 Pour utiliser le script Panoramax dans votre projet :
 1. assurez-vous d'avoir une couche Panoramax présente dans votre projet QGIS
-2. copier `panoramax_3.8.js` dans le dossier `media/js` de votre projet
+2. copier `panoramax3_3.9.js` ou `panoramax4_3.9.js` dans le dossier `media/js/default` de votre répertoire (ou `media/js/nom du projet`)
 3. le bouton Panoramax s'affichera dans Lizmap Web Client
-4. En cliquant sur ce bouton, les photos associées aux points de la couche Panoramax seront affichées.
-   Un clic sur un point permet d'afficher la photo correspondante.
+4. en cliquant sur ce bouton, un dock s'ouvrira affichant le visualiseur de photos
+5. cliquez sur un point de la couche Panoramax sur la carte pour afficher la photo correspondante
+   - une flèche directionnelle indique l'azimut de la photo
+   - la carte se centre automatiquement sur le point
 
 ## Personnalisation
 
@@ -63,13 +70,21 @@ projection for this script to work. QGIS will handle the reprojection.
 
 
 ## Usage
+Two JavaScript files are available:
+- **panoramax3_3.9.js**: uses the Panoramax V3 API (legacy, stable)
+- **panoramax4_3.9.js**: uses the Panoramax V4 API (Web Components, recommended)
 
-1. copy the panoramax_3.8.js file to the media/js folder of your QGIS project.
-2. verify that the Panoramax layer (or group) exists in your QGIS project.
-3. open Lizmap Web Client and ensure the version installed is 3.8 or higher.
-4. the Panoramax button should now appear in the Lizmap interface, allowing you to view the photos related to the points
-   in the Panoramax layer.
+**We recommend using V4**, which is more modern and better maintained.
 
+
+To use the Panoramax script in your project:
+1. ensure you have a Panoramax layer present in your QGIS project
+2. copy `panoramax3_3.9.js` or `panoramax4_3.9.js` to the `media/js/default` folder of your project directory (or `media/js/project name`)
+3. the Panoramax button will appear in Lizmap Web Client
+4. by clicking on this button, a dock will open displaying the photo viewer
+5. click on a point in the Panoramax layer on the map to display the corresponding photo
+   - a directional arrow indicates the photo's azimuth
+   - the map automatically centers on the point
 
 ## Customization
 
