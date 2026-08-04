@@ -1,35 +1,78 @@
-#content #lizmap-selection-statistics {
-    max-width: 300px;
-    max-height: 500px;
-    overflow: auto;
-    position: absolute;
-    bottom: 250px;
-    right: 10px;
-    z-index: 1000;
-    border: 2px solid white;
-    border-radius: 4px;
-    box-shadow: 2px 2px 2px 2px #aaa;
+/**
+ * Selection statistics - Lizmap Web Client 3.9
+ *
+ * The panel is appended at the bottom of Lizmap's selection minidock, so
+ * Lizmap owns the layout: only the block and its table are styled here.
+ *
+ * var(--name, fallback) follows the LWC theme when it exposes the variable,
+ * and falls back to neutral values otherwise.
+ */
+
+#lizmap-selection-statistics {
+    margin-top: 6px;
+    padding: 4px 2px;
+    border-top: 1px solid var(--color-border, #ccc);
     font-size: 12px;
-    background-color: #F0F0F0;
+    background-color: var(--color-bg, #f8f8f8);
 }
-#content.mobile #lizmap-selection-statistics {
-    bottom: revert;
-    right: revert;
-    left: 40px;
-    top: 10px;
+
+/* Bootstrap may set a more specific display, so make `hidden` explicit. */
+#lizmap-selection-statistics[hidden],
+.lizmap-stats-block[hidden] {
+    display: none;
 }
-#lizmap-selection-statistics div {
-    margin-bottom: 10px;
-    padding: 2px;
+
+.lizmap-stats-title {
+    margin-bottom: 4px;
+    font-weight: bold;
 }
+
+.lizmap-stats-block {
+    margin-bottom: 8px;
+}
+
+/* Layer name on the left, print control on the right. */
+.lizmap-stats-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    min-height: 22px;
+}
+
+.lizmap-stats-print {
+    flex: none;
+    padding: 1px 5px;
+    line-height: 1;
+}
+
+.lizmap-stats-block:last-child {
+    margin-bottom: 0;
+}
+
 .lizmap-selection-statistics-table {
-    margin-bottom: 0px;
-    background-color: #d8d8d8;
+    margin-bottom: 4px;
+    background-color: transparent;
 }
-.lizmap-selection-statistics-table tr th{
-    margin-bottom: 0px;
+
+.lizmap-selection-statistics-table th {
+    text-align: center;
+    font-weight: bold;
 }
-.lizmap-selection-statistics-table tr th,
-.lizmap-selection-statistics-table tr td {
-    line-height: 10px;
+
+.lizmap-selection-statistics-table th,
+.lizmap-selection-statistics-table td {
+    padding: 2px 4px;
+    line-height: 1.3;
+    border-top: 1px solid var(--color-border, #ddd);
+}
+
+.lizmap-stats-value {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.lizmap-stats-message {
+    margin: 2px 0;
+    color: var(--color-danger, #a94442);
 }
