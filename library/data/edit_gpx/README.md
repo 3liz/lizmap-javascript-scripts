@@ -1,3 +1,12 @@
+---
+title: "Script de traitement de fichier GPX sur Lizmap <= 3.3"
+category: data
+tags: []
+since: ""
+status: active
+replaced_by:
+description: ""
+---
 # Script de traitement de fichier GPX sur Lizmap <= 3.3
 
 Pour utiliser cette fonctionnalité, il faut cliquer sur l’icône à droite de l'écran,
@@ -15,3 +24,4 @@ Après ça on clique sur la donnée à modifier.
 
 Il est aussi possible de dessiner des lignes créer des couches vides
 et de vider le projet en cliquant sur les boutons dédiés.
+

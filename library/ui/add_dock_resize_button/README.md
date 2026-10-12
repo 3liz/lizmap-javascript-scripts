@@ -1,3 +1,12 @@
+---
+title: "add_dock_resize_button"
+category: ui
+tags: []
+since: ""
+status: active
+replaced_by:
+description: ""
+---
 Add dock resize button
 =======================
 
@@ -6,4 +15,5 @@ This script adds a button on the bottom right of the dock, which allows to toggl
 **Compatibility**: this script is only for Lizmap Web Client >= **3.4**
 
 ![Screenshot](lizmap_javascript_dock_resize.gif)
+
 

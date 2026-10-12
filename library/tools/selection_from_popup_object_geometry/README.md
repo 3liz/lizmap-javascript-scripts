@@ -1,3 +1,12 @@
+---
+title: "Selection from a popup feature geometry"
+category: tools
+tags: []
+since: ""
+status: active
+replaced_by:
+description: ""
+---
 # Selection from a popup feature geometry
 
 ## Presentation
@@ -17,3 +26,4 @@ For polygon geometries, the choice has been made to select the features **inside
 The **QGIS** project must be configured to allow Lizmap to display **the
 feature geometry in the popup**: you should check the checkbox called
 `Add the geometry to feature response` in the project properties, tab `QGIS Server`, group `WMS Capabilities`.
+

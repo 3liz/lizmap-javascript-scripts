@@ -1,0 +1,460 @@
+/* =============================================================================
+   Catalogue Lizmap JavaScript scripts - feuille de style
+   -----------------------------------------------------------------------------
+   Palette derivee du theme par defaut de Lizmap Web Client
+   (lizmap-web-client/lizmap/www/themes/default/css/main.css) :
+     --header-color                       #43718c  (bleu ardoise, couleur de marque)
+     --color-contrasted-elements-light    #c3dceb  (bleu clair)
+     bouton "success"                     #95c02a  (vert action Lizmap)
+     bouton "danger"                      #da4f49  (rouge)
+     --color-text-primary                 #333333
+   Style : plat, "Swiss / minimal", bordures fines, pas d'ombres marquees,
+   coins tres peu arrondis - comme l'interface Lizmap elle-meme.
+   ========================================================================== */
+
+:root {
+  /* --- Identite Lizmap (valeurs sources, ne pas retoucher) --- */
+  --liz-blue: #43718c;
+  --liz-blue-strong: #345a70;
+  --liz-blue-light: #c3dceb;
+  --liz-green: #95c02a;
+  --liz-red: #da4f49;
+
+  /* --- Jetons semantiques (theme clair) --- */
+  --bg: #ffffff;
+  --surface: #f5f8fa;
+  --surface-2: #e9f0f4;
+  --border: #d7e0e6;
+  --border-strong: #b7c6ce;
+  --text: #2b2b2b;
+  --text-muted: #5b6b74;
+  --link: var(--liz-blue);
+  --link-hover: var(--liz-blue-strong);
+  --accent: var(--liz-blue);
+  --on-accent: #ffffff;
+  --ok: #6f9310;          /* vert Lizmap assombri pour usage sur fond clair */
+  --danger: #c33c37;
+
+  /* --- Formes & rythme --- */
+  --radius: 4px;
+  --radius-pill: 999px;
+  --maxw: 1180px;
+  --gap: 1.5rem;
+
+  /* --- Typographie --- */
+  --font-sans: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+
+  --shadow-hover: 0 1px 2px rgba(27, 50, 64, .07), 0 3px 10px rgba(27, 50, 64, .06);
+
+  color-scheme: light dark;
+  accent-color: var(--liz-blue);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --liz-blue: #7fb2cc;
+    --liz-blue-strong: #a6cee0;
+    --liz-blue-light: #23566d;
+
+    --bg: #161f27;
+    --surface: #1b2833;
+    --surface-2: #24343f;
+    --border: #2f4350;
+    --border-strong: #3f5a68;
+    --text: #e6edf1;
+    --text-muted: #9db0bc;
+    --link: #9ccbe0;
+    --link-hover: #c2e1ef;
+    --accent: #7fb2cc;
+    --on-accent: #10202a;
+    --ok: #a7d05a;
+    --danger: #e78682;
+
+    --shadow-hover: 0 1px 2px rgba(0, 0, 0, .45), 0 3px 12px rgba(0, 0, 0, .38);
+  }
+}
+
+/* --- Base --------------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font: 16px/1.55 var(--font-sans);
+  color: var(--text);
+  background: var(--bg);
+}
+
+a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:hover { color: var(--link-hover); }
+
+::selection { background: var(--liz-blue-light); color: var(--text); }
+
+:focus-visible {
+  outline: 2px solid var(--liz-blue);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Barre de defilement discrete, teintee */
+* { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--bg);
+}
+
+/* --- En-tete : bandeau plein "bleu Lizmap", comme dans l'appli ---------- */
+
+header {
+  background: var(--liz-blue);
+  color: #fff;
+  padding: 1.5rem clamp(1rem, 4vw, 2.5rem) 1.35rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  header { background: #1c3947; }
+}
+
+header h1 {
+  margin: 0;
+  font-size: clamp(1.25rem, 1rem + 1.2vw, 1.6rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items:center;
+}
+
+header h1:before {
+  content: "";
+  background: url('./logo.png') no-repeat;
+  background-size: 60px 60px;
+  padding-right: 10px; 
+  display: inline-block;
+  width: 60px; 
+  height: 60px;
+}
+
+/* Ligne titre + selecteur de langue */
+.header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .75rem 1rem;
+}
+
+#lang {
+  font: inherit;
+  font-size: .9rem;
+  color: #fff;
+  background-color: rgba(255, 255, 255, .12);
+  border: 1px solid rgba(255, 255, 255, .45);
+  border-radius: var(--radius);
+  padding: .3rem 1.7rem .3rem .55rem;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='none' stroke='white' stroke-width='1.6' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right .5rem center;
+}
+#lang:hover { background-color: rgba(255, 255, 255, .2); }
+#lang:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+/* la liste deroulante native s'affiche sur fond systeme : on force du lisible */
+#lang option { color: var(--text); background: var(--bg); }
+
+header .sub {
+  margin: .3rem 0 1.1rem;
+  color: rgba(255, 255, 255, .82);
+  font-size: .9rem;
+}
+header .sub a { color: #fff; text-decoration: underline; }
+header .sub a:hover { color: #fff; opacity: .85; }
+
+header input[type="search"] {
+  width: 100%;
+  max-width: 460px;
+  padding: .55rem .8rem;
+  font: inherit;
+  font-size: 1rem;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+}
+header input[type="search"]:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* --- Mise en page ------------------------------------------------------- */
+
+.layout {
+  display: flex;
+  gap: var(--gap);
+  align-items: flex-start;
+  /* max-width: var(--maxw); */
+  max-width: 90%; 
+  margin: 0 auto;
+  padding: var(--gap) clamp(1rem, 4vw, 2.5rem);
+}
+
+/* --- Colonne de filtres ----------------------------------------------- */
+
+aside {
+  flex: 0 0 232px;
+  position: sticky;
+  top: 1rem;
+}
+
+aside section { margin-bottom: 1.35rem; }
+
+aside h2 {
+  margin: 0 0 .55rem;
+  font-size: .72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-muted);
+}
+
+.facet { display: flex; flex-wrap: wrap; gap: .35rem; }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .22rem .6rem;
+  font-size: .82rem;
+  line-height: 1.3;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+}
+.chip:hover { border-color: var(--border-strong); background: var(--surface-2); }
+
+/* la vraie case reste accessible au clavier mais n'occupe pas de place */
+.chip input {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  clip: rect(0 0 0 0); clip-path: inset(50%);
+  overflow: hidden; white-space: nowrap;
+}
+.chip:has(input:focus-visible) { outline: 2px solid var(--liz-blue); outline-offset: 2px; }
+
+.chip[data-active="true"] {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-color: var(--accent);
+  font-weight: 500;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .9rem;
+  color: var(--text);
+  cursor: pointer;
+}
+.toggle input { width: 1rem; height: 1rem; }
+.toggle + .toggle { margin-top: .45rem; }
+
+#reset {
+  margin-top: .25rem;
+  padding: .45rem .8rem;
+  font: inherit;
+  font-size: .85rem;
+  color: var(--text);
+  background: var(--liz-blue-light);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: filter .15s ease;
+}
+#reset:hover { filter: brightness(.94); }
+
+/* --- Liste ------------------------------------------------------------- */
+
+main { flex: 1; min-width: 0; }
+
+.count {
+  margin: 0 0 1rem;
+  font-size: .85rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: .8rem;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+}
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: .9rem .95rem;
+  background: var(--bg);
+  transition: border-color .18s ease, background-color .18s ease, box-shadow .18s ease;
+}
+.card:hover {
+  border-color: var(--liz-blue);
+  background: var(--surface);
+  box-shadow: var(--shadow-hover);
+}
+.card.deprecated { opacity: .68; }
+.card.deprecated:hover { opacity: 1; }
+
+.card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .45rem;
+}
+.card-head a {
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: -0.005em;
+}
+.card-head a:hover { text-decoration: underline; }
+
+.badge {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  font-weight: 500;
+  padding: .06rem .38rem;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  white-space: nowrap;
+}
+.badge.dep {
+  color: var(--danger);
+  border-color: var(--danger);
+  font-family: var(--font-sans);
+  letter-spacing: .01em;
+}
+.badge.feat {
+  color: var(--ok);
+  border-color: var(--ok);
+  font-family: var(--font-sans);
+  letter-spacing: .01em;
+}
+.badge.new {
+  color: var(--liz-blue);
+  border-color: var(--liz-blue);
+  font-family: var(--font-sans);
+  letter-spacing: .01em;
+}
+.card.featured { border-color: var(--border-strong); }
+.card.featured:hover { border-color: var(--liz-blue); }
+
+.desc { margin: .55rem 0 .5rem; font-size: .92rem; }
+
+.repl {
+  margin: .25rem 0 0;
+  font-size: .84rem;
+  color: var(--text-muted);
+  display: flex;
+  gap: .4rem;
+}
+.repl::before {
+  content: "";
+  flex: 0 0 auto;
+  width: .5rem; height: .5rem;
+  margin-top: .38rem;
+  border-radius: 50%;
+  background: var(--danger);
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem;
+  margin-top: .6rem;
+}
+.card-tags span {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  padding: .05rem .4rem;
+  background: var(--surface-2);
+  color: var(--text-muted);
+  border-radius: var(--radius);
+}
+.card-tags .cat {
+  background: var(--liz-blue-light);
+  color: var(--liz-blue-strong);
+  font-family: var(--font-sans);
+  font-weight: 600;
+}
+@media (prefers-color-scheme: dark) {
+  .card-tags .cat { color: #dcecf4; }
+}
+
+.card-desc{
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.card-meta {
+  margin: .55rem 0 0;
+  font-size: .72rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* pastille de statut discrete a gauche du titre */
+.card.active .card-head::before,
+.card.deprecated .card-head::before {
+  content: "";
+  align-self: center;
+  flex: 0 0 auto;
+  width: .5rem; height: .5rem;
+  border-radius: 50%;
+  background: var(--ok);
+}
+.card.deprecated .card-head::before { background: var(--danger); }
+
+.empty { color: var(--text-muted); }
+
+
+.list-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+  .list-header .count { margin: 0; }
+  .sort { font-size: .8rem; color: var(--text-muted); display: flex; gap: .4rem; align-items: center; }
+  .sort select { font: inherit; font-size: .8rem; padding: .2rem .4rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg); color: var(--text); }
+
+
+/* --- Responsive ------------------------------------------------------- */
+
+@media (max-width: 760px) {
+  .layout { flex-direction: column; }
+  aside { position: static; flex-basis: auto; width: 100%; }
+  .facet { gap: .4rem; }
+}
+
+/* --- Accessibilite : mouvement reduit -------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}

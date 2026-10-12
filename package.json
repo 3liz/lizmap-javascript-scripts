@@ -1,0 +1,17 @@
+{
+  "name": "lizmap-javascript-scripts-catalog",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Outillage de catalogue pour la bibliotheque de snippets Lizmap",
+  "scripts": {
+    "bootstrap:frontmatter": "node scripts/bootstrap-frontmatter.mjs",
+    "check:catalog": "node scripts/build-catalog.mjs --check",
+    "build:catalog": "node scripts/build-catalog.mjs",    
+    "check:i18n": "node scripts/check-i18n.mjs",    
+    "serve": "node scripts/serve.mjs"
+  },
+  "devDependencies": {
+    "gray-matter": "^4.0.3"
+  }
+}

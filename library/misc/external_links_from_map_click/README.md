@@ -1,3 +1,12 @@
+---
+title: "External links"
+category: misc
+tags: []
+since: ""
+status: active
+replaced_by:
+description: ""
+---
 # External links
 
 ## Presentation
@@ -48,3 +57,4 @@ const DOCK_LINKS = [
     },
 ];
 ```
+

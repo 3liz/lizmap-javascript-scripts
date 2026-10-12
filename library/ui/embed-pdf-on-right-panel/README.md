@@ -1,3 +1,12 @@
+---
+title: "embed-pdf-on-right-panel"
+category: ui
+tags: []
+since: ""
+status: active
+replaced_by:
+description: ""
+---
 ## Add a right panel with an embedded PDF
 
 * This script add a panel on the right of the map, displaying an embedded PDF (using the browser PDF viewer)
@@ -6,3 +15,4 @@
 * This script can be used to simply display HTML content
 
 ![](PDF-right-panel.png)
+

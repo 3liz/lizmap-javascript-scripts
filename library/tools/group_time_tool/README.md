@@ -1,4 +1,12 @@
-
+---
+title: "Group Time Tool"
+category: tools
+tags: []
+since: ""
+status: active
+replaced_by:
+description: ""
+---
 # Group Time Tool
 
 A LizMap custom JavaScript to display time series as a video or a GIF.
@@ -48,3 +56,4 @@ For more details, consult the documentation available [here](./doc/Group_time_to
 
 
 ## Licence
+

@@ -1,3 +1,12 @@
+---
+title: "display_children_popup_as_tabs"
+category: ui
+tags: []
+since: ""
+status: active
+replaced_by:
+description: ""
+---
 ## Display children popup as tabs
 
 * This script works with Lizmap >= 3.5.
@@ -5,3 +14,4 @@
 * Children are defined in QGIS in 'Project Properties' => Relations.
 * Children tabs are ordered by their Id so you can control it by setting Ids
 as 0_your_id, 1_your_id, ... for example.
+

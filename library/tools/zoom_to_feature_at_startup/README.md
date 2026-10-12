@@ -1,3 +1,12 @@
+---
+title: "zoom_to_feature_at_startup"
+category: tools
+tags: []
+since: ""
+status: active
+replaced_by:
+description: ""
+---
 ## Lizmap Web Client 3.6
 
 This feature is now deprecated since [3.6](https://www.3liz.com/en/news/lizmap-web-client-3-6.html)
@@ -24,3 +33,4 @@ The hash is built like this `#fid:[qgis_layer_id].[feature_unique_id]`. In the e
 ## Configuration
 
 If you only want to zoom to the feature at startup, and not show the feature popup, you can replace `var show_popup = true;` by `var show_popup = false;`
+

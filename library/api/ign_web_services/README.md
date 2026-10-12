@@ -1,3 +1,12 @@
+---
+title: "French IGN API"
+category: api
+tags: []
+since: ""
+status: active
+replaced_by:
+description: ""
+---
 # French IGN API
 
 Several JavaScript scripts have been published here.
@@ -27,3 +36,4 @@ This scripts allows to :
 ## Isochrone
 
 ![API isochrone](lizmap_javascript_ign_isochrone.gif)
+

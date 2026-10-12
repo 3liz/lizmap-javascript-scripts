@@ -1,3 +1,12 @@
+---
+title: "snapping_while_editing"
+category: tools
+tags: []
+since: ""
+status: active
+replaced_by:
+description: ""
+---
 Activate snapping
 ==================
 

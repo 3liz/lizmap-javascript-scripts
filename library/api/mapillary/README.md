@@ -1,3 +1,12 @@
+---
+title: "Mapillary"
+category: api
+tags: []
+since: ""
+status: active
+replaced_by:
+description: ""
+---
 # Mapillary
 
 https://user-images.githubusercontent.com/2145040/222394069-77bfdf4b-0843-4cfb-a849-abfef6166ea9.mp4
@@ -12,3 +21,4 @@ https://user-images.githubusercontent.com/2145040/222394069-77bfdf4b-0843-4cfb-a
 To use Mapillary in Lizmap:
 1. copy `mapillary.js` to the `media/js` directory of your project
 2. edit `mapillary.js` then replace `YOUR_MAPILLARY_TOKEN_HERE` with your mapillary access token
+

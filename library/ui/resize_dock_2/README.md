@@ -1,3 +1,12 @@
+---
+title: "Resize dock 2"
+category: ui
+tags: []
+since: ""
+status: active
+replaced_by:
+description: ""
+---
 # Resize dock 2
 
 An alternative implementation of the other script [resize dock with splitter](../resize_dock_with_splitter), using [interact.js](https://interactjs.io/).
@@ -9,3 +18,4 @@ Available for Lizmap Web Client:
 * 3.7
 * 3.8
 * 3.9
+

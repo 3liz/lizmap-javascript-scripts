@@ -2,6 +2,8 @@
 
 ![Lizmap logo](icon.png)
 
+Browse and filter every script in the **[online catalog](https://3liz.github.io/lizmap-javascript-scripts/)** - by category, tag and Lizmap Web Client version.
+
 You can use those JavaScript scripts to enhance Lizmap Web Client.
 Documentation about additional JavaScript is on
 [docs.lizmap.com](https://docs.lizmap.com/next/en/publish/customization/javascript.html)

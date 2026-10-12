@@ -1,3 +1,12 @@
+---
+title: "Connecteur Lizmap à Oxalis (https://web.operis.fr/)"
+category: api
+tags: []
+since: ""
+status: active
+replaced_by:
+description: ""
+---
 # Connecteur Lizmap à Oxalis (https://web.operis.fr/)
 
 Ces scripts permettent la communication entre Lizmap et Oxalis. Il vous faut au préalable disposer d'un projet QGIS avec des parcelles cadastrales (https://github.com/3liz/lizmap-cadastre-module).
@@ -23,3 +32,4 @@ Il vous sera aussi possible de :
 5. Afin de permettre l'implantation d'un dossier (nécessite le pont niveau 3, bouton en-dessous le bouton 2 sur la capture d'écran), il vous faut :
    1. Ajouter la table `vl_ox_sigdosparc_aos` en utilisant un foreign data wrapper pointant sur la base de donnée d'Oxalis et préparer la base local. Pour cela utiliser `sql/oxalis_implanter_dossier.sql` (à adapter)
    2. Ajouter la vue `dossier_oxalis` en édition dans votre projet Lizmap
+

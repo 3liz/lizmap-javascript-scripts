@@ -1,3 +1,12 @@
+---
+title: "Translation"
+category: translation
+tags: []
+since: ""
+status: active
+replaced_by:
+description: ""
+---
 # Translation
 
 ## Purpose
@@ -82,3 +91,4 @@ At the moment the script translates:
 * If something is not properly translated check the html selector (e.g. `$("div#header div#title h1")`), they can be
   different depending on your lizmap properties (e.g the container of the popup), or the json file.
 * For further details about the script see the comments in the code.
+

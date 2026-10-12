@@ -1,3 +1,12 @@
+---
+title: "refresh_layers_every_n_seconds"
+category: misc
+tags: []
+since: ""
+status: active
+replaced_by:
+description: ""
+---
 ## Description
 
 Refresh layers every N seconds.
@@ -15,3 +24,4 @@ Edit the script to configure the variables
 * `REFRESH_INTERVAL_MS` with the interval in milliseconds
 
 https://github.com/3liz/lizmap-javascript-scripts/assets/2145040/52f4bed8-415e-4d16-87c3-390bd13445d6
+

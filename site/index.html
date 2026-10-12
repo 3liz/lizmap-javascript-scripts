@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">  
+  <title>Lizmap JavaScript scripts</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="header-bar">
+      <h1>Lizmap JavaScript scripts</h1>
+      <select id="lang" aria-label="Language">
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+        <option value="es">Español</option>
+        <option value="it">Italiano</option>
+      </select>
+    </div>
+    <p class="sub">
+      <span data-i18n="subtitle">Snippet catalog</span> -
+      <a href="https://github.com/3liz/lizmap-javascript-scripts"
+         data-i18n="repo_link">GitHub repository</a>
+    </p>
+    <input id="q" type="search" autocomplete="off"
+           data-i18n-placeholder="search_placeholder"
+           placeholder="Search a script, a tag...">
+  </header>
+
+  <div class="layout">
+    <aside>
+      <section>
+        <h2 data-i18n="facet_category">Category</h2>
+        <div id="categories" class="facet"></div>
+      </section>
+      <section>
+        <h2 data-i18n="facet_tags">Tags</h2>
+        <div id="tags" class="facet"></div>
+      </section>
+      <section>
+        <label class="toggle">
+          <input type="checkbox" id="showFeaturedOnly">
+          <span data-i18n="toggle_featured">Featured only</span>
+        </label>
+        <label class="toggle">
+          <input type="checkbox" id="showDeprecated">
+          <span data-i18n="toggle_deprecated">Include deprecated scripts</span>
+        </label>
+      </section>
+      <button id="reset" type="button" data-i18n="reset">Reset filters</button>
+    </aside>
+
+    <main>
+      <div class="list-header">
+        <p id="count" class="count"></p>
+        <label class="sort">
+          <span data-i18n="sort_label">Sort by</span>
+          <select id="sort">
+            <option value="title" data-i18n="sort_title">Name (A-Z)</option>
+            <option value="updated-desc" data-i18n="sort_updated_desc">Recently updated</option>
+            <option value="updated-asc" data-i18n="sort_updated_asc">Least recently updated</option>
+          </select>
+        </label>
+      </div>
+      <ul id="list" class="cards"></ul>
+      <p id="empty" class="empty" hidden
+         data-i18n="empty">No script matches the filters.</p>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,3 +1,13 @@
+---
+title: "(FR) Panoramax"
+category: api
+tags: [api, opendata, panoramax]
+since: ""
+status: active
+featured: true
+replaced_by:
+description: "Permet d'afficher les traces et les photos provenant de Panoramax"
+---
 # (FR) Panoramax
 
 _English below_

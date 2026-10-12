@@ -1,3 +1,12 @@
+---
+title: "Background selector"
+category: ui
+tags: []
+since: ""
+status: active
+replaced_by:
+description: ""
+---
 # Background selector
 
 _(like on Google maps)_

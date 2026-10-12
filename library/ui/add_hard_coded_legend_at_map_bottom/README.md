@@ -1,3 +1,12 @@
+---
+title: "Show a hard-coded legend panel at the bottom of the map"
+category: ui
+tags: []
+since: ""
+status: active
+replaced_by:
+description: ""
+---
 # Show a hard-coded legend panel at the bottom of the map
 
 The script will show a small window with a **user-defined legend** at the bottom of the map.
@@ -67,3 +76,4 @@ var my_legend_items = [
 ```
 
 You can also configure the labels by updating the other variables.
+

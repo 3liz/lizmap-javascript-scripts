@@ -1,3 +1,12 @@
+---
+title: "Show some statistics on the selected features for some fields"
+category: tools
+tags: []
+since: ""
+status: active
+replaced_by:
+description: ""
+---
 # Show some statistics on the selected features for some fields
 
 The script will show a small window on the right side of the map with computed statistics on the current layers selected features.
@@ -53,3 +62,4 @@ You can also adapt the locales for the aggregated functions labels. At present, 
         'maximum': 'Maximum'
     }
 ```
+

@@ -1,3 +1,12 @@
+---
+title: "Interactive Step-by-Step Guided Tours"
+category: ui
+tags: []
+since: ""
+status: active
+replaced_by:
+description: ""
+---
 # Interactive Step-by-Step Guided Tours
 ![guided-tour](./demo.gif)
 ## Introduction
@@ -14,3 +23,4 @@ const tour = new Shepherd.Tour({
             classes: 'shepherd-theme-default',
 ``` 
 For detailed guidance and documentation on `shepherd.js`, refer to the official documentation at [shepherdjs.dev](https://shepherdjs.dev/).
+
