@@ -1,18 +1,26 @@
 /**
  * @license Mozilla Public License Version 2.0
  * This script has been developed by the "community"
- * There isn't any guarantee that this script will work on another version of Lizmap Web Client.
+ * Automatically expands the legend when a layer or group is checked, and collapses it when unchecked. Tested with Lizmap Web Client 3.9.
  */
 
 lizMap.events.on({
-    uicreated: function (e) {
-        $('#switcher-layers tr.liz-layer button').click(function(){
-            if ($(this).hasClass('checked') && $(this).parents('tr.collapsed').length === 1){
-                $(this).prev().click()
-            }
-            if (!$(this).hasClass('checked') && $(this).parents('tr.expanded').length === 1) {
-                $(this).prev().click()
-            }
-        });
+    uicreated: function () {
+        const layerTree = lizMap.mainLizmap.state.layerTree;
+
+        const toggleExpanded = (evt) => {
+            const item = layerTree.findTreeLayersAndGroups()
+                .find(tl => tl.name === evt.name);
+            if (!item) return;
+
+            const expand = !!evt.visibility;
+            item.expanded = expand;
+
+            // Second passage une fois que l'interface a fini de réagir au clic
+            setTimeout(() => { item.expanded = expand; }, 300);
+        };
+
+        layerTree.addListener(toggleExpanded, 'layer.visibility.changed');
+        layerTree.addListener(toggleExpanded, 'group.visibility.changed');
     }
 });
