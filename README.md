@@ -63,6 +63,7 @@ the script was written.
 * [Smart filter](./library/tools/smartfilter)
 * [Display statistics on the current layer selection](./library/tools/show_statistics_on_selection)
 * [Selection from a popup feature geometry](./library/tools/selection_from_popup_object_geometry)
+* [GeoTIFF export](./library/tools/geotiff_export), export the current map view as a georeferenced GeoTIFF file
 * Deprecated since LWC 3.6
   * [Zoom to feature at startup and show popup](./library/tools/zoom_to_feature_at_startup),
     now use the [native permalink](https://docs.lizmap.com/current/en/publish/configuration/permalink.html)
