@@ -209,7 +209,7 @@
                 option.textContent = item.label;
                 dpiSelect.appendChild(option);
             });
-            dpiSelect.value = '300';
+            dpiSelect.value = '150';
 
             Object.assign(dpiSelect.style, {
                 width: '100%',
