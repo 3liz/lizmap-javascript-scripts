@@ -39,6 +39,16 @@
             document.getElementById('lizmap-reopen-btn')?.remove();
 
             // =====================================================
+            // STATE VARIABLES (Moved up to avoid Temporal Dead Zone)
+            // =====================================================
+            let legendScale = 1;
+            let wmsServiceTitle = 'External WMS';
+            let wmsLayerTitles = {}; 
+            let addedWmsLayers = []; 
+            let activeLayerId = null;
+            let existingExternalGroups = {};
+
+            // =====================================================
             // CREATE FLOATING WINDOW
             // =====================================================
             const panel = document.createElement('div');
@@ -141,8 +151,6 @@
             content.appendChild(btnAddWms);
 
             // --- LEGEND PREVIEW SECTION ---
-            let legendScale = 1;
-
             const legendContainer = document.createElement('div');
             Object.assign(legendContainer.style, { display: 'none', marginTop: '10px', padding: '5px', background: '#ffffff', border: '1px solid #ccc', borderRadius: '4px' });
             
@@ -202,6 +210,7 @@
             }
 
             function zoomAtPoint(newScale, mouseX, mouseY) {
+                const oldScale = legendScale; // Fix: Save old scale before updating
                 const rect = legendBox.getBoundingClientRect();
                 const scrollLeft = legendBox.scrollLeft;
                 const scrollTop = legendBox.scrollTop;
@@ -213,8 +222,9 @@
                     const imgX = mouseX - rect.left + scrollLeft;
                     const imgY = mouseY - rect.top + scrollTop;
                     
-                    legendBox.scrollLeft = Math.max(0, (imgX * (newScale / legendScale)) - (mouseX - rect.left));
-                    legendBox.scrollTop = Math.max(0, (imgY * (newScale / legendScale)) - (mouseY - rect.top));
+                    const ratio = newScale / oldScale; // Fix: Use oldScale
+                    legendBox.scrollLeft = Math.max(0, (imgX * ratio) - (mouseX - rect.left));
+                    legendBox.scrollTop = Math.max(0, (imgY * ratio) - (mouseY - rect.top));
                 } else {
                     legendBox.scrollLeft = scrollLeft;
                     legendBox.scrollTop = scrollTop;
@@ -315,7 +325,6 @@
             btnReopen.innerHTML = '<i class="fa fa-map-o"></i>';
             btnReopen.title = 'Open Lizmap Extras';
             
-            // Initial style
             Object.assign(btnReopen.style, { 
                 position: 'fixed', 
                 top: '85px', 
@@ -334,7 +343,6 @@
                 transition: 'transform 0.1s ease'
             });
             
-            // Hover effect
             btnReopen.addEventListener('mouseover', () => {
                 btnReopen.style.transform = 'scale(1.1)';
                 btnReopen.style.background = '#43718c';
@@ -347,16 +355,12 @@
             document.body.appendChild(btnReopen);
 
             const hide = () => { 
-                // Get the current position of the panel before hiding it
                 const rect = panel.getBoundingClientRect();
-                
-                // Align with the RIGHT edge of the panel
                 const rightOffset = window.innerWidth - rect.right;
                 btnReopen.style.top = rect.top + 'px';
                 btnReopen.style.left = 'auto';
                 btnReopen.style.right = rightOffset + 'px';
                 
-                // Hide the panel and show the button
                 panel.style.display = 'none'; 
                 btnReopen.style.display = 'block'; 
             };
@@ -386,12 +390,6 @@
             // =====================================================
             // WMS LOGIC
             // =====================================================
-            let wmsServiceTitle = 'External WMS';
-            let wmsLayerTitles = {}; 
-            let addedWmsLayers = []; 
-            let activeLayerId = null;
-            let existingExternalGroups = {}; // Track groups by name
-
             btnLoadWms.addEventListener('click', async () => {
                 let url = inputUrl.value.trim();
                 if (!url) { alert('Please enter a URL.'); return; }
@@ -443,14 +441,14 @@
 
                     selectLayers.style.display = 'block';
                     btnAddWms.style.display = 'block';
-                    btnLoadWms.innerHTML = '<i class="fa fa-search"></i> Read Layers'; // Reset button text
+                    btnLoadWms.innerHTML = '<i class="fa fa-search"></i> Read Layers';
 
                 } catch (error) {
                     console.warn('CORS/Network Error:', error);
                     alert('Could not read layers automatically.\nYou can still type the Layer ID manually.');
                     selectLayers.style.display = 'none';
                     btnAddWms.style.display = 'block'; 
-                    btnLoadWms.innerHTML = '<i class="fa fa-search"></i> Read Layers'; // Keep button available for retry
+                    btnLoadWms.innerHTML = '<i class="fa fa-search"></i> Read Layers';
                     inputUrl.value = '';
                     inputManualLayer.value = '';
                 }
@@ -482,18 +480,21 @@
                                 legendScale = selected.scale || 1;
                                 updateLegendTransform(); 
                                 
-                                if (legendImg.complete) {
+                                // Fix: Use a temporary listener instead of overwriting onload
+                                const onLegendLoad = function() {
+                                    this.style.display = 'block';
+                                    legendTitle.innerHTML = '<i class="fa fa-search-plus"></i> Legend (scroll to zoom)';
+                                    legendControls.style.display = 'block';
+                                    updateLegendTransform(); 
                                     legendBox.scrollLeft = selected.scrollLeft || 0;
                                     legendBox.scrollTop = selected.scrollTop || 0;
+                                    legendImg.removeEventListener('load', onLegendLoad);
+                                };
+                                
+                                if (legendImg.complete) {
+                                    onLegendLoad.call(legendImg);
                                 } else {
-                                    legendImg.onload = function() {
-                                        this.style.display = 'block';
-                                        legendTitle.innerHTML = '<i class="fa fa-search-plus"></i> Legend (scroll to zoom)';
-                                        legendControls.style.display = 'block';
-                                        updateLegendTransform(); 
-                                        legendBox.scrollLeft = selected.scrollLeft || 0;
-                                        legendBox.scrollTop = selected.scrollTop || 0;
-                                    };
+                                    legendImg.addEventListener('load', onLegendLoad);
                                 }
                             } else {
                                 legendContainer.style.display = 'none';
@@ -525,7 +526,6 @@
                         groupName = new URL(url).hostname; 
                     }
 
-                    // Check if group already exists, if not create it
                     let extGroup;
                     if (existingExternalGroups[groupName]) {
                         extGroup = existingExternalGroups[groupName];
@@ -566,7 +566,7 @@
                         scale: 1,
                         scrollLeft: 0,
                         scrollTop: 0,
-                        groupName: groupName // Save group name for Clear All
+                        groupName: groupName 
                     });
                     
                     activeLayerId = finalId;
@@ -610,7 +610,6 @@
             btnClearAll.addEventListener('click', () => {
                 if (!confirm('Are you sure you want to remove all external layers?')) return;
 
-                // Get unique group names to remove
                 const groupsToRemove = new Set(addedWmsLayers.map(l => l.groupName));
 
                 groupsToRemove.forEach(groupName => {
@@ -621,12 +620,10 @@
                     }
                 });
 
-                // Reset internal state
                 addedWmsLayers = [];
                 activeLayerId = null;
-                existingExternalGroups = {}; // Clear group cache
+                existingExternalGroups = {}; 
                 
-                // Reset UI
                 opacityContainer.style.display = 'none';
                 layerListDiv.innerHTML = '';
                 legendContainer.style.display = 'none';
@@ -637,7 +634,6 @@
                 btnAddWms.style.display = 'none';
                 btnLoadWms.innerHTML = '<i class="fa fa-search"></i> Read Layers';
                 
-                // Force map redraw
                 olMap.renderSync();
                 
                 console.log('All external WMS layers cleared.');
