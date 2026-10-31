@@ -1,9 +1,10 @@
 # Lizmap Extras: GeoTIFF Export & External WMS Loader
 
 A floating panel with two tools for Lizmap Web Client 3.9+:
-
 1. **Export Map as GeoTIFF** — WYSIWYG georeferenced export with DPI selection.
 2. **Add External WMS Layer** — Load any WMS via GetCapabilities, with legend preview and opacity control.
+
+**The "Lizmap Extras" panel will appear automatically in the top-right corner of your map.**
 
 ## Features
 
@@ -27,10 +28,7 @@ A floating panel with two tools for Lizmap Web Client 3.9+:
 
 ## Usage
 
-1. Copy `lizmap_extras_3.9.js` to your Lizmap project's `media/js/` folder
-2. Add it to the project's JavaScript configuration
-3. A floating panel appears in the top-right corner
-4. Use the GeoTIFF section to export the current view, or the WMS section to add external layers
+Once the script is loaded in your Lizmap project, the panel will appear automatically. 
 
 ## Compatibility
 
@@ -51,11 +49,9 @@ Lizmap 3.9 exposes two OpenLayers instances:
 
 This script uses the OL10 instance for georeferencing and captures the `.ol-viewport canvas`.
 
-## Future Improvements
+## License
 
-- Multi-selection of WMS layers via checkboxes
-- Persistence of external layers and opacity via `localStorage`
-- Inclusion of the legend inside the exported GeoTIFF
+Mozilla Public License 2.0
 
 ## License
 
