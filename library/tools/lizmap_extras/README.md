@@ -23,7 +23,7 @@ A floating panel with two tools for Lizmap Web Client 3.9+:
 
 ## Screenshot
 
-![Lizmap Extras panel](screenshot.png)
+![Lizmap Extras panel](lizmap-extras.png)
 
 ## Usage
 
