@@ -117,7 +117,7 @@
 
             // --- WMS SECTION ---
             const hr = document.createElement('hr');
-            Object.assign(hr.style, { border: '0', borderTop: '1px solid #eee', margin: '10px 0' });
+            Object.assign(hr.style, { border: '0', borderTop: '1px solid #eee', margin: '0px 0' });
             content.appendChild(hr);
 
             const infoWms = document.createElement('div');
@@ -128,7 +128,7 @@
             const inputUrl = document.createElement('input');
             inputUrl.type = 'text';
             inputUrl.placeholder = 'WMS URL (e.g., https://...)';
-            Object.assign(inputUrl.style, { width: '100%', padding: '6px', marginBottom: '8px', borderRadius: '4px', border: '1px solid #ccc', boxSizing: 'border-box', fontSize: '11px' });
+			Object.assign(inputUrl.style, { width: '100%', padding: '6px', marginBottom: '8px', borderRadius: '4px', border: '1px solid #ccc', boxSizing: 'border-box', fontSize: '11px' });
             content.appendChild(inputUrl);
 
             const inputManualLayer = document.createElement('input');
@@ -416,28 +416,61 @@
 			
 			hide();
 
-            // Drag
+            // =====================================================
+            // DRAG LOGIC (Mouse & Touch)
+            // =====================================================
             let dragging = false, startX, startY, posX, posY;
-			header.addEventListener('mousedown', (e) => {
-				if (e.target.closest('button')) return;
-				dragging = true;
-				const rect = panel.getBoundingClientRect();
-				startX = e.clientX; startY = e.clientY;
-				posX = rect.left; posY = rect.top;
-				// Fix the panel at its current visual position BEFORE removing right/bottom
-				panel.style.left = rect.left + 'px';
-				panel.style.top = rect.top + 'px';
-				panel.style.right = 'auto';
-				panel.style.bottom = 'auto';
-				e.preventDefault();
-			});
-            document.addEventListener('mousemove', (e) => {
-                if (!dragging) return;
-                panel.style.left = Math.max(0, Math.min(posX + e.clientX - startX, window.innerWidth - panel.offsetWidth)) + 'px';
-                panel.style.top = Math.max(0, Math.min(posY + e.clientY - startY, window.innerHeight - panel.offsetHeight)) + 'px';
-            });
-            document.addEventListener('mouseup', () => dragging = false);
 
+            function startDrag(clientX, clientY) {
+                dragging = true;
+                const rect = panel.getBoundingClientRect();
+                startX = clientX; startY = clientY;
+                posX = rect.left; posY = rect.top;
+                // Fix the panel at its current visual position BEFORE removing right/bottom
+                panel.style.left = rect.left + 'px';
+                panel.style.top = rect.top + 'px';
+                panel.style.right = 'auto';
+                panel.style.bottom = 'auto';
+            }
+
+            function moveDrag(clientX, clientY) {
+                if (!dragging) return;
+                panel.style.left = Math.max(0, Math.min(posX + clientX - startX, window.innerWidth - panel.offsetWidth)) + 'px';
+                panel.style.top = Math.max(0, Math.min(posY + clientY - startY, window.innerHeight - panel.offsetHeight)) + 'px';
+            }
+
+            function endDrag() {
+                dragging = false;
+            }
+
+            // Mouse events (Desktop)
+            header.addEventListener('mousedown', (e) => {
+                if (e.target.closest('button')) return;
+                startDrag(e.clientX, e.clientY);
+                e.preventDefault();
+            });
+            document.addEventListener('mousemove', (e) => moveDrag(e.clientX, e.clientY));
+            document.addEventListener('mouseup', endDrag);
+
+            // Touch events (Mobile & Tablets)
+            header.addEventListener('touchstart', (e) => {
+                if (e.target.closest('button')) return;
+                // Uses the first finger touch
+                const touch = e.touches[0];
+                startDrag(touch.clientX, touch.clientY);
+                // Prevents scrolling the map when dragging the window
+                e.preventDefault(); 
+            }, { passive: false });
+
+            document.addEventListener('touchmove', (e) => {
+                if (!dragging) return;
+                const touch = e.touches[0];
+                moveDrag(touch.clientX, touch.clientY);
+                e.preventDefault(); // Prevents page scrolling
+            }, { passive: false });
+
+            document.addEventListener('touchend', endDrag);
+			
             // =====================================================
             // WMS LOGIC
             // =====================================================
@@ -446,7 +479,7 @@
                 if (!url) { alert('Please enter a URL.'); return; }
                 
                 // Preserve MapServer ?map= parameter
-                if (url.includes('?') && !url.includes('map=')) {
+               if (url.includes('?') && !url.toLowerCase().includes('map=')) {
                     url = url.split('?')[0];
                 }
                 
@@ -550,8 +583,17 @@
                     btnLoadWms.innerHTML = '<i class="fa fa-search"></i> Read Layers';
 
                 } catch (error) {
-                    console.warn('CORS/Network Error:', error);
-                    alert('Could not read layers automatically.\nYou can still type the Layer ID manually.');
+                    console.warn('WMS Read Error:', error);
+                    
+                    // Check if it's a Network/CORS issue (fetch failed completely) 
+                    // or an HTTP error (like 404 or 500 from the server)
+                    let errorMsg = error.message;
+                    if (errorMsg === 'Failed to fetch' || errorMsg.includes('NetworkError')) {
+                        errorMsg = 'Could not connect to the WMS server. This is usually caused by CORS restrictions (the server does not allow browser access) or an invalid URL.';
+                    }
+
+                    alert('Could not read layers automatically:\n\n' + errorMsg + '\n\nYou can still try to type the Layer ID manually in the field below.');
+                    
                     selectLayers.style.display = 'none';
                     btnAddWms.style.display = 'block'; 
                     btnLoadWms.innerHTML = '<i class="fa fa-search"></i> Read Layers';
@@ -580,7 +622,23 @@
                             opacitySlider.value = selected.layer.getOpacity();
                             document.getElementById('opacity-val').innerText = Math.round(selected.layer.getOpacity() * 100) + '%';
                             
-							if (selected.legendUrl) {
+							if (selected.classes && selected.classes.length > 0) {
+                                // HTML Fallback Legend
+                                let html = '<div style="padding: 5px; font-size: 11px;">';
+                                selected.classes.forEach(cls => {
+                                    html += `<div style="display: flex; align-items: center; margin-bottom: 3px;">
+                                                <div style="width: 15px; height: 15px; background: ${cls.color}; border: 1px solid #999; margin-right: 5px;"></div>
+                                                <span>${cls.label}</span>
+                                             </div>`;
+                                });
+                                html += '</div>';
+                                
+                                legendBox.innerHTML = html;
+                                legendContainer.style.display = 'block';
+                                legendTitle.innerText = 'Legend';
+                                legendControls.style.display = 'none';
+                            } else if (selected.legendUrl) {
+                                // Image Legend
 								if (legendImg.parentElement !== legendBox) {
 									legendBox.innerHTML = '';
 									legendBox.appendChild(legendImg);
@@ -645,7 +703,7 @@
                 let url = inputUrl.value.trim();
                 
                 // Preserve MapServer ?map= parameter
-                if (url.includes('?') && !url.includes('map=')) {
+                if (url.includes('?') && !url.toLowerCase().includes('map=')) {
                     url = url.split('?')[0];
                 }
 
@@ -720,7 +778,7 @@
                         title: finalId, 
                         layer: layer, 
                         legendUrl: legendUrl,
-						scale: 1,
+						classes: wmsLayerClasses[layerId], // Store classes for the HTML fallback legend
 						scrollRatioX: 0,
 						scrollRatioY: 0,
                         groupName: groupName 
@@ -728,7 +786,6 @@
                     
                     activeLayerId = finalId;
 
-					// Instead of loading the image (which MapServer does not generate), draw the legend:
 					// Reset legend zoom/scroll for the new layer
 					legendScale = 1;
 					legendBox.scrollLeft = 0;
