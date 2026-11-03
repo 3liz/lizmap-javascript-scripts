@@ -59,6 +59,7 @@ the script was written.
 * [Dynamic form field visibility](./library/tools/dynamic_form_field_visibility)
 * [Group time tool](./library/tools/group_time_tool), Display a temporal layers' group as a GIF and generate it
 * [Point buffer on map](./library/tools/point_buffer_on_map) Display a buffer on the map
+* [Click buffer on map](./library/tools/click_buffer_on_map) Draw a fixed-radius circle at each map click
 * [Simple filter](./library/tools/simplefilter)
 * [Smart filter](./library/tools/smartfilter)
 * [Display statistics on the current layer selection](./library/tools/show_statistics_on_selection)
