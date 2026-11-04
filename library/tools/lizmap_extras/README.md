@@ -56,3 +56,6 @@ This script uses the OL10 instance for georeferencing and captures the `.ol-view
 ## License
 
 Mozilla Public License 2.0
+
+---
+Built with AI assistance.
