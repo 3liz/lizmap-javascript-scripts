@@ -2,7 +2,7 @@
 
 Adds a search field above the legend to filter the layers by their title.
 
-![Legend layer filter](./legend_layer_filter.png)
+![Legend layer filter](./legend_layer_filter.PNG)
 
 * Shows the layers whose title contains the typed text, and the groups containing them.
 * If the text matches a group name, the whole content of the group is shown.
