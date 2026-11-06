@@ -85,6 +85,7 @@ the script was written.
 * [Resize Dock with splitter 2 (interact.js)](./library/ui/resize_dock_2)
 * [Simplify export options](./library/ui/simplify-export-options) WfsOutputExtension
 * [Export attribute table to CSV](./library/ui/export-attributetable-csv)
+* [Attribute table column resize](./library/ui/attribute_table_column_resize), resize the attribute table columns by dragging the headers
 * [Add button to toggle dock full width](./library/ui/add_dock_resize_button)
 * [Add a hard-coded legend at the bottom of the map](./library/ui/add_hard_coded_legend_at_map_bottom)
 * [Show a global legend image for all visible layers](./library/ui/show_global_legend_image)
