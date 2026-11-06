@@ -595,10 +595,9 @@
                     alert('Could not read layers automatically:\n\n' + errorMsg + '\n\nYou can still try to type the Layer ID manually in the field below.');
                     
                     selectLayers.style.display = 'none';
+					inputManualLayer.style.display = 'block';
                     btnAddWms.style.display = 'block'; 
                     btnLoadWms.innerHTML = '<i class="fa fa-search"></i> Read Layers';
-                    inputUrl.value = '';
-                    inputManualLayer.value = '';
                 }
             });
 
