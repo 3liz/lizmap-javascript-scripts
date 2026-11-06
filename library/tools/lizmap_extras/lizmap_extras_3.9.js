@@ -42,11 +42,11 @@
             // STATE VARIABLES (Moved up to avoid Temporal Dead Zone)
             // =====================================================
             let legendScale = 1;
-			let currentLegendLoadHandler = null;
+            let currentLegendLoadHandler = null;
             let wmsServiceTitle = 'External WMS';
             let wmsLayerTitles = {}; 
-			let wmsLayerClasses = {};
-			let wmsLayerBounds = {}; 
+            let wmsLayerClasses = {};
+            let wmsLayerBounds = {}; 
             let addedWmsLayers = []; 
             let activeLayerId = null;
             let existingExternalGroups = {};
@@ -117,7 +117,7 @@
 
             // --- WMS SECTION ---
             const hr = document.createElement('hr');
-            Object.assign(hr.style, { border: '0', borderTop: '1px solid #eee', margin: '0px 0' });
+            Object.assign(hr.style, { border: '0', borderTop: '1px solid #eee', margin: '10px 0' });
             content.appendChild(hr);
 
             const infoWms = document.createElement('div');
@@ -128,7 +128,8 @@
             const inputUrl = document.createElement('input');
             inputUrl.type = 'text';
             inputUrl.placeholder = 'WMS URL (e.g., https://...)';
-			Object.assign(inputUrl.style, { width: '100%', padding: '6px', marginBottom: '8px', borderRadius: '4px', border: '1px solid #ccc', boxSizing: 'border-box', fontSize: '11px' });
+			inputUrl.value = '';
+            Object.assign(inputUrl.style, { width: '100%', padding: '6px', marginBottom: '8px', borderRadius: '4px', border: '1px solid #ccc', boxSizing: 'border-box', fontSize: '11px' });
             content.appendChild(inputUrl);
 
             const inputManualLayer = document.createElement('input');
@@ -152,20 +153,20 @@
             btnAddWms.addEventListener('mouseover', () => { btnAddWms.style.background = '#365b71'; });
             btnAddWms.addEventListener('mouseout', () => { btnAddWms.style.background = '#43718c'; });
             content.appendChild(btnAddWms);
-			
-			// --- ZOOM TO LAYER OPTION ---
-			const chkZoomLabel = document.createElement('label');
-			Object.assign(chkZoomLabel.style, { display: 'flex', alignItems: 'center', fontSize: '11px', color: '#555', marginBottom: '10px', cursor: 'pointer' });
+            
+            // --- ZOOM TO LAYER OPTION ---
+            const chkZoomLabel = document.createElement('label');
+            Object.assign(chkZoomLabel.style, { display: 'flex', alignItems: 'center', fontSize: '11px', color: '#555', marginBottom: '10px', cursor: 'pointer' });
 
-			const chkZoomToLayer = document.createElement('input');
-			chkZoomToLayer.type = 'checkbox';
-			chkZoomToLayer.checked = false; // default: off (current behaviour)
-			Object.assign(chkZoomToLayer.style, { marginRight: '6px' });
+            const chkZoomToLayer = document.createElement('input');
+            chkZoomToLayer.type = 'checkbox';
+            chkZoomToLayer.checked = false; // default: off (current behaviour)
+            Object.assign(chkZoomToLayer.style, { marginRight: '6px' });
 
-			chkZoomLabel.appendChild(chkZoomToLayer);
-			chkZoomLabel.appendChild(document.createTextNode('Zoom to layer on add'));
-			content.appendChild(chkZoomLabel);
-			
+            chkZoomLabel.appendChild(chkZoomToLayer);
+            chkZoomLabel.appendChild(document.createTextNode('Zoom to layer on add'));
+            content.appendChild(chkZoomLabel);
+            
             // --- LEGEND PREVIEW SECTION ---
             const legendContainer = document.createElement('div');
             Object.assign(legendContainer.style, { display: 'none', marginTop: '10px', padding: '5px', background: '#ffffff', border: '1px solid #ccc', borderRadius: '4px' });
@@ -225,41 +226,41 @@
                 legendImg.style.height = 'auto'; 
             }
 
-			function zoomAtPoint(newScale, mouseX, mouseY) {
-				const oldScale = legendScale;
-				const rect = legendBox.getBoundingClientRect();
-				const scrollLeft = legendBox.scrollLeft;
-				const scrollTop = legendBox.scrollTop;
-				
-				legendScale = newScale;
-				updateLegendTransform();
-				
-				if (mouseX !== undefined && mouseY !== undefined) {
-					const imgX = mouseX - rect.left + scrollLeft;
-					const imgY = mouseY - rect.top + scrollTop;
-					
-					const ratio = newScale / oldScale;
-					legendBox.scrollLeft = Math.max(0, (imgX * ratio) - (mouseX - rect.left));
-					legendBox.scrollTop = Math.max(0, (imgY * ratio) - (mouseY - rect.top));
-				} else {
-					// No mouse anchor (buttons +/−): keep the center of the visible area stable
-					const ratio = newScale / oldScale;
-					const centerX = scrollLeft + (rect.width / 2);
-					const centerY = scrollTop + (rect.height / 2);
-					legendBox.scrollLeft = Math.max(0, (centerX * ratio) - (rect.width / 2));
-					legendBox.scrollTop = Math.max(0, (centerY * ratio) - (rect.height / 2));
-				}
+            function zoomAtPoint(newScale, mouseX, mouseY) {
+                const oldScale = legendScale;
+                const rect = legendBox.getBoundingClientRect();
+                const scrollLeft = legendBox.scrollLeft;
+                const scrollTop = legendBox.scrollTop;
+                
+                legendScale = newScale;
+                updateLegendTransform();
+                
+                if (mouseX !== undefined && mouseY !== undefined) {
+                    const imgX = mouseX - rect.left + scrollLeft;
+                    const imgY = mouseY - rect.top + scrollTop;
+                    
+                    const ratio = newScale / oldScale;
+                    legendBox.scrollLeft = Math.max(0, (imgX * ratio) - (mouseX - rect.left));
+                    legendBox.scrollTop = Math.max(0, (imgY * ratio) - (mouseY - rect.top));
+                } else {
+                    // No mouse anchor (buttons +/−): keep the center of the visible area stable
+                    const ratio = newScale / oldScale;
+                    const centerX = scrollLeft + (rect.width / 2);
+                    const centerY = scrollTop + (rect.height / 2);
+                    legendBox.scrollLeft = Math.max(0, (centerX * ratio) - (rect.width / 2));
+                    legendBox.scrollTop = Math.max(0, (centerY * ratio) - (rect.height / 2));
+                }
 
-				// Persist scale/scroll for the active layer (so +/− buttons keep state)
-				const selected = addedWmsLayers.find(l => l.id === activeLayerId);
-				if (selected) {
-				selected.scale = legendScale;
-				const maxY = Math.max(1, legendBox.scrollHeight - legendBox.clientHeight);
-				const maxX = Math.max(1, legendBox.scrollWidth - legendBox.clientWidth);
-				selected.scrollRatioY = legendBox.scrollTop / maxY;
-				selected.scrollRatioX = legendBox.scrollLeft / maxX;
-				}
-			}
+                // Persist scale/scroll for the active layer (so +/− buttons keep state)
+                const selected = addedWmsLayers.find(l => l.id === activeLayerId);
+                if (selected) {
+                    selected.scale = legendScale;
+                    const maxY = Math.max(1, legendBox.scrollHeight - legendBox.clientHeight);
+                    const maxX = Math.max(1, legendBox.scrollWidth - legendBox.clientWidth);
+                    selected.scrollRatioY = legendBox.scrollTop / maxY;
+                    selected.scrollRatioX = legendBox.scrollLeft / maxX;
+                }
+            }
 
             btnZoomIn.addEventListener('click', () => { zoomAtPoint(legendScale + 0.2); });
             btnZoomOut.addEventListener('click', () => { zoomAtPoint(Math.max(0.2, legendScale - 0.2)); });
@@ -272,9 +273,9 @@
                 
                 const selected = addedWmsLayers.find(l => l.id === activeLayerId);
                 if (selected) {
-					selected.scale = 1;
-					selected.scrollRatioY = 0;
-					selected.scrollRatioX = 0;
+                    selected.scale = 1;
+                    selected.scrollRatioY = 0;
+                    selected.scrollRatioX = 0;
                 }
             });
 
@@ -299,25 +300,25 @@
                 
                 const selected = addedWmsLayers.find(l => l.id === activeLayerId);
                 if (selected) {
-					selected.scale = legendScale;
-					const maxY = Math.max(1, legendBox.scrollHeight - legendBox.clientHeight);
-					const maxX = Math.max(1, legendBox.scrollWidth - legendBox.clientWidth);
-					selected.scrollRatioY = legendBox.scrollTop / maxY;
-					selected.scrollRatioX = legendBox.scrollLeft / maxX;
+                    selected.scale = legendScale;
+                    const maxY = Math.max(1, legendBox.scrollHeight - legendBox.clientHeight);
+                    const maxX = Math.max(1, legendBox.scrollWidth - legendBox.clientWidth);
+                    selected.scrollRatioY = legendBox.scrollTop / maxY;
+                    selected.scrollRatioX = legendBox.scrollLeft / maxX;
                 }
             }, { passive: false });
-			
-			legendBox.addEventListener('scroll', () => {
-				const selected = addedWmsLayers.find(l => l.id === activeLayerId);
-				if (selected) {
-					const maxY = Math.max(1, legendBox.scrollHeight - legendBox.clientHeight);
-					const maxX = Math.max(1, legendBox.scrollWidth - legendBox.clientWidth);
-					selected.scrollRatioY = legendBox.scrollTop / maxY;
-					selected.scrollRatioX = legendBox.scrollLeft / maxX;
-					selected.scale = legendScale;
-				}
-			});
-			
+            
+            legendBox.addEventListener('scroll', () => {
+                const selected = addedWmsLayers.find(l => l.id === activeLayerId);
+                if (selected) {
+                    const maxY = Math.max(1, legendBox.scrollHeight - legendBox.clientHeight);
+                    const maxX = Math.max(1, legendBox.scrollWidth - legendBox.clientWidth);
+                    selected.scrollRatioY = legendBox.scrollTop / maxY;
+                    selected.scrollRatioX = legendBox.scrollLeft / maxX;
+                    selected.scale = legendScale;
+                }
+            });
+            
             // --- OPACITY CONTROL SECTION ---
             const opacityContainer = document.createElement('div');
             Object.assign(opacityContainer.style, { display: 'none', marginTop: '12px', padding: '10px', background: '#f8f9fa', borderRadius: '4px', border: '1px solid #eee' });
@@ -413,8 +414,8 @@
                 panel.style.display = 'block'; 
                 btnReopen.style.display = 'none'; 
             });
-			
-			hide();
+            
+            hide();
 
             // =====================================================
             // DRAG LOGIC (Mouse & Touch)
@@ -470,7 +471,7 @@
             }, { passive: false });
 
             document.addEventListener('touchend', endDrag);
-			
+            
             // =====================================================
             // WMS LOGIC
             // =====================================================
@@ -488,8 +489,8 @@
 
                 btnLoadWms.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Reading...';
                 wmsLayerTitles = {}; 
-				wmsLayerClasses = {}; 
-				wmsLayerBounds = {};
+                wmsLayerClasses = {}; 
+                wmsLayerBounds = {};
                 
                 try {
                     const response = await fetch(capabilitiesUrl);
@@ -510,72 +511,72 @@
                     if (allLayerNodes.length === 0) throw new Error('No layers found.');
 
                     selectLayers.innerHTML = '';
-					const layerOptions = [];
+                    const layerOptions = [];
                     let validLayersCount = 0;
 
-					allLayerNodes.forEach(node => {
-						const nameNode = node.querySelector(':scope > Name');
+                    allLayerNodes.forEach(node => {
+                        const nameNode = node.querySelector(':scope > Name');
 
-						if (nameNode) {
-							const name = nameNode.textContent.trim();
-							const titleNode = node.querySelector(':scope > Title');
-							const title = titleNode ? titleNode.textContent.trim() : name;
+                        if (nameNode) {
+                            const name = nameNode.textContent.trim();
+                            const titleNode = node.querySelector(':scope > Title');
+                            const title = titleNode ? titleNode.textContent.trim() : name;
 
-							wmsLayerTitles[name] = title;
+                            wmsLayerTitles[name] = title;
 
-							// Read layer bounding box for "zoom to layer"
-							const bbNode = node.querySelector(':scope > BoundingBox');
-							if (bbNode) {
-								const crs = bbNode.getAttribute('CRS') || '';
-								const minx = parseFloat(bbNode.getAttribute('minx'));
-								const miny = parseFloat(bbNode.getAttribute('miny'));
-								const maxx = parseFloat(bbNode.getAttribute('maxx'));
-								const maxy = parseFloat(bbNode.getAttribute('maxy'));
-								if (!isNaN(minx) && !isNaN(miny) && !isNaN(maxx) && !isNaN(maxy)) {
-									// For EPSG:4326 (and other geographic CRS in WMS 1.3.0), axis order is lat,lon → swap to lon,lat
-									const isGeographic = /4326|4258|4269|4230/i.test(crs);
-									const extent = isGeographic
-										? [miny, minx, maxy, maxx]   // lon,lat
-										: [minx, miny, maxx, maxy];
-									wmsLayerBounds[name] = { crs: crs, extent: extent };
-								}
-							}
-							
-							// Extract classes (colors and names) for the manual legend
-							const classNodes = node.querySelectorAll(':scope > Class');
-							if (classNodes.length > 0) {
-								wmsLayerClasses[name] = [];
-								classNodes.forEach(classNode => {
-									const classNameNode = classNode.querySelector(':scope > Name');
-									const colorNode = classNode.querySelector(':scope > Style > Color');
+                            // Read layer bounding box for "zoom to layer"
+                            const bbNode = node.querySelector(':scope > BoundingBox');
+                            if (bbNode) {
+                                const crs = bbNode.getAttribute('CRS') || '';
+                                const minx = parseFloat(bbNode.getAttribute('minx'));
+                                const miny = parseFloat(bbNode.getAttribute('miny'));
+                                const maxx = parseFloat(bbNode.getAttribute('maxx'));
+                                const maxy = parseFloat(bbNode.getAttribute('maxy'));
+                                if (!isNaN(minx) && !isNaN(miny) && !isNaN(maxx) && !isNaN(maxy)) {
+                                    // For EPSG:4326 (and other geographic CRS in WMS 1.3.0), axis order is lat,lon → swap to lon,lat
+                                    const isGeographic = /4326|4258|4269|4230/i.test(crs);
+                                    const extent = isGeographic
+                                        ? [miny, minx, maxy, maxx]   // lon,lat
+                                        : [minx, miny, maxx, maxy];
+                                    wmsLayerBounds[name] = { crs: crs, extent: extent };
+                                }
+                            }
+                            
+                            // Extract classes (colors and names) for the manual legend
+                            const classNodes = node.querySelectorAll(':scope > Class');
+                            if (classNodes.length > 0) {
+                                wmsLayerClasses[name] = [];
+                                classNodes.forEach(classNode => {
+                                    const classNameNode = classNode.querySelector(':scope > Name');
+                                    const colorNode = classNode.querySelector(':scope > Style > Color');
 
-									if (classNameNode) {
-										let color = '#ccc'; // Default color
-										if (colorNode) {
-											// Convert MapServer RGB values to HEX (e.g., 124 165 209 -> #7ca5d1)
-											const rgb = colorNode.textContent.split(' ');
-											if (rgb.length === 3) {
-												color = '#' + parseInt(rgb[0]).toString(16).padStart(2, '0') +
-																parseInt(rgb[1]).toString(16).padStart(2, '0') +
-																parseInt(rgb[2]).toString(16).padStart(2, '0');
-											}
-										}
-										wmsLayerClasses[name].push({ label: classNameNode.textContent.trim(), color: color });
-									}
-								});
-							}
+                                    if (classNameNode) {
+                                        let color = '#ccc'; // Default color
+                                        if (colorNode) {
+                                            // Convert MapServer RGB values to HEX (e.g., 124 165 209 -> #7ca5d1)
+                                            const rgb = colorNode.textContent.split(' ');
+                                            if (rgb.length === 3) {
+                                                color = '#' + parseInt(rgb[0]).toString(16).padStart(2, '0') +
+                                                                parseInt(rgb[1]).toString(16).padStart(2, '0') +
+                                                                parseInt(rgb[2]).toString(16).padStart(2, '0');
+                                            }
+                                        }
+                                        wmsLayerClasses[name].push({ label: classNameNode.textContent.trim(), color: color });
+                                    }
+                                });
+                            }
 
-							const opt = document.createElement('option');
-							opt.value = name;
-							opt.textContent = title;
-							layerOptions.push({ title, opt });
-							validLayersCount++;
-						}
-					});
+                            const opt = document.createElement('option');
+                            opt.value = name;
+                            opt.textContent = title;
+                            layerOptions.push({ title, opt });
+                            validLayersCount++;
+                        }
+                    });
 
-					layerOptions.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
-					layerOptions.forEach(item => selectLayers.appendChild(item.opt));
-					
+                    layerOptions.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
+                    layerOptions.forEach(item => selectLayers.appendChild(item.opt));
+                    
                     if (validLayersCount === 0) throw new Error('No valid layers found.');
 
                     selectLayers.style.display = 'block';
@@ -595,7 +596,7 @@
                     alert('Could not read layers automatically:\n\n' + errorMsg + '\n\nYou can still try to type the Layer ID manually in the field below.');
                     
                     selectLayers.style.display = 'none';
-					inputManualLayer.style.display = 'block';
+                    inputManualLayer.style.display = 'block';
                     btnAddWms.style.display = 'block'; 
                     btnLoadWms.innerHTML = '<i class="fa fa-search"></i> Read Layers';
                 }
@@ -621,7 +622,7 @@
                             opacitySlider.value = selected.layer.getOpacity();
                             document.getElementById('opacity-val').innerText = Math.round(selected.layer.getOpacity() * 100) + '%';
                             
-							if (selected.classes && selected.classes.length > 0) {
+                            if (selected.classes && selected.classes.length > 0) {
                                 // HTML Fallback Legend
                                 let html = '<div style="padding: 5px; font-size: 11px;">';
                                 selected.classes.forEach(cls => {
@@ -638,48 +639,48 @@
                                 legendControls.style.display = 'none';
                             } else if (selected.legendUrl) {
                                 // Image Legend
-								if (legendImg.parentElement !== legendBox) {
-									legendBox.innerHTML = '';
-									legendBox.appendChild(legendImg);
-									legendBox.scrollLeft = 0;
-									legendBox.scrollTop = 0;
-								}
+                                if (legendImg.parentElement !== legendBox) {
+                                    legendBox.innerHTML = '';
+                                    legendBox.appendChild(legendImg);
+                                    legendBox.scrollLeft = 0;
+                                    legendBox.scrollTop = 0;
+                                }
 
-								if (currentLegendLoadHandler) {
-									legendImg.removeEventListener('load', currentLegendLoadHandler);
-									currentLegendLoadHandler = null;
-								}
-								legendImg.src = selected.legendUrl;
+                                if (currentLegendLoadHandler) {
+                                    legendImg.removeEventListener('load', currentLegendLoadHandler);
+                                    currentLegendLoadHandler = null;
+                                }
+                                legendImg.src = selected.legendUrl;
                                 legendContainer.style.display = 'block';
                                 legendScale = selected.scale || 1;
                                 updateLegendTransform(); 
                                 
-								const onLegendLoad = function() {
-									// Abort if the user already switched to another layer
-									if (activeLayerId !== layerObj.id) {
-										legendImg.removeEventListener('load', onLegendLoad);
-										return;
-									}
-									this.style.display = 'block';
-									legendTitle.innerHTML = '<i class="fa fa-search-plus"></i> Legend (scroll to zoom)';
-									legendControls.style.display = 'block';
-									updateLegendTransform(); 
-									void legendBox.scrollWidth;
-									void legendBox.scrollHeight;
-									const maxY = Math.max(1, legendBox.scrollHeight - legendBox.clientHeight);
-									const maxX = Math.max(1, legendBox.scrollWidth - legendBox.clientWidth);
-									legendBox.scrollLeft = (selected.scrollRatioX || 0) * maxX;
-									legendBox.scrollTop = (selected.scrollRatioY || 0) * maxY;
-									legendImg.removeEventListener('load', onLegendLoad);
-									currentLegendLoadHandler = null;
-								};
-								
-								if (legendImg.complete) {
-									onLegendLoad.call(legendImg);
-								} else {
-									currentLegendLoadHandler = onLegendLoad;
-									legendImg.addEventListener('load', onLegendLoad);
-								}
+                                const onLegendLoad = function() {
+                                    // Abort if the user already switched to another layer
+                                    if (activeLayerId !== layerObj.id) {
+                                        legendImg.removeEventListener('load', onLegendLoad);
+                                        return;
+                                    }
+                                    this.style.display = 'block';
+                                    legendTitle.innerHTML = '<i class="fa fa-search-plus"></i> Legend (scroll to zoom)';
+                                    legendControls.style.display = 'block';
+                                    updateLegendTransform(); 
+                                    void legendBox.scrollWidth;
+                                    void legendBox.scrollHeight;
+                                    const maxY = Math.max(1, legendBox.scrollHeight - legendBox.clientHeight);
+                                    const maxX = Math.max(1, legendBox.scrollWidth - legendBox.clientWidth);
+                                    legendBox.scrollLeft = (selected.scrollRatioX || 0) * maxX;
+                                    legendBox.scrollTop = (selected.scrollRatioY || 0) * maxY;
+                                    legendImg.removeEventListener('load', onLegendLoad);
+                                    currentLegendLoadHandler = null;
+                                };
+                                
+                                if (legendImg.complete) {
+                                    onLegendLoad.call(legendImg);
+                                } else {
+                                    currentLegendLoadHandler = onLegendLoad;
+                                    legendImg.addEventListener('load', onLegendLoad);
+                                }
                             } else {
                                 legendContainer.style.display = 'none';
                             }
@@ -744,27 +745,27 @@
                         extGroup.itemState.setName(groupName);
                     }
 
-					// Zoom to layer extent if available (only if enabled by the user)
-					if (chkZoomToLayer.checked) {
-						const bounds = wmsLayerBounds[layerId];
-						if (bounds && bounds.extent) {
-							try {
-								const mapProj = olMap.getView().getProjection().getCode();
-								let extent = bounds.extent;
-								const fromCrs = bounds.crs.match(/EPSG:(\d+)/i);
-								if (fromCrs) {
-									const from = 'EPSG:' + fromCrs[1];
-									if (from !== mapProj) {
-										extent = lizMap.ol.proj.transformExtent(extent, from, mapProj);
-									}
-								}
-								olMap.getView().fit(extent, { padding: [50, 50, 50, 50], duration: 800, maxZoom: 18 });
-							} catch (e) {
-								console.warn('Zoom to layer failed:', e);
-							}
-						}
-					}
-					
+                    // Zoom to layer extent if available (only if enabled by the user)
+                    if (chkZoomToLayer.checked) {
+                        const bounds = wmsLayerBounds[layerId];
+                        if (bounds && bounds.extent) {
+                            try {
+                                const mapProj = olMap.getView().getProjection().getCode();
+                                let extent = bounds.extent;
+                                const fromCrs = bounds.crs.match(/EPSG:(\d+)/i);
+                                if (fromCrs) {
+                                    const from = 'EPSG:' + fromCrs[1];
+                                    if (from !== mapProj) {
+                                        extent = lizMap.ol.proj.transformExtent(extent, from, mapProj);
+                                    }
+                                }
+                                olMap.getView().fit(extent, { padding: [50, 50, 50, 50], duration: 800, maxZoom: 18 });
+                            } catch (e) {
+                                console.warn('Zoom to layer failed:', e);
+                            }
+                        }
+                    }
+                    
                     // Preserve MapServer ?map= in legend URL
                     let legendUrl = url;
                     if (!legendUrl.includes('?')) legendUrl += '?';
@@ -777,49 +778,49 @@
                         title: finalId, 
                         layer: layer, 
                         legendUrl: legendUrl,
-						classes: wmsLayerClasses[layerId], // Store classes for the HTML fallback legend
-						scrollRatioX: 0,
-						scrollRatioY: 0,
+                        classes: wmsLayerClasses[layerId], // Store classes for the HTML fallback legend
+                        scrollRatioX: 0,
+                        scrollRatioY: 0,
                         groupName: groupName 
                     });
                     
                     activeLayerId = finalId;
 
-					// Reset legend zoom/scroll for the new layer
-					legendScale = 1;
-					legendBox.scrollLeft = 0;
-					legendBox.scrollTop = 0;
-					updateLegendTransform();
-					const selectedClasses = wmsLayerClasses[layerId];
+                    // Reset legend zoom/scroll for the new layer
+                    legendScale = 1;
+                    legendBox.scrollLeft = 0;
+                    legendBox.scrollTop = 0;
+                    updateLegendTransform();
+                    const selectedClasses = wmsLayerClasses[layerId];
 
-					if (selectedClasses && selectedClasses.length > 0) {
-						// Build the legend HTML
-						let html = '<div style="padding: 5px; font-size: 11px;">';
-						selectedClasses.forEach(cls => {
-							html += `
-								<div style="display: flex; align-items: center; margin-bottom: 3px;">
-									<div style="width: 15px; height: 15px; background: ${cls.color}; border: 1px solid #999; margin-right: 5px;"></div>
-									<span>${cls.label}</span>
-								</div>
-							`;
-						});
-						html += '</div>';
-						
-						// Replace the legend image with this HTML
-						legendBox.innerHTML = html;
-						legendContainer.style.display = 'block';
-						legendTitle.innerText = 'Legend';
-						legendControls.style.display = 'none'; // Hide zoom controls, since it is now text
-					} else {
-						// If there are no classes (e.g., servers that work correctly), try the normal image
-						legendBox.innerHTML = ''; // Clear the HTML
-						legendBox.appendChild(legendImg);
-						legendBox.scrollLeft = 0;
-						legendBox.scrollTop = 0;
-						legendImg.src = legendUrl;
-						legendContainer.style.display = 'block';
-						legendControls.style.display = 'block';
-					}
+                    if (selectedClasses && selectedClasses.length > 0) {
+                        // Build the legend HTML
+                        let html = '<div style="padding: 5px; font-size: 11px;">';
+                        selectedClasses.forEach(cls => {
+                            html += `
+                                <div style="display: flex; align-items: center; margin-bottom: 3px;">
+                                    <div style="width: 15px; height: 15px; background: ${cls.color}; border: 1px solid #999; margin-right: 5px;"></div>
+                                    <span>${cls.label}</span>
+                                </div>
+                            `;
+                        });
+                        html += '</div>';
+                        
+                        // Replace the legend image with this HTML
+                        legendBox.innerHTML = html;
+                        legendContainer.style.display = 'block';
+                        legendTitle.innerText = 'Legend';
+                        legendControls.style.display = 'none'; // Hide zoom controls, since it is now text
+                    } else {
+                        // If there are no classes (e.g., servers that work correctly), try the normal image
+                        legendBox.innerHTML = ''; // Clear the HTML
+                        legendBox.appendChild(legendImg);
+                        legendBox.scrollLeft = 0;
+                        legendBox.scrollTop = 0;
+                        legendImg.src = legendUrl;
+                        legendContainer.style.display = 'block';
+                        legendControls.style.display = 'block';
+                    }
                     opacityContainer.style.display = 'block';
                     opacitySlider.value = '1';
                     document.getElementById('opacity-val').innerText = '100%';
@@ -865,16 +866,16 @@
                 addedWmsLayers = [];
                 activeLayerId = null;
                 existingExternalGroups = {};
-				wmsLayerTitles = {};
-				wmsLayerClasses = {};
-				wmsLayerBounds = {};
-				chkZoomToLayer.checked = false;
+                wmsLayerTitles = {};
+                wmsLayerClasses = {};
+                wmsLayerBounds = {};
+                chkZoomToLayer.checked = false;
                 
                 opacityContainer.style.display = 'none';
                 layerListDiv.innerHTML = '';
                 legendContainer.style.display = 'none';
                 legendImg.src = '';
-                inputUrl.value = '';
+				inputUrl.value = '';
                 inputManualLayer.value = '';
                 selectLayers.style.display = 'none';
                 btnAddWms.style.display = 'none';
@@ -889,7 +890,15 @@
             // GEOTIFF LOGIC
             // =====================================================
             btnGeoTIFF.addEventListener('click', async function (evt) {
-                evt.preventDefault(); btnGeoTIFF.disabled = true;
+                evt.preventDefault(); 
+                
+                // Change button to loading state
+                btnGeoTIFF.disabled = true;
+                btnGeoTIFF.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Exporting...';
+                btnGeoTIFF.style.opacity = '0.7';
+
+                // Short pause to allow the browser to render the loading state
+                await new Promise(r => setTimeout(r, 100));
 
                 try {
                     const GeoTIFF = await loadGeoTIFF();
@@ -904,6 +913,11 @@
                     const copy = document.createElement('canvas');
                     copy.width = canvas.width; copy.height = canvas.height;
                     const ctxCopy = copy.getContext('2d');
+                    
+                    // Fill the background with white to avoid black areas in the GeoTIFF
+                    ctxCopy.fillStyle = '#FFFFFF';
+                    ctxCopy.fillRect(0, 0, copy.width, copy.height);
+                    
                     ctxCopy.drawImage(canvas, 0, 0);
 
                     try {
@@ -966,7 +980,10 @@
                     console.error('GeoTIFF error:', error);
                     alert('GeoTIFF error:\n' + error.message);
                 } finally {
+                    // Restore button to normal state
                     btnGeoTIFF.disabled = false;
+                    btnGeoTIFF.innerHTML = '<i class="fa fa-file-image-o"></i> Export GeoTIFF';
+                    btnGeoTIFF.style.opacity = '1';
                 }
             });
 
