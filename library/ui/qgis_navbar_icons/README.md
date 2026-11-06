@@ -39,4 +39,4 @@ The icons come from the [QGIS default theme](https://github.com/qgis/QGIS/tree/m
 
 ## Compatibility
 
-Tested with Lizmap Web Client 3.6.12.
+Tested with Lizmap Web Client 3.9.12.
