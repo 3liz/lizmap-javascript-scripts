@@ -21,7 +21,7 @@
  * Icons: QGIS default theme (https://github.com/qgis/QGIS/tree/master/images/themes/default),
  * © QGIS contributors, GNU GPL v2 or later.
  *
- * Tested with Lizmap Web Client 3.6.12.
+ * Tested with Lizmap Web Client 3.9.12.
  */
 (function () {
     'use strict';
